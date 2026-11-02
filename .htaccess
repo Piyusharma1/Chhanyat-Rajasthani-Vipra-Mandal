@@ -1,0 +1,140 @@
+# ============================================
+# ENABLE REWRITE ENGINE
+# ============================================
+Options -MultiViews
+RewriteEngine On
+RewriteBase /
+
+# Remove trailing slash if not a directory
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)/$ /$1 [L,R=301]
+
+# ============================================
+# FORCE HTTPS (SSL)
+# ============================================
+RewriteCond %{HTTPS} off
+RewriteCond %{HTTP:X-Forwarded-Proto} !https
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# ============================================
+# FORCE NON-WWW (or change to force www if preferred)
+# ============================================
+RewriteCond %{HTTP_HOST} ^www\.chhanyatvipralatur\.com [NC]
+RewriteRule ^(.*)$ https://chhanyatvipralatur.com/$1 [L,R=301]
+
+# ============================================
+# REDIRECT OLD/UNUSED INDEX FILES TO HOMEPAGE
+# ============================================
+RewriteRule ^index1\.php$ / [L,R=301]
+RewriteRule ^index2\.php$ / [L,R=301]
+RewriteRule ^Hello\.php$ / [L,R=301]
+RewriteRule ^piyush\.php$ / [L,R=301]
+RewriteRule ^index_Maintenance\.php$ / [L,R=301]
+
+# ============================================
+# REMOVE index.php FROM URLs (clean URLs)
+# ============================================
+RewriteCond %{THE_REQUEST} /index\.php [NC]
+RewriteRule ^(.*)index\.php$ /$1 [L,R=301]
+
+# Remove index.html from URLs (if it exists)
+RewriteCond %{THE_REQUEST} /index\.html [NC]
+RewriteRule ^(.*)index\.html$ /$1 [L,R=301]
+
+# ============================================
+# REMOVE .php EXTENSION (Clean URLs)
+# ============================================
+# 1. Redirect external requests with .php to the clean URL (SEO friendly)
+RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /([^\ ]+)\.php
+RewriteCond %{REQUEST_URI} !^/api/ [NC]
+RewriteCond %{REQUEST_URI} !^/index_Maintenance\.php [NC]
+RewriteRule ^(.*)\.php$ /$1 [L,R=301]
+
+# 2. Internally route extensionless requests to the .php file
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.php -f
+RewriteRule ^(.*)$ $1.php [L]
+
+# ============================================
+# ALLOW DIRECT ACCESS TO UPLOADS
+# ============================================
+RewriteRule ^uploads/ - [L]
+
+# ============================================
+# CORS AND CACHING FOR IMAGES
+# ============================================
+<IfModule mod_headers.c>
+    <FilesMatch "\.(jpg|jpeg|png|webp|gif|svg)$">
+        Header set Access-Control-Allow-Origin "*"
+        Header set Cache-Control "public, max-age=31536000"
+    </FilesMatch>
+</IfModule>
+
+# ============================================
+# PREVENT STALE CSS AND JS CACHE
+# ============================================
+<IfModule mod_headers.c>
+    <FilesMatch "\.(css|js)$">
+        Header set Cache-Control "no-cache, no-store, must-revalidate"
+        Header set Pragma "no-cache"
+        Header set Expires "0"
+    </FilesMatch>
+</IfModule>
+
+# ============================================
+# ENABLE COMPRESSION (GZIP)
+# ============================================
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE application/json
+    AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# ============================================
+# SECURITY HEADERS
+# ============================================
+<IfModule mod_headers.c>
+    # Prevent clickjacking
+    Header always append X-Frame-Options SAMEORIGIN
+    
+    # Prevent MIME type sniffing
+    Header set X-Content-Type-Options "nosniff"
+    
+    # Enable XSS protection
+    Header set X-XSS-Protection "1; mode=block"
+    
+    # Referrer Policy
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# ============================================
+# BLOCK ACCESS TO SENSITIVE FILES
+# ============================================
+<FilesMatch "^\.">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+<FilesMatch "\.(htaccess|htpasswd|ini|log|sh|inc|bak|py|sql|env)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# ============================================
+# CUSTOM ERROR PAGES (optional)
+# ============================================
+ErrorDocument 404 /404.html
+ErrorDocument 403 /403.html
+ErrorDocument 500 /500.html

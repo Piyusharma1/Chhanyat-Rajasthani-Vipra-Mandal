@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Yatra+One&family=Tiro+Devanagari+Hindi&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <meta name="robots" content="noindex, nofollow">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>रखरखाव जारी है — छःन्यात राजस्थानी विप्र मंडल</title>
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --saffron:      #E8871A;
+            --saffron-deep: #C9680A;
+            --maroon:       #7B1C2E;
+            --gold:         #D4A017;
+            --cream:        #FDF6EC;
+            --text-dark:    #2A1A0E;
+            --text-mid:     #5C3D1E;
+        }
+
+        body {
+            min-height: 100vh;
+            background: var(--cream);
+            font-family: 'Tiro Devanagari Hindi', Georgia, serif;
+            color: var(--text-dark);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            overflow-x: hidden;
+        }
+
+        /* ── Decorative top border ── */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: 6px;
+            background: repeating-linear-gradient(
+                90deg,
+                var(--saffron) 0px,
+                var(--saffron) 20px,
+                var(--maroon) 20px,
+                var(--maroon) 40px,
+                var(--gold)   40px,
+                var(--gold)   60px
+            );
+        }
+
+        /* ── Mandala SVG background ── */
+        .bg-mandala {
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 700px;
+            height: 700px;
+            opacity: 0.045;
+            pointer-events: none;
+            animation: slow-spin 80s linear infinite;
+        }
+
+        @keyframes slow-spin {
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        /* ── Card ── */
+        .card {
+            position: relative;
+            background: #fff;
+            border-radius: 4px;
+            max-width: 560px;
+            width: 100%;
+            padding: 52px 44px 44px;
+            box-shadow:
+                0 0 0 1px rgba(212,160,23,0.25),
+                0 2px 4px rgba(0,0,0,0.06),
+                0 12px 40px rgba(123,28,46,0.10);
+            text-align: center;
+        }
+
+        /* Gold corner accents */
+        .card::before, .card::after {
+            content: '';
+            position: absolute;
+            width: 28px; height: 28px;
+            border-color: var(--gold);
+            border-style: solid;
+        }
+        .card::before { top: 12px; left: 12px;  border-width: 2px 0 0 2px; }
+        .card::after  { bottom: 12px; right: 12px; border-width: 0 2px 2px 0; }
+
+        /* ── ॐ symbol ── */
+        .om {
+            font-family: 'Yatra One', serif;
+            font-size: 3.2rem;
+            color: var(--saffron);
+            line-height: 1;
+            margin-bottom: 6px;
+            display: block;
+            animation: glow-pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes glow-pulse {
+            0%, 100% { text-shadow: 0 0 8px rgba(232,135,26,0.3); }
+            50%       { text-shadow: 0 0 22px rgba(232,135,26,0.65); }
+        }
+
+        /* ── Org name ── */
+        .org-name {
+            font-family: 'Yatra One', serif;
+            font-size: 1.05rem;
+            color: var(--maroon);
+            letter-spacing: 0.03em;
+            margin-bottom: 32px;
+        }
+
+        /* ── Divider ── */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0 auto 28px;
+            max-width: 320px;
+        }
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--gold));
+        }
+        .divider::after {
+            background: linear-gradient(to left, transparent, var(--gold));
+        }
+        .divider-dot {
+            width: 6px; height: 6px;
+            background: var(--gold);
+            border-radius: 50%;
+        }
+
+        /* ── Gear icon (pure CSS) ── */
+        .gear-wrap {
+            margin: 0 auto 24px;
+            width: 72px; height: 72px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .gear-wrap svg {
+            animation: gear-turn 6s linear infinite;
+        }
+
+        @keyframes gear-turn {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ── Headline ── */
+        h1 {
+            font-family: 'Yatra One', serif;
+            font-size: 1.75rem;
+            color: var(--maroon);
+            line-height: 1.35;
+            margin-bottom: 14px;
+        }
+
+        /* ── Sub text ── */
+        .sub {
+            font-size: 1.05rem;
+            color: var(--text-mid);
+            line-height: 1.75;
+            margin-bottom: 32px;
+        }
+
+        /* ── Status pill ── */
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #FFF4E6;
+            border: 1px solid rgba(232,135,26,0.35);
+            border-radius: 50px;
+            padding: 8px 20px;
+            font-size: 0.9rem;
+            color: var(--saffron-deep);
+            font-weight: 600;
+            margin-bottom: 32px;
+        }
+
+        .status-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: var(--saffron);
+            animation: blink 1.4s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50%       { opacity: 0.25; }
+        }
+
+        /* ── Contact note ── */
+        .contact-note {
+            font-size: 0.88rem;
+            color: #9A7050;
+            border-top: 1px solid rgba(212,160,23,0.2);
+            padding-top: 22px;
+            margin-top: 8px;
+            line-height: 1.7;
+        }
+
+        .contact-note a {
+            color: var(--saffron-deep);
+            text-decoration: none;
+            font-weight: 600;
+            border-bottom: 1px dashed var(--saffron-deep);
+        }
+
+        @media (max-width: 480px) {
+            .card { padding: 40px 24px 32px; }
+            h1    { font-size: 1.45rem; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .bg-mandala, .gear-wrap svg, .om { animation: none; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Background mandala -->
+<svg class="bg-mandala" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <g fill="none" stroke="#7B1C2E" stroke-width="0.5">
+        <circle cx="100" cy="100" r="90"/>
+        <circle cx="100" cy="100" r="75"/>
+        <circle cx="100" cy="100" r="60"/>
+        <circle cx="100" cy="100" r="45"/>
+        <circle cx="100" cy="100" r="30"/>
+        <circle cx="100" cy="100" r="15"/>
+        <line x1="100" y1="10"  x2="100" y2="190"/>
+        <line x1="10"  y1="100" x2="190" y2="100"/>
+        <line x1="29"  y1="29"  x2="171" y2="171"/>
+        <line x1="171" y1="29"  x2="29"  y2="171"/>
+        <line x1="19"  y1="63"  x2="181" y2="137"/>
+        <line x1="63"  y1="19"  x2="137" y2="181"/>
+        <line x1="181" y1="63"  x2="19"  y2="137"/>
+        <line x1="137" y1="19"  x2="63"  y2="181"/>
+        <!-- Petal ring -->
+        <ellipse cx="100" cy="55"  rx="8" ry="18" transform="rotate(0   100 100)"/>
+        <ellipse cx="100" cy="55"  rx="8" ry="18" transform="rotate(45  100 100)"/>
+        <ellipse cx="100" cy="55"  rx="8" ry="18" transform="rotate(90  100 100)"/>
+        <ellipse cx="100" cy="55"  rx="8" ry="18" transform="rotate(135 100 100)"/>
+        <ellipse cx="100" cy="55"  rx="8" ry="18" transform="rotate(180 100 100)"/>
+        <ellipse cx="100" cy="55"  rx="8" ry="18" transform="rotate(225 100 100)"/>
+        <ellipse cx="100" cy="55"  rx="8" ry="18" transform="rotate(270 100 100)"/>
+        <ellipse cx="100" cy="55"  rx="8" ry="18" transform="rotate(315 100 100)"/>
+    </g>
+</svg>
+
+<main class="card" role="main">
+
+    <span class="om" aria-hidden="true">ॐ</span>
+    <p class="org-name">छःन्यात राजस्थानी विप्र मंडल, लातूर</p>
+
+    <div class="divider" aria-hidden="true"><span class="divider-dot"></span></div>
+
+    <!-- Animated gear -->
+    <div class="gear-wrap" aria-hidden="true">
+        <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill="#E8871A" d="
+                M27 2h10l1.5 6.5a20 20 0 0 1 4.8 2L49 7l7 7-3.5 5.7a20 20 0 0 1 2 4.8L61 26v10l-6.5 1.5a20 20 0 0 1-2 4.8L56 49l-7 7-5.7-3.5a20 20 0 0 1-4.8 2L37 61H27l-1.5-6.5a20 20 0 0 1-4.8-2L15 56l-7-7 3.5-5.7a20 20 0 0 1-2-4.8L3 37V27l6.5-1.5a20 20 0 0 1 2-4.8L8 15l7-7 5.7 3.5a20 20 0 0 1 4.8-2L27 2z
+            "/>
+            <circle cx="32" cy="32" r="10" fill="#FDF6EC"/>
+            <circle cx="32" cy="32" r="6"  fill="#E8871A"/>
+        </svg>
+    </div>
+
+    <h1>वेबसाइट अस्थायी रूप से<br>बंद है</h1>
+
+    <p class="sub">
+        हम अपनी वेबसाइट को बेहतर बनाने के लिए<br>
+        <strong>रखरखाव कार्य</strong> कर रहे हैं।<br>
+        कृपया कुछ समय बाद पुनः प्रयास करें।
+    </p>
+
+    <div class="status-pill">
+        <span class="status-dot"></span>
+        रखरखाव प्रगति पर है
+    </div>
+
+    <p class="contact-note">
+        किसी आवश्यक जानकारी के लिए हमसे संपर्क करें:<br>
+        <a href="tel:+919607712448">पियुश बालाराम शर्मा &nbsp;📞 9607712448</a>
+        <br><br>
+        असुविधा के लिए क्षमा करें 🙏
+    </p>
+
+</main>
+
+</body>
+</html>

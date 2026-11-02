@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="/sitemap.xsl"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Main Pages Only -->
+  <url>
+    <loc>https://chhanyatvipralatur.com/</loc>
+    <lastmod>2026-07-03</lastmod>
+    <priority>1.0</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://chhanyatvipralatur.com/families.php</loc>
+    <lastmod>2026-07-03</lastmod>
+    <priority>0.8</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://chhanyatvipralatur.com/gallery.php</loc>
+    <lastmod>2026-06-28</lastmod>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://chhanyatvipralatur.com/calendar.php</loc>
+    <lastmod>2026-11-02</lastmod>
+    <priority>0.9</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://chhanyatvipralatur.com/about.php</loc>
+    <lastmod>2026-11-02</lastmod>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+
+</urlset>
