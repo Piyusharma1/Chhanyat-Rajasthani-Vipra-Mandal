@@ -54,11 +54,6 @@
 
     <div class="container" style="padding-top: 15px;">
         <!-- Breadcrumb -->
-        <nav class="breadcrumb no-print" aria-label="Breadcrumb">
-            <a href="index.php">🏠 मुख्य पृष्ठ</a>
-            <span class="separator">›</span>
-            <span class="current">फोटो गैलरी</span>
-        </nav>
 
         <section>
             <div class="gallery-hero">
