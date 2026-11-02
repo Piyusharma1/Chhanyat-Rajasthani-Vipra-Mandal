@@ -422,8 +422,6 @@ if (editModal) {
                 }
             }
 
-            const getEditVal = (id) => document.getElementById(id)?.value.trim() || '';
-
             const updateData = {
                 id: familyId,
                 branch: branchValue,
