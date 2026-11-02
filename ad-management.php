@@ -617,7 +617,19 @@ session_start();
                     </div>
                     <div class="image-preview-box" id="ad-image-preview">
                         <img id="preview-img" src="" alt="पूर्वावलोकन">
-                        <div><small id="preview-filename" style="color: #666;"></small></div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="ad-placement"><i class="fas fa-map-marker-alt"></i> विज्ञापन स्थान (Placement) *</label>
+                        <select id="ad-placement" name="placement">
+                            <option value="top" selected>1. शीर्ष बैनर (Top Banner: आँकड़े आणि समिती दरम्यान)</option>
+                            <option value="feed">2. इन-फीड कार्ड (In-Feed Card: सूचनांच्या मध्ये दर ५ नंतर)</option>
+                            <option value="bottom">3. तळ बैनर (Bottom Banner: फुटरच्या वर)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ad-start-date"><i class="fas fa-calendar-alt"></i> प्रारंभ तिथि (Start Date - वैकल्पिक)</label>
+                        <input type="date" id="ad-start-date" name="start_date">
                     </div>
                 </div>
 
@@ -702,6 +714,21 @@ session_start();
                     <div class="form-group">
                         <label>नया बैनर चुनें (छोड़ दें यदि बदलना नहीं है)</label>
                         <input type="file" id="edit-ad-image-file" name="image" accept="image/jpeg,image/png,image/webp">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="edit-ad-placement">स्थान (Placement)</label>
+                            <select id="edit-ad-placement" name="placement">
+                                <option value="top">1. शीर्ष बैनर (Top Banner)</option>
+                                <option value="feed">2. इन-फीड कार्ड (In-Feed Card)</option>
+                                <option value="bottom">3. तळ बैनर (Bottom Banner)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-ad-start-date">प्रारंभ तिथि</label>
+                            <input type="date" id="edit-ad-start-date" name="start_date">
+                        </div>
                     </div>
 
                     <div class="form-row">

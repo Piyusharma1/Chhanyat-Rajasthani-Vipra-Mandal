@@ -4984,13 +4984,11 @@ body.dark-mode .obj-content p {
 /* =========================================
    LOCAL ADS SECTION
    ========================================= */
-.promotions-outer-section,
 .ad-outer-section {
     padding: 10px 0 20px;
     animation: fadeIn 0.5s ease;
 }
 
-.promotions-section,
 .ad-section {
     padding: 20px;
     background: linear-gradient(135deg, var(--saffron-pale) 0%, #fff 100%);
@@ -5000,7 +4998,6 @@ body.dark-mode .obj-content p {
     box-shadow: 0 4px 20px rgba(123, 26, 26, 0.05);
 }
 
-.promotions-header-row,
 .ad-header-row {
     display: flex;
     justify-content: space-between;
@@ -5010,7 +5007,6 @@ body.dark-mode .obj-content p {
     border-bottom: 1px dashed rgba(201, 148, 26, 0.3);
 }
 
-.promotions-badge,
 .ad-badge {
     display: inline-flex;
     align-items: center;
@@ -5021,12 +5017,10 @@ body.dark-mode .obj-content p {
     font-family: 'Tiro Devanagari Hindi', serif;
 }
 
-.promotions-badge i,
 .ad-badge i {
     color: var(--saffron);
 }
 
-.promotions-disclaimer,
 .ad-disclaimer {
     font-size: 0.75rem;
     color: #888;
@@ -5037,7 +5031,6 @@ body.dark-mode .obj-content p {
     text-transform: uppercase;
 }
 
-.promotions-grid,
 .ad-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -5046,7 +5039,6 @@ body.dark-mode .obj-content p {
     align-items: stretch;
 }
 
-.sponsor-banner,
 .ad-banner {
     display: flex;
     flex-direction: column;
@@ -5062,14 +5054,12 @@ body.dark-mode .obj-content p {
     position: relative;
 }
 
-.sponsor-banner:hover,
 .ad-banner:hover {
     transform: translateY(-4px);
     box-shadow: 0 10px 24px rgba(123, 26, 26, 0.18);
     border-color: var(--gold);
 }
 
-.sponsor-banner-media,
 .ad-banner-media {
     width: 100%;
     min-height: 100px;
@@ -5083,7 +5073,6 @@ body.dark-mode .obj-content p {
     padding: 6px;
 }
 
-.sponsor-banner-media img,
 .ad-banner-media img {
     max-width: 100%;
     max-height: 400px;
@@ -5095,12 +5084,10 @@ body.dark-mode .obj-content p {
     transition: transform 0.3s ease;
 }
 
-.sponsor-banner:hover .sponsor-banner-media img,
 .ad-banner:hover .ad-banner-media img {
     transform: scale(1.02);
 }
 
-.sponsor-banner-footer,
 .ad-banner-footer {
     padding: 10px 14px;
     background: #fff;
@@ -5111,7 +5098,6 @@ body.dark-mode .obj-content p {
     border-top: 1px solid rgba(0,0,0,0.05);
 }
 
-.sponsor-banner-title,
 .ad-banner-title {
     font-size: 0.95rem;
     font-weight: 600;
@@ -5121,7 +5107,6 @@ body.dark-mode .obj-content p {
     text-overflow: ellipsis;
 }
 
-.sponsor-banner-contact-btn,
 .ad-banner-contact-btn {
     background: #25D366;
     color: #fff !important;
@@ -5137,7 +5122,6 @@ body.dark-mode .obj-content p {
     transition: background 0.2s;
 }
 
-.sponsor-banner-contact-btn:hover,
 .ad-banner-contact-btn:hover {
     background: #1eb855;
 }
@@ -5620,6 +5604,195 @@ body.dark-mode .obj-content p {
         padding: 8px 2px;
         font-size: 0.78rem;
     }
+}
+
+/* ────────────────────────────────────────────────────────────────
+   📢 LOCAL SPONSOR ADS (TOP, IN-FEED & BOTTOM SLOTS)
+   ──────────────────────────────────────────────────────────────── */
+.sponsor-banner-container {
+    max-width: 970px;
+    margin: 32px auto;
+    padding: 0 16px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.sponsor-banner-card {
+    background: var(--white, #ffffff);
+    border: 1px solid rgba(201, 148, 26, 0.28);
+    border-radius: var(--radius, 12px);
+    overflow: hidden;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+    transition: transform var(--transition-global, 0.25s), box-shadow var(--transition-global, 0.25s);
+}
+
+.sponsor-banner-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.09);
+}
+
+.sponsor-banner-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 14px;
+    background: linear-gradient(90deg, rgba(201, 148, 26, 0.1) 0%, rgba(255, 107, 0, 0.05) 100%);
+    border-bottom: 1px solid rgba(201, 148, 26, 0.15);
+}
+
+.sponsor-badge {
+    font-family: 'Tiro Devanagari Hindi', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 2px 8px;
+    border-radius: 6px;
+    background: #4B5563;
+    color: #FFFFFF !important;
+    display: inline-flex;
+    align-items: center;
+}
+
+.sponsor-biz-name {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--maroon, #7B1A1A);
+    font-family: 'Tiro Devanagari Hindi', sans-serif;
+}
+
+.sponsor-banner-media {
+    display: block;
+    width: 100%;
+    max-height: 250px;
+    background: #f8f9fa;
+    text-align: center;
+    text-decoration: none;
+    overflow: hidden;
+}
+
+.sponsor-banner-media img {
+    width: 100%;
+    height: auto;
+    max-height: 250px;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+}
+
+.sponsor-banner-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 8px 14px;
+    background: #FAFAFA;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.sponsor-banner-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-dark, #222);
+    font-family: 'Tiro Devanagari Hindi', sans-serif;
+}
+
+.sponsor-banner-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sponsor-action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.sponsor-action-btn.wa-btn {
+    background: #25D366;
+    color: #FFFFFF;
+}
+
+.sponsor-action-btn.wa-btn:hover {
+    background: #1EBE5D;
+}
+
+.sponsor-action-btn.link-btn {
+    background: var(--saffron, #FF6B00);
+    color: #FFFFFF;
+}
+
+.sponsor-action-btn.link-btn:hover {
+    background: var(--saffron-deep, #E05300);
+}
+
+/* In-Feed Sponsor Card */
+.sponsor-feed-card {
+    border-left: 4px solid var(--saffron, #FF6B00) !important;
+    background: linear-gradient(180deg, #FFFFFF 0%, #FFFDF9 100%) !important;
+    position: relative;
+}
+
+.sponsor-feed-media {
+    display: block;
+    width: 100%;
+    max-height: 190px;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 8px;
+    background: #f1f1f1;
+}
+
+.sponsor-feed-media img {
+    width: 100%;
+    height: auto;
+    max-height: 190px;
+    object-fit: cover;
+    display: block;
+}
+
+/* Ensure at least 40px gap before Load More button */
+#load-more-announcements {
+    margin-top: 40px !important;
+}
+
+/* Dark mode adjustments */
+body.dark-mode .sponsor-banner-card {
+    background: #1e1e1e;
+    border-color: rgba(201, 148, 26, 0.4);
+}
+
+body.dark-mode .sponsor-banner-header {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .sponsor-biz-name {
+    color: var(--saffron, #FF6B00);
+}
+
+body.dark-mode .sponsor-banner-media {
+    background: #141414;
+}
+
+body.dark-mode .sponsor-banner-footer {
+    background: #252525;
+    border-top-color: #333;
+}
+
+body.dark-mode .sponsor-banner-title {
+    color: #eee;
+}
+
+body.dark-mode .sponsor-feed-card {
+    background: #222 !important;
+    border-color: #444;
 }
 
 /* ────────────────────────────────────────────────────────────────

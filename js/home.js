@@ -1,4 +1,88 @@
 // ============================================
+// 📢 LOCAL SPONSOR ADS CONFIGURATION & HELPERS
+// ============================================
+export const ADS_ENABLED = true;
+export const AD_EVERY_N = 5;
+const ADS_CACHE_KEY = 'crvm_local_ads_cache_v1';
+const ADS_CACHE_TTL_MS = 15 * 60 * 1000; // 15 minutes TTL
+
+let loadedAds = [];
+let feedAdCounter = 0;
+
+// Initialize cache synchronously if valid
+try {
+    const cachedRaw = localStorage.getItem(ADS_CACHE_KEY);
+    if (cachedRaw) {
+        const cached = JSON.parse(cachedRaw);
+        if (cached && cached.timestamp && (Date.now() - cached.timestamp < ADS_CACHE_TTL_MS)) {
+            if (Array.isArray(cached.data)) {
+                loadedAds = cached.data;
+            }
+        }
+    }
+} catch (e) {}
+
+function escapeHTML(str) {
+    if (!str) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+function isValidHttpUrl(string) {
+    if (!string) return false;
+    try {
+        const url = new URL(string, window.location.origin);
+        return url.protocol === 'http:' || url.protocol === 'https:';
+    } catch (_) {
+        return false;
+    }
+}
+
+function getSafeAdLink(ad) {
+    if (ad.link_url && isValidHttpUrl(ad.link_url)) {
+        return ad.link_url;
+    }
+    if (ad.phone) {
+        return `https://wa.me/91${ad.phone.replace(/\D/g, '')}?text=${encodeURIComponent('नमस्कार, मैं छःन्यात विप्र समाज वेबसाइट पर आपका विज्ञापन देखकर संपर्क कर रहा हूँ।')}`;
+    }
+    return '#';
+}
+
+function trackAdClick(adId) {
+    if (!adId) return;
+    try {
+        if (navigator.sendBeacon) {
+            navigator.sendBeacon(`api/track_ad_click.php?id=${encodeURIComponent(adId)}`);
+        } else {
+            fetch(`api/track_ad_click.php?id=${encodeURIComponent(adId)}`, {
+                method: 'POST',
+                credentials: 'include',
+                keepalive: true
+            }).catch(() => {});
+        }
+    } catch (e) {
+        // Non-blocking
+    }
+}
+
+function bindAdClickTracking(container) {
+    if (!container) return;
+    const links = container.querySelectorAll('[data-ad-id]');
+    links.forEach(el => {
+        if (el.dataset.clickBound) return;
+        el.dataset.clickBound = 'true';
+        el.addEventListener('click', () => {
+            const adId = el.getAttribute('data-ad-id');
+            trackAdClick(adId);
+        });
+    });
+}
+
+// ============================================
 // ✅ PERFORMANCE MONITORING
 // ============================================
 const performanceMarks = new Map();
@@ -283,6 +367,49 @@ function setupMarqueeClickHandlers(marqueeContainer) {
     });
 }
 
+function createFeedAdCardHTML(ad) {
+    if (!ad) return '';
+    const title = escapeHTML(ad.title || '');
+    const biz = escapeHTML(ad.business_name || '');
+    const img = escapeHTML(ad.image_url || '');
+    const safeLink = getSafeAdLink(ad);
+    const hasTarget = safeLink !== '#' && isValidHttpUrl(safeLink);
+    const waLink = ad.phone ? `https://wa.me/91${ad.phone.replace(/\D/g, '')}?text=${encodeURIComponent('नमस्कार, मैं छःन्यात विप्र समाज वेबसाइट पर आपका विज्ञापन देखकर संपर्क कर रहा हूँ।')}` : null;
+
+    return `
+        <div class="ann-card sponsor-feed-card" role="article" aria-label="प्रायोजित जाहिरात: ${title}">
+            <div class="ann-meta" style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:8px;">
+                <span class="ann-tag sponsor-badge">प्रायोजित जाहिरात</span>
+                ${biz ? `<span class="ann-tag" style="background:var(--saffron, #FF6B00); color:white;">🏢 ${biz}</span>` : ''}
+            </div>
+            ${img ? `
+                <a href="${safeLink}" ${hasTarget ? 'target="_blank" rel="noopener"' : ''} class="sponsor-feed-media" data-ad-id="${ad.id}">
+                    <img src="${img}" alt="${title || 'प्रायोजित'}" loading="lazy" decoding="async">
+                </a>
+            ` : ''}
+            <h3 class="ann-title" style="margin-top: 8px;">${title}</h3>
+            <p class="ann-body" style="color: var(--text-soft); font-size: 0.95rem;">
+                ${biz ? `<strong>${biz}</strong> — ` : ''}लातूर स्थानिक व्यवसाय प्रायोजक
+            </p>
+            <div class="ann-footer">
+                <span class="ann-author" style="color: #888;">📢 स्थानिक प्रायोजक</span>
+                <div style="display:flex; gap:8px; align-items:center;">
+                    ${waLink ? `
+                        <a href="${waLink}" target="_blank" rel="noopener" class="sponsor-action-btn wa-btn" data-ad-id="${ad.id}" style="padding: 4px 10px; font-size: 0.82rem;" title="WhatsApp">
+                            WhatsApp
+                        </a>
+                    ` : ''}
+                    ${hasTarget ? `
+                        <a href="${safeLink}" target="_blank" rel="noopener" class="sponsor-action-btn link-btn" data-ad-id="${ad.id}" style="padding: 4px 10px; font-size: 0.82rem;">
+                            जाणून घ्या →
+                        </a>
+                    ` : ''}
+                </div>
+            </div>
+        </div>
+    `;
+}
+
 function renderAnnouncements(announcements, append = false) {
     const announcementsList = document.getElementById('announcements-list');
     if (!announcementsList) return;
@@ -292,7 +419,21 @@ function renderAnnouncements(announcements, append = false) {
         return;
     }
 
-    const html = announcements.map(a => {
+    if (!append) {
+        feedAdCounter = 0;
+    }
+
+    const feedAds = loadedAds.filter(a => a.placement === 'feed');
+    const availableFeedAds = feedAds.length > 0 ? feedAds : loadedAds;
+
+    const existingAnnCount = append
+        ? announcementsList.querySelectorAll('.ann-card:not(.sponsor-feed-card)').length
+        : 0;
+
+    const cardsHtml = [];
+
+    announcements.forEach((a, index) => {
+        const totalIndex = existingAnnCount + index + 1;
         const tagType = a.type || 'notice';
         const tagClass = `tag-${tagType}`;
         const tagLabel = tagType === 'event' ? 'कार्यक्रम' : tagType === 'update' ? 'अपडेट' : 'सूचना';
@@ -304,7 +445,7 @@ function renderAnnouncements(announcements, append = false) {
 
         const dateStr = a.date ? a.date : (a.createdAt ? new Date(a.createdAt).toLocaleDateString('hi-IN') : '');
 
-        return `
+        cardsHtml.push(`
                 <div class="ann-card">
                     <div class="ann-meta" style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:8px;">
                         <span class="ann-tag ${tagClass}">${tagLabel}</span>
@@ -318,14 +459,25 @@ function renderAnnouncements(announcements, append = false) {
                         ${a.link ? `<a href="${a.link}" target="_blank" class="ann-link">और पढ़ें →</a>` : ''}
                     </div>
                 </div>
-            `;
-    }).join('');
+            `);
+
+        // Inject sponsor card after every AD_EVERY_N announcement
+        if (ADS_ENABLED && availableFeedAds.length > 0 && totalIndex % AD_EVERY_N === 0) {
+            const ad = availableFeedAds[feedAdCounter % availableFeedAds.length];
+            feedAdCounter++;
+            cardsHtml.push(createFeedAdCardHTML(ad));
+        }
+    });
+
+    const fullHtml = cardsHtml.join('');
 
     if (append) {
-        announcementsList.insertAdjacentHTML('beforeend', html);
+        announcementsList.insertAdjacentHTML('beforeend', fullHtml);
     } else {
-        announcementsList.innerHTML = html;
+        announcementsList.innerHTML = fullHtml;
     }
+
+    bindAdClickTracking(announcementsList);
 }
 
 function renderHomeCommittee(committee) {
@@ -405,74 +557,135 @@ async function loadCriticalData() {
 }
 
 // ============================================
-// 📢 DYNAMIC HOME ADS LOADER
+// 📢 DYNAMIC HOME ADS LOADER (TOP, FEED, BOTTOM)
 // ============================================
-async function loadHomeAds() {
-    const sectionEl = document.getElementById('home-ads-section');
-    const gridEl = document.getElementById('home-ads-grid');
-    if (!sectionEl || !gridEl) return;
+async function fetchLocalAds() {
+    if (!ADS_ENABLED) return [];
 
     try {
-        let response;
-        try {
-            response = await fetch('api/get_sponsors.php', { credentials: 'include' });
-            if (!response.ok) throw new Error('Fallback to get_ads');
-        } catch (_) {
-            response = await fetch('api/get_ads.php', { credentials: 'include' });
+        const cachedRaw = localStorage.getItem(ADS_CACHE_KEY);
+        if (cachedRaw) {
+            const cached = JSON.parse(cachedRaw);
+            if (cached && cached.timestamp && (Date.now() - cached.timestamp < ADS_CACHE_TTL_MS)) {
+                if (Array.isArray(cached.data)) {
+                    return cached.data;
+                }
+            }
         }
-        if (!response.ok) return;
+    } catch (e) {
+        console.warn('Ads cache read failed:', e);
+    }
+
+    try {
+        const response = await fetch('api/get_ads.php', { credentials: 'include' });
+        if (!response.ok) return [];
         const result = await response.json();
         const ads = (result && result.success && Array.isArray(result.data)) ? result.data : [];
 
-        if (ads.length === 0) {
-            sectionEl.style.display = 'none';
-            return;
-        }
+        try {
+            localStorage.setItem(ADS_CACHE_KEY, JSON.stringify({
+                timestamp: Date.now(),
+                data: ads
+            }));
+        } catch (e) {}
 
-        renderHomeAds(ads);
-        sectionEl.style.display = 'block';
+        return ads;
     } catch (err) {
-        console.warn('⚠️ Could not load home ads/sponsors:', err);
+        console.warn('⚠️ Could not fetch ads:', err);
+        return [];
     }
 }
 
-function renderHomeAds(ads) {
-    const gridEl = document.getElementById('home-ads-grid');
-    if (!gridEl) return;
+function renderBannerSlot(containerId, ads) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
 
-    gridEl.innerHTML = ads.map(ad => {
-        const title = ad.title || '';
-        const biz = ad.business_name || '';
-        const img = ad.image_url || '';
-        const targetUrl = ad.link_url || (ad.phone ? `tel:${ad.phone.replace(/\D/g, '')}` : '#');
-        const isExternal = !!ad.link_url;
-        const waLink = ad.phone ? `https://wa.me/91${ad.phone.replace(/\D/g, '')}?text=${encodeURIComponent('नमस्कार, मैं छःन्यात विप्र समाज वेबसाइट पर आपका विज्ञापन देखकर संपर्क कर रहा हूँ।')}` : null;
+    if (!ADS_ENABLED || !ads || ads.length === 0) {
+        container.style.display = 'none';
+        container.innerHTML = '';
+        return;
+    }
 
-        return `
-                <div class="sponsor-banner ad-banner" role="listitem">
-                    <a href="${targetUrl}" ${isExternal ? 'target="_blank" rel="noopener"' : ''} class="sponsor-banner-media ad-banner-media" aria-label="${title}">
-                        <img src="${img}" alt="${title}" loading="lazy" decoding="async" onerror="this.style.display='none'">
-                    </a>
-                    <div class="sponsor-banner-footer ad-banner-footer">
-                        <div class="sponsor-banner-title ad-banner-title" title="${title}">
-                            ${title}
-                            ${biz ? `<small style="display:block;font-size:0.8rem;color:#777;font-weight:normal;">${biz}</small>` : ''}
-                        </div>
-                        ${waLink ? `
-                            <a href="${waLink}" target="_blank" rel="noopener" class="sponsor-banner-contact-btn ad-banner-contact-btn" title="WhatsApp पर संपर्क करें">
-                                <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/></svg>
-                                <span>संपर्क</span>
-                            </a>
-                        ` : (ad.phone ? `
-                            <a href="tel:${ad.phone.replace(/\D/g, '')}" class="sponsor-banner-contact-btn ad-banner-contact-btn" style="background:var(--maroon);">
-                                <span>📞 कॉल</span>
-                            </a>
-                        ` : '')}
-                    </div>
+    // Pick ad (random rotation across eligible ads)
+    const ad = ads[Math.floor(Math.random() * ads.length)];
+    if (!ad) {
+        container.style.display = 'none';
+        return;
+    }
+
+    const title = escapeHTML(ad.title || '');
+    const biz = escapeHTML(ad.business_name || '');
+    const img = escapeHTML(ad.image_url || '');
+    const safeLink = getSafeAdLink(ad);
+    const hasTarget = safeLink !== '#' && isValidHttpUrl(safeLink);
+    const waLink = ad.phone ? `https://wa.me/91${ad.phone.replace(/\D/g, '')}?text=${encodeURIComponent('नमस्कार, मैं छःन्यात विप्र समाज वेबसाइट पर आपका विज्ञापन देखकर संपर्क कर रहा हूँ।')}` : null;
+
+    container.innerHTML = `
+        <div class="sponsor-banner-card">
+            <div class="sponsor-banner-header">
+                <span class="sponsor-badge">प्रायोजित जाहिरात</span>
+                ${biz ? `<span class="sponsor-biz-name">${biz}</span>` : ''}
+            </div>
+            <a href="${safeLink}" ${hasTarget ? 'target="_blank" rel="noopener"' : ''} class="sponsor-banner-media" data-ad-id="${ad.id}" aria-label="${title}">
+                <img src="${img}" alt="${title || biz || 'स्थानिक प्रायोजक जाहिरात'}" loading="lazy" decoding="async" onerror="this.closest('.sponsor-banner-container').style.display='none'">
+            </a>
+            <div class="sponsor-banner-footer">
+                <div class="sponsor-banner-info">
+                    <span class="sponsor-banner-title">${title}</span>
                 </div>
-            `;
-    }).join('');
+                <div class="sponsor-banner-actions">
+                    ${waLink ? `
+                        <a href="${waLink}" target="_blank" rel="noopener" class="sponsor-action-btn wa-btn" data-ad-id="${ad.id}" title="WhatsApp पर संपर्क करें">
+                            <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/></svg>
+                            <span>संपर्क</span>
+                        </a>
+                    ` : ''}
+                    ${hasTarget ? `
+                        <a href="${safeLink}" target="_blank" rel="noopener" class="sponsor-action-btn link-btn" data-ad-id="${ad.id}">
+                            <span>भेट द्या →</span>
+                        </a>
+                    ` : ''}
+                </div>
+            </div>
+        </div>
+    `;
+
+    container.style.display = 'block';
+    bindAdClickTracking(container);
 }
+
+export async function loadHomeAds() {
+    if (!ADS_ENABLED) return;
+
+    try {
+        loadedAds = await fetchLocalAds();
+        if (!loadedAds || loadedAds.length === 0) {
+            const topSlot = document.getElementById('ad-slot-top');
+            const bottomSlot = document.getElementById('ad-slot-bottom');
+            if (topSlot) topSlot.style.display = 'none';
+            if (bottomSlot) bottomSlot.style.display = 'none';
+            return;
+        }
+
+        const topAds = loadedAds.filter(a => a.placement === 'top');
+        const bottomAds = loadedAds.filter(a => a.placement === 'bottom');
+
+        renderBannerSlot('ad-slot-top', topAds.length > 0 ? topAds : loadedAds);
+        renderBannerSlot('ad-slot-bottom', bottomAds.length > 0 ? bottomAds : loadedAds);
+
+        // If announcements already rendered without in-feed ad, re-render
+        const announcementsList = document.getElementById('announcements-list');
+        if (announcementsList && announcementsState.allData && announcementsState.allData.length > 0) {
+            if (!announcementsList.querySelector('.sponsor-feed-card') && announcementsState.allData.length >= AD_EVERY_N) {
+                renderAnnouncements(announcementsState.allData, false);
+            }
+        }
+    } catch (err) {
+        console.warn('⚠️ Could not load home ads:', err);
+    }
+}
+
+
 
 // ============================================
 // 📅 UPCOMING EVENTS / CALENDAR LOADER
