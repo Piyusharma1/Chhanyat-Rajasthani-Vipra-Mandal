@@ -16,6 +16,21 @@ if ($type === 'family' || $type === 'families') {
     $prefix = 'committee_';
 }
 
+$rawName = isset($_POST['name']) ? trim($_POST['name']) : 
+          (isset($_POST['custom_name']) ? trim($_POST['custom_name']) : 
+          (isset($_POST['head']) ? trim($_POST['head']) : ''));
+
+// Clean custom name for filename: keep letters, vowel marks (\p{M}), numbers, and convert spaces/special chars to underscore
+$cleanName = '';
+if (!empty($rawName)) {
+    $cleanName = strip_tags($rawName);
+    $cleanName = preg_replace('/[^\p{L}\p{M}\p{N}\-_]+/u', '_', $cleanName);
+    $cleanName = preg_replace('/_+/', '_', trim($cleanName, '_-'));
+    if (mb_strlen($cleanName, 'UTF-8') > 60) {
+        $cleanName = mb_substr($cleanName, 0, 60, 'UTF-8');
+    }
+}
+
 $uploadDir = '../uploads/' . $folderName . '/';
 $maxFileSize = 5 * 1024 * 1024; // 5MB
 $allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'];
@@ -84,8 +99,18 @@ if (!in_array($fileType, $allowedTypes)) {
 
 require_once __DIR__ . '/webp_utils.php';
 
-// Generate unique WebP filename
-$uniqueFilename = uniqid($prefix, true) . '.webp';
+// Generate WebP filename using custom clean name if provided, else fallback to unique prefix
+if (!empty($cleanName)) {
+    $baseFilename = $cleanName;
+    if (file_exists($uploadDir . $baseFilename . '.webp')) {
+        $uniqueFilename = $baseFilename . '_' . date('Ymd_His') . '.webp';
+    } else {
+        $uniqueFilename = $baseFilename . '.webp';
+    }
+} else {
+    $uniqueFilename = uniqid($prefix, true) . '.webp';
+}
+
 $uploadPath = $uploadDir . $uniqueFilename;
 
 // Convert and save as WebP
@@ -93,8 +118,9 @@ if (convertToWebp($file['tmp_name'], $uploadPath)) {
     // Get full URL
     $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
     $host = $_SERVER['HTTP_HOST'];
-    $imageUrl = $protocol . '://' . $host . '/uploads/' . $folderName . '/' . $uniqueFilename;
-    $relativeUrl = 'uploads/' . $folderName . '/' . $uniqueFilename;
+    $encodedFilename = rawurlencode($uniqueFilename);
+    $imageUrl = $protocol . '://' . $host . '/uploads/' . $folderName . '/' . $encodedFilename;
+    $relativeUrl = 'uploads/' . $folderName . '/' . $encodedFilename;
     
     // Verify file exists
     if (!file_exists($uploadPath)) {

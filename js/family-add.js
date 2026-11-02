@@ -95,7 +95,7 @@ async function loadBranchesDropdown() {
 // =========================================
 // 📸 IMAGE UPLOAD TO HOSTINGER
 // =========================================
-async function uploadImageToHostinger(file) {
+async function uploadImageToHostinger(file, customName = '') {
     const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'];
     if (!allowedTypes.includes(file.type)) throw new Error('केवल JPG, PNG या WebP allowed हैं।');
     if (file.size > 2 * 1024 * 1024) throw new Error('Image 2MB से कम होनी चाहिए।');
@@ -103,13 +103,17 @@ async function uploadImageToHostinger(file) {
     const formData = new FormData();
     formData.append('image', file);
     formData.append('type', 'family');
+    if (customName) {
+        formData.append('name', customName);
+        formData.append('custom_name', customName);
+    }
     
     const response = await fetch(UPLOAD_API_URL, { method: 'POST', body: formData });
     const responseText = await response.text();
     let result;
     try { result = JSON.parse(responseText); } catch { throw new Error('Server ने invalid response भेजा।'); }
     
-    if (!result.success) throw new Error(result.error || 'Upload failed');
+    if (!result.success) throw new Error(result.error || result.message || 'Upload failed');
     if (!result.url) throw new Error('Server ने URL नहीं भेजा।');
     
     return result.url;
@@ -328,13 +332,14 @@ async function handleAddFamily(e) {
         return;
     }
     
-    // Upload photo
+    // Upload photo with Head of Family name (कुटुंब प्रमुख नाव)
     const photoInput = document.getElementById('family-photo');
     let photoUrl = null;
+    const headName = getVal('family-head');
     if (photoInput && photoInput.files && photoInput.files[0]) {
         submitBtn.textContent = '📸 फोटो अपलोड हो रही है...';
         try {
-            photoUrl = await uploadImageToHostinger(photoInput.files[0]);
+            photoUrl = await uploadImageToHostinger(photoInput.files[0], headName);
         } catch (err) {
             showToast('फोटो अपलोड त्रुटि: ' + err.message, 'error');
             submitBtn.disabled = false;

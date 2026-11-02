@@ -94,7 +94,7 @@ async function loadBranchesForEdit() {
 // =========================================
 // 📸 IMAGE UPLOAD TO HOSTINGER
 // =========================================
-async function uploadImageToHostinger(file) {
+async function uploadImageToHostinger(file, customName = '') {
     const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'];
     if (!allowedTypes.includes(file.type)) throw new Error('केवल JPG, PNG या WebP allowed हैं।');
     if (file.size > 2 * 1024 * 1024) throw new Error('Image 2MB से कम होनी चाहिए।');
@@ -102,13 +102,17 @@ async function uploadImageToHostinger(file) {
     const formData = new FormData();
     formData.append('image', file);
     formData.append('type', 'family');
+    if (customName) {
+        formData.append('name', customName);
+        formData.append('custom_name', customName);
+    }
 
     const response = await fetch(UPLOAD_API_URL, { method: 'POST', body: formData });
     const responseText = await response.text();
     let result;
     try { result = JSON.parse(responseText); } catch { throw new Error('Server ने invalid response भेजा।'); }
 
-    if (!result.success) throw new Error(result.error || 'Upload failed');
+    if (!result.success) throw new Error(result.error || result.message || 'Upload failed');
     if (!result.url) throw new Error('Server ने URL नहीं भेजा।');
 
     return result.url;
@@ -401,12 +405,15 @@ if (editModal) {
                 return;
             }
 
+            const getEditVal = (id) => document.getElementById(id)?.value.trim() || '';
+            const headName = getEditVal('edit-head');
+
             const editPhotoInput = document.getElementById('edit-family-photo');
             let newPhotoUrl = null;
             if (editPhotoInput && editPhotoInput.files && editPhotoInput.files[0]) {
                 saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> फोटो अपलोड...';
                 try {
-                    newPhotoUrl = await uploadImageToHostinger(editPhotoInput.files[0]);
+                    newPhotoUrl = await uploadImageToHostinger(editPhotoInput.files[0], headName);
                 } catch (err) {
                     showToast('फोटो अपलोड त्रुटि: ' + err.message, 'error');
                     saveBtn.disabled = false;

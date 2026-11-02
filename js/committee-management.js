@@ -70,7 +70,7 @@ function showToast(message, type = 'success') {
 // =========================================
 // 📸 IMAGE UPLOAD
 // =========================================
-async function uploadImageToHostinger(fileInputId) {
+async function uploadImageToHostinger(fileInputId, customName = '') {
     const fileInput = document.getElementById(fileInputId);
     if (!fileInput || !fileInput.files[0]) return null;
     const file = fileInput.files[0];
@@ -79,11 +79,15 @@ async function uploadImageToHostinger(fileInputId) {
     const formData = new FormData();
     formData.append('image', file);
     formData.append('type', 'committee');
+    if (customName) {
+        formData.append('name', customName);
+        formData.append('custom_name', customName);
+    }
     try {
         const response = await fetch('api/upload-image.php', { method: 'POST', body: formData });
         const result = await response.json();
         if (result.success) return result.url;
-        else { showToast(result.message || 'छवि अपलोड त्रुटि।', 'error'); return null; }
+        else { showToast(result.error || result.message || 'छवि अपलोड त्रुटि।', 'error'); return null; }
     } catch (error) { showToast('छवि अपलोड त्रुटि: ' + error.message, 'error'); return null; }
 }
 
@@ -97,10 +101,11 @@ async function handleAddMember(e) {
     submitBtn.disabled = true; submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> जोड़ रहा है...';
     try {
         let photoUrl = null;
+        const memberName = document.getElementById('comm-name')?.value.trim() || '';
         const photoInput = document.getElementById('comm-photo-file');
         if (photoInput && photoInput.files[0]) {
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> छवि अपलोड...';
-            photoUrl = await uploadImageToHostinger('comm-photo-file');
+            photoUrl = await uploadImageToHostinger('comm-photo-file', memberName);
         }
         if (!photoUrl) photoUrl = document.getElementById('comm-photo')?.value.trim() || null;
         
@@ -287,8 +292,13 @@ async function handleAddCentralMember(e) {
     if (!submitBtn) return;
     submitBtn.disabled = true; submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> जोड़ रहा है...';
     try {
-        let photoUrl = null; const photoInput = document.getElementById('central-comm-photo-file');
-        if (photoInput && photoInput.files[0]) { submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> छवि अपलोड...'; photoUrl = await uploadImageToHostinger('central-comm-photo-file'); }
+        let photoUrl = null; 
+        const memberName = document.getElementById('central-comm-name')?.value.trim() || '';
+        const photoInput = document.getElementById('central-comm-photo-file');
+        if (photoInput && photoInput.files[0]) { 
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> छवि अपलोड...'; 
+            photoUrl = await uploadImageToHostinger('central-comm-photo-file', memberName); 
+        }
         if (!photoUrl) photoUrl = document.getElementById('central-comm-photo')?.value.trim() || null;
         
         const newMember = {
