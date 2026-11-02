@@ -23,15 +23,7 @@ function loadComponents() {
     var path = el.getAttribute('data-include');
     return fetch(path)
       .then(function(response) {
-        if (!response.ok) {
-          if (path.endsWith('.php')) {
-            return fetch(path.replace(/\.php$/, '.html')).then(function(altRes) {
-              if (!altRes.ok) throw new Error('Failed: ' + path);
-              return altRes.text();
-            });
-          }
-          throw new Error('Failed: ' + path);
-        }
+        if (!response.ok) throw new Error('Failed: ' + path);
         return response.text();
       })
       .then(function(html) {

@@ -10,18 +10,18 @@ $hasPdf = file_exists(__DIR__ . '/' . $calendarPdfPath);
 $pdfSize = $hasPdf ? round(filesize(__DIR__ . '/' . $calendarPdfPath) / (1024 * 1024), 2) . ' MB' : 'अनुपलब्ध';
 
 $months = [
-    1  => ['hi' => 'जनवरी', 'en' => 'January'],
-    2  => ['hi' => 'फ़रवरी', 'en' => 'February'],
+    1  => ['hi' => 'जानेवारी', 'en' => 'January'],
+    2  => ['hi' => 'फेब्रुवारी', 'en' => 'February'],
     3  => ['hi' => 'मार्च', 'en' => 'March'],
-    4  => ['hi' => 'अप्रैल', 'en' => 'April'],
-    5  => ['hi' => 'मई', 'en' => 'May'],
+    4  => ['hi' => 'एप्रिल', 'en' => 'April'],
+    5  => ['hi' => 'मे', 'en' => 'May'],
     6  => ['hi' => 'जून', 'en' => 'June'],
-    7  => ['hi' => 'जुलाई', 'en' => 'July'],
-    8  => ['hi' => 'अगस्त', 'en' => 'August'],
-    9  => ['hi' => 'सितंबर', 'en' => 'September'],
-    10 => ['hi' => 'अक्टूबर', 'en' => 'October'],
-    11 => ['hi' => 'नवंबर', 'en' => 'November'],
-    12 => ['hi' => 'दिसंबर', 'en' => 'December'],
+    7  => ['hi' => 'जुलै', 'en' => 'July'],
+    8  => ['hi' => 'ऑगस्ट', 'en' => 'August'],
+    9  => ['hi' => 'सप्टेंबर', 'en' => 'September'],
+    10 => ['hi' => 'ऑक्टोबर', 'en' => 'October'],
+    11 => ['hi' => 'नोव्हेंबर', 'en' => 'November'],
+    12 => ['hi' => 'डिसेंबर', 'en' => 'December'],
 ];
 ?>
 <!DOCTYPE html>

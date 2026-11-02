@@ -182,18 +182,18 @@
                             <span>माहवार पृष्ठ (सीधे देखें)</span>
                         </div>
                         <div class="home-cal-months-strip" id="home-cal-months-strip">
-                            <a href="calendar.php?month=1" class="home-month-pill" data-month="1">१. जनवरी</a>
-                            <a href="calendar.php?month=2" class="home-month-pill" data-month="2">२. फ़रवरी</a>
+                            <a href="calendar.php?month=1" class="home-month-pill" data-month="1">१. जानेवारी</a>
+                            <a href="calendar.php?month=2" class="home-month-pill" data-month="2">२. फेब्रुवारी</a>
                             <a href="calendar.php?month=3" class="home-month-pill" data-month="3">३. मार्च</a>
-                            <a href="calendar.php?month=4" class="home-month-pill" data-month="4">४. अप्रैल</a>
-                            <a href="calendar.php?month=5" class="home-month-pill" data-month="5">५. मई</a>
+                            <a href="calendar.php?month=4" class="home-month-pill" data-month="4">४. एप्रिल</a>
+                            <a href="calendar.php?month=5" class="home-month-pill" data-month="5">५. मे</a>
                             <a href="calendar.php?month=6" class="home-month-pill" data-month="6">६. जून</a>
-                            <a href="calendar.php?month=7" class="home-month-pill" data-month="7">७. जुलाई</a>
-                            <a href="calendar.php?month=8" class="home-month-pill" data-month="8">८. अगस्त</a>
-                            <a href="calendar.php?month=9" class="home-month-pill" data-month="9">९. सितंबर</a>
-                            <a href="calendar.php?month=10" class="home-month-pill" data-month="10">१०. अक्टूबर</a>
-                            <a href="calendar.php?month=11" class="home-month-pill" data-month="11">११. नवंबर</a>
-                            <a href="calendar.php?month=12" class="home-month-pill" data-month="12">१२. दिसंबर</a>
+                            <a href="calendar.php?month=7" class="home-month-pill" data-month="7">७. जुलै</a>
+                            <a href="calendar.php?month=8" class="home-month-pill" data-month="8">८. ऑगस्ट</a>
+                            <a href="calendar.php?month=9" class="home-month-pill" data-month="9">९. सप्टेंबर</a>
+                            <a href="calendar.php?month=10" class="home-month-pill" data-month="10">१०. ऑक्टोबर</a>
+                            <a href="calendar.php?month=11" class="home-month-pill" data-month="11">११. नोव्हेंबर</a>
+                            <a href="calendar.php?month=12" class="home-month-pill" data-month="12">१२. डिसेंबर</a>
                         </div>
 
                         <div class="home-cal-action-btns">

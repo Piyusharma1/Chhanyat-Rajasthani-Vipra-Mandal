@@ -5,18 +5,18 @@ $hasPdf = file_exists(__DIR__ . '/' . $calendarPdfPath);
 $targetMonth = isset($_GET['month']) ? trim((string)$_GET['month']) : '';
 
 $months = [
-    1  => ['hi' => 'जनवरी', 'en' => 'January', 'hi_num' => '१'],
-    2  => ['hi' => 'फ़रवरी', 'en' => 'February', 'hi_num' => '२'],
-    3  => ['hi' => 'मार्च', 'en' => 'March', 'hi_num' => '३'],
-    4  => ['hi' => 'अप्रैल', 'en' => 'April', 'hi_num' => '४'],
-    5  => ['hi' => 'मई', 'en' => 'May', 'hi_num' => '५'],
-    6  => ['hi' => 'जून', 'en' => 'June', 'hi_num' => '६'],
-    7  => ['hi' => 'जुलाई', 'en' => 'July', 'hi_num' => '७'],
-    8  => ['hi' => 'अगस्त', 'en' => 'August', 'hi_num' => '८'],
-    9  => ['hi' => 'सितंबर', 'en' => 'September', 'hi_num' => '९'],
-    10 => ['hi' => 'अक्टूबर', 'en' => 'October', 'hi_num' => '१०'],
-    11 => ['hi' => 'नवंबर', 'en' => 'November', 'hi_num' => '११'],
-    12 => ['hi' => 'दिसंबर', 'en' => 'December', 'hi_num' => '१२'],
+    1  => ['hi' => 'जानेवारी', 'en' => '', 'hi_num' => '१'],
+    2  => ['hi' => 'फेब्रुवारी', 'en' => '', 'hi_num' => '२'],
+    3  => ['hi' => 'मार्च', 'en' => '', 'hi_num' => '३'],
+    4  => ['hi' => 'एप्रिल', 'en' => '', 'hi_num' => '४'],
+    5  => ['hi' => 'मे', 'en' => '', 'hi_num' => '५'],
+    6  => ['hi' => 'जून', 'en' => '', 'hi_num' => '६'],
+    7  => ['hi' => 'जुलै', 'en' => '', 'hi_num' => '७'],
+    8  => ['hi' => 'ऑगस्ट', 'en' => '', 'hi_num' => '८'],
+    9  => ['hi' => 'सप्टेंबर', 'en' => '', 'hi_num' => '९'],
+    10 => ['hi' => 'ऑक्टोबर', 'en' => '', 'hi_num' => '१०'],
+    11 => ['hi' => 'नोव्हेंबर', 'en' => '', 'hi_num' => '११'],
+    12 => ['hi' => 'डिसेंबर', 'en' => '', 'hi_num' => '१२'],
 ];
 
 // Pre-build all 13 calendar pages for grid & interactive lightbox viewer
@@ -673,7 +673,7 @@ foreach ($months as $num => $m) {
                 <div class="month-row-card" id="month-card-<?= $num ?>">
                     <div class="month-card-header">
                         <h3><?= $page['title'] ?></h3>
-                        <span><?= $m['en'] ?></span>
+                        <?php if (!empty($m['en'])): ?><span><?= htmlspecialchars($m['en']) ?></span><?php endif; ?>
                     </div>
                     <div class="month-card-img-wrap">
                         <a href="<?= $page['src'] ?>" class="cal-lb-trigger" data-lb-index="<?= $num ?>" title="क्लिक कर पूरा देखें">
