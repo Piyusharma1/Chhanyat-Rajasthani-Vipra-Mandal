@@ -7,7 +7,16 @@ error_reporting(E_ALL);
 ini_set('display_errors', 0); // Don't display errors in output
 ini_set('log_errors', 1);
 
-$uploadDir = '../uploads/committee/';
+$type = isset($_POST['type']) ? trim($_POST['type']) : (isset($_GET['type']) ? trim($_GET['type']) : '');
+if ($type === 'family' || $type === 'families') {
+    $folderName = 'families';
+    $prefix = 'family_';
+} else {
+    $folderName = 'committee';
+    $prefix = 'committee_';
+}
+
+$uploadDir = '../uploads/' . $folderName . '/';
 $maxFileSize = 5 * 1024 * 1024; // 5MB
 $allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'];
 
@@ -76,7 +85,7 @@ if (!in_array($fileType, $allowedTypes)) {
 require_once __DIR__ . '/webp_utils.php';
 
 // Generate unique WebP filename
-$uniqueFilename = uniqid('committee_', true) . '.webp';
+$uniqueFilename = uniqid($prefix, true) . '.webp';
 $uploadPath = $uploadDir . $uniqueFilename;
 
 // Convert and save as WebP
@@ -84,7 +93,8 @@ if (convertToWebp($file['tmp_name'], $uploadPath)) {
     // Get full URL
     $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
     $host = $_SERVER['HTTP_HOST'];
-    $imageUrl = $protocol . '://' . $host . '/uploads/committee/' . $uniqueFilename;
+    $imageUrl = $protocol . '://' . $host . '/uploads/' . $folderName . '/' . $uniqueFilename;
+    $relativeUrl = 'uploads/' . $folderName . '/' . $uniqueFilename;
     
     // Verify file exists
     if (!file_exists($uploadPath)) {
@@ -100,6 +110,7 @@ if (convertToWebp($file['tmp_name'], $uploadPath)) {
         'success' => true,
         'message' => 'छवि सफलतापूर्वक अपलोड हुई और WebP में परिवर्तित की गई।',
         'url' => $imageUrl,
+        'relative_url' => $relativeUrl,
         'path' => $uploadPath,
         'filename' => $uniqueFilename,
         'size' => $finalSize

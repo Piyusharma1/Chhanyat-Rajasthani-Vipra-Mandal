@@ -101,6 +101,7 @@ async function uploadImageToHostinger(file) {
 
     const formData = new FormData();
     formData.append('image', file);
+    formData.append('type', 'family');
 
     const response = await fetch(UPLOAD_API_URL, { method: 'POST', body: formData });
     const responseText = await response.text();

@@ -78,6 +78,7 @@ async function uploadImageToHostinger(fileInputId) {
     
     const formData = new FormData();
     formData.append('image', file);
+    formData.append('type', 'committee');
     try {
         const response = await fetch('api/upload-image.php', { method: 'POST', body: formData });
         const result = await response.json();
