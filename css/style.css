@@ -4984,11 +4984,13 @@ body.dark-mode .obj-content p {
 /* =========================================
    LOCAL ADS SECTION
    ========================================= */
+.promotions-outer-section,
 .ad-outer-section {
     padding: 10px 0 20px;
     animation: fadeIn 0.5s ease;
 }
 
+.promotions-section,
 .ad-section {
     padding: 20px;
     background: linear-gradient(135deg, var(--saffron-pale) 0%, #fff 100%);
@@ -4998,6 +5000,7 @@ body.dark-mode .obj-content p {
     box-shadow: 0 4px 20px rgba(123, 26, 26, 0.05);
 }
 
+.promotions-header-row,
 .ad-header-row {
     display: flex;
     justify-content: space-between;
@@ -5007,6 +5010,7 @@ body.dark-mode .obj-content p {
     border-bottom: 1px dashed rgba(201, 148, 26, 0.3);
 }
 
+.promotions-badge,
 .ad-badge {
     display: inline-flex;
     align-items: center;
@@ -5017,10 +5021,12 @@ body.dark-mode .obj-content p {
     font-family: 'Tiro Devanagari Hindi', serif;
 }
 
+.promotions-badge i,
 .ad-badge i {
     color: var(--saffron);
 }
 
+.promotions-disclaimer,
 .ad-disclaimer {
     font-size: 0.75rem;
     color: #888;
@@ -5031,6 +5037,7 @@ body.dark-mode .obj-content p {
     text-transform: uppercase;
 }
 
+.promotions-grid,
 .ad-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -5039,6 +5046,7 @@ body.dark-mode .obj-content p {
     align-items: stretch;
 }
 
+.sponsor-banner,
 .ad-banner {
     display: flex;
     flex-direction: column;
@@ -5054,12 +5062,14 @@ body.dark-mode .obj-content p {
     position: relative;
 }
 
+.sponsor-banner:hover,
 .ad-banner:hover {
     transform: translateY(-4px);
     box-shadow: 0 10px 24px rgba(123, 26, 26, 0.18);
     border-color: var(--gold);
 }
 
+.sponsor-banner-media,
 .ad-banner-media {
     width: 100%;
     min-height: 100px;
@@ -5073,6 +5083,7 @@ body.dark-mode .obj-content p {
     padding: 6px;
 }
 
+.sponsor-banner-media img,
 .ad-banner-media img {
     max-width: 100%;
     max-height: 400px;
@@ -5084,10 +5095,12 @@ body.dark-mode .obj-content p {
     transition: transform 0.3s ease;
 }
 
+.sponsor-banner:hover .sponsor-banner-media img,
 .ad-banner:hover .ad-banner-media img {
     transform: scale(1.02);
 }
 
+.sponsor-banner-footer,
 .ad-banner-footer {
     padding: 10px 14px;
     background: #fff;
@@ -5098,6 +5111,7 @@ body.dark-mode .obj-content p {
     border-top: 1px solid rgba(0,0,0,0.05);
 }
 
+.sponsor-banner-title,
 .ad-banner-title {
     font-size: 0.95rem;
     font-weight: 600;
@@ -5107,6 +5121,7 @@ body.dark-mode .obj-content p {
     text-overflow: ellipsis;
 }
 
+.sponsor-banner-contact-btn,
 .ad-banner-contact-btn {
     background: #25D366;
     color: #fff !important;
@@ -5122,6 +5137,7 @@ body.dark-mode .obj-content p {
     transition: background 0.2s;
 }
 
+.sponsor-banner-contact-btn:hover,
 .ad-banner-contact-btn:hover {
     background: #1eb855;
 }

@@ -129,18 +129,18 @@
             </div>
         </section>
 
-        <!-- ═══ LOCAL ADVERTISEMENTS ═══ -->
-        <section class="ad-outer-section" id="home-ads-section" aria-label="स्थानीय विज्ञापन" style="display: none;">
+        <!-- ═══ LOCAL ADVERTISEMENTS / SPONSORS ═══ -->
+        <section class="promotions-outer-section ad-outer-section" id="home-ads-section" aria-label="स्थानीय विज्ञापन" style="display: none;">
             <div class="container">
-                <div class="ad-section">
-                    <div class="ad-header-row">
-                        <div class="ad-badge">
+                <div class="promotions-section ad-section">
+                    <div class="promotions-header-row ad-header-row">
+                        <div class="promotions-badge ad-badge">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--saffron);"><path d="m3 11 18-5v12L3 14v-3z"></path><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"></path></svg>
                             <span>प्रायोजक एवं स्थानीय विज्ञापन</span>
                         </div>
-                        <span class="ad-disclaimer">विज्ञापन</span>
+                        <span class="promotions-disclaimer ad-disclaimer">विज्ञापन</span>
                     </div>
-                    <div class="ad-grid" id="home-ads-grid" role="list">
+                    <div class="promotions-grid ad-grid" id="home-ads-grid" role="list">
                         <!-- Populated dynamically via home.js -->
                     </div>
                 </div>
