@@ -14,7 +14,7 @@ const CONFIG = {
 
 const IMAGE_CONFIG = {
     DEFAULT_PHOTO: 'https://placehold.net/avatar-4.png',
-    DEFAULT_IDEAL_PHOTO: 'https://i.ibb.co/Rp7W81P2/Gayatri-mata-jpg.jpg',
+    DEFAULT_IDEAL_PHOTO: 'https://chhanyatvipralatur.com/idel/Gayatri%20mata.webp',
     DEFAULT_AVATAR: 'https://placehold.net/avatar-4.png',
     ROOT_MARGIN: '300px 0px'
 };
@@ -51,9 +51,9 @@ const imageObserver = new IntersectionObserver((entries, observer) => {
             observer.unobserve(img);
         }
     });
-}, { 
+}, {
     rootMargin: IMAGE_CONFIG.ROOT_MARGIN,
-    threshold: 0.01 
+    threshold: 0.01
 });
 
 /**
@@ -62,33 +62,33 @@ const imageObserver = new IntersectionObserver((entries, observer) => {
 function loadImageOptimized(img) {
     const url = img.dataset.src;
     const fallback = img.dataset.fallback || IMAGE_CONFIG.DEFAULT_PHOTO;
-    
+
     if (!url) {
         setFinalImage(img, fallback);
         return;
     }
-    
+
     // ✅ Check cache first — instant if we've seen this URL before
     if (imageCache.has(url)) {
         const cached = imageCache.get(url);
         setFinalImage(img, cached.valid ? url : cached.finalUrl);
         return;
     }
-    
+
     // ✅ Show blurred placeholder immediately
     showBlurPlaceholder(img);
-    
+
     // ✅ Load directly on the real <img> element — ONE download only
     img.onload = () => {
         imageCache.set(url, { valid: true, finalUrl: url });
         revealImage(img);
     };
-    
+
     img.onerror = () => {
         imageCache.set(url, { valid: false, finalUrl: fallback });
         setFinalImage(img, fallback, true);
     };
-    
+
     img.src = url;
 }
 
@@ -136,10 +136,10 @@ function revealImage(img) {
     img.style.filter = 'blur(0)';
     img.style.opacity = '1';
     img.style.transform = 'scale(1)';
-    
+
     img.classList.remove('img-loading');
     img.classList.add('img-loaded');
-    
+
     const skeleton = img.previousElementSibling;
     if (skeleton && skeleton.classList.contains('image-skeleton')) {
         skeleton.style.opacity = '0';
@@ -152,7 +152,7 @@ function revealImage(img) {
  */
 function observeImages(selector, options = {}) {
     const { eager = false, priority = 'auto' } = options;
-    
+
     requestAnimationFrame(() => {
         document.querySelectorAll(selector).forEach((img, index) => {
             if (eager || index < 3) {
@@ -171,10 +171,10 @@ function observeImages(selector, options = {}) {
 async function initBranchPage() {
     const urlParams = new URLSearchParams(window.location.search);
     const branchName = urlParams.get('branch');
-    
-    if (!branchName) { 
-        window.location.href = '/'; 
-        return; 
+
+    if (!branchName) {
+        window.location.href = '/';
+        return;
     }
 
     showLoadingState();
@@ -193,10 +193,10 @@ async function initBranchPage() {
 
         const branches = branchesResult.value.data;
         branchData = branches.find(b => b.branchName === branchName);
-        
-        if (!branchData) { 
+
+        if (!branchData) {
             showErrorState('शाखा नहीं मिली');
-            return; 
+            return;
         }
 
         if (familiesResult.status === 'rejected') {
@@ -211,8 +211,8 @@ async function initBranchPage() {
         document.getElementById('branch-title').textContent = displayBranchName;
         document.getElementById('breadcrumb-branch').textContent = displayBranchName;
         document.title = `${displayBranchName} | छःन्यात राजस्थानी विप्र मंडल`;
-        
-        renderIdealSection(branchData); 
+
+        renderIdealSection(branchData);
         renderCommittee(branchData.committee);
         setupFamilyFilters();
         applyFamilyFilters();
@@ -297,10 +297,10 @@ function renderIdealSection(branch) {
     const container = document.getElementById('ideal-section-container');
     if (!container) return;
 
-    const photoUrl = branch.idealPhoto || IMAGE_CONFIG.DEFAULT_IDEAL_PHOTO; 
-    const idealName = escapeHTML(branch.idealName || 'माँ गायत्री'); 
-    const idealQuote = escapeHTML(branch.idealQuote || '"ॐ भूर्भुवः स्वः तत्सवितुर्वरेण्यं भर्गो देवस्य धीमहि धियो यो नः प्रचोदयात्"'); 
-    
+    const photoUrl = branch.idealPhoto || IMAGE_CONFIG.DEFAULT_IDEAL_PHOTO;
+    const idealName = escapeHTML(branch.idealName || 'माँ गायत्री');
+    const idealQuote = escapeHTML(branch.idealQuote || '"ॐ भूर्भुवः स्वः तत्सवितुर्वरेण्यं भर्गो देवस्य धीमहि धियो यो नः प्रचोदयात्"');
+
     // ✅ PRELOAD the ideal photo — browser starts downloading IMMEDIATELY
     const preloadLink = document.createElement('link');
     preloadLink.rel = 'preload';
@@ -335,18 +335,18 @@ function renderIdealSection(branch) {
 function renderCommittee(committee) {
     const grid = document.getElementById('committee-grid');
     if (!grid) return;
-    
+
     if (!committee || committee.length === 0) {
         grid.innerHTML = '<p class="empty-message">इस परिवार के कार्यकारिणी का डेटा जल्द ही अपडेट किया जाएगा।</p>';
         return;
     }
-    
+
     grid.innerHTML = committee.map((m, index) => {
         const name = escapeHTML(m.name || 'अज्ञात');
         const designation = escapeHTML(m.designation || '');
         const photoUrl = m.photo || IMAGE_CONFIG.DEFAULT_PHOTO;
         const mobile = m.mobile ? m.mobile.replace(/\D/g, '') : '';
-        
+
         return `
         <div class="committee-card">
             <img class="committee-photo"
@@ -389,17 +389,17 @@ function setupFamilyFilters() {
     const filterHead = document.getElementById('filter-head');
     const filterSurname = document.getElementById('filter-surname');
     const filterGotra = document.getElementById('filter-gotra');
-    
+
     let searchTimeout;
-    
+
     const handleFilter = () => {
         clearTimeout(searchTimeout);
         searchTimeout = setTimeout(() => {
-            currentPage = 1; 
+            currentPage = 1;
             applyFamilyFilters();
         }, CONFIG.DEBOUNCE_DELAY);
     };
-    
+
     if (filterHead) filterHead.addEventListener('input', handleFilter);
     if (filterSurname) filterSurname.addEventListener('input', handleFilter);
     if (filterGotra) filterGotra.addEventListener('input', handleFilter);
@@ -412,18 +412,18 @@ function applyFamilyFilters() {
 
     const filtered = branchFamilies.filter(f => {
         if (!head && !surname && !gotra) return true;
-        
+
         const fHead = (f.head || '').toLowerCase();
         const fSurname = (f.surname || '').toLowerCase();
         const fGotra = (f.gotra || '').toLowerCase();
-        
+
         const matchHead = !head || fHead.includes(head);
         const matchSurname = !surname || fSurname.includes(surname);
         const matchGotra = !gotra || fGotra.includes(gotra);
-        
+
         return matchHead && matchSurname && matchGotra;
     });
-    
+
     renderFamilies(filtered);
     renderPagination(filtered.length);
 }
@@ -431,17 +431,17 @@ function applyFamilyFilters() {
 function renderFamilies(families) {
     const grid = document.getElementById('family-grid');
     if (!grid) return;
-    
+
     const pageItems = families.slice(
-        (currentPage - 1) * CONFIG.ITEMS_PER_PAGE, 
+        (currentPage - 1) * CONFIG.ITEMS_PER_PAGE,
         currentPage * CONFIG.ITEMS_PER_PAGE
     );
-    
-    if (pageItems.length === 0) { 
-        grid.innerHTML = '<p class="empty-message">🔍 कोई परिवार नहीं मिला।</p>'; 
-        return; 
+
+    if (pageItems.length === 0) {
+        grid.innerHTML = '<p class="empty-message">🔍 कोई परिवार नहीं मिला।</p>';
+        return;
     }
-    
+
     grid.innerHTML = pageItems.map(f => {
         const head = escapeHTML(f.head || 'अज्ञात');
         const branch = escapeHTML(f.branch || '—');
@@ -452,9 +452,9 @@ function renderFamilies(families) {
         const surname = escapeHTML(f.surname || '');
         const gotra = escapeHTML(f.gotra || '');
         const photoUrl = f.photo || IMAGE_CONFIG.DEFAULT_PHOTO;
-        
+
         const location = [village, district].filter(Boolean).join(', ') || '—';
-        
+
         return `
         <div class="family-card clickable-card" 
              data-family-id="${f.id}"
@@ -490,12 +490,12 @@ function renderFamilies(families) {
 function setupFamilyCardListeners() {
     document.querySelectorAll('.family-card.clickable-card').forEach(card => {
         const familyId = card.dataset.familyId;
-        
+
         const navigate = (e) => {
             if (e.target.closest('[data-stop-propagation]')) return;
             window.location.href = `family-details.php?id=${familyId}`;
         };
-        
+
         card.addEventListener('click', navigate);
         card.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' || e.key === ' ') {
@@ -512,32 +512,32 @@ function setupFamilyCardListeners() {
 function renderPagination(totalItems) {
     const pagination = document.getElementById('pagination');
     if (!pagination) return;
-    
+
     const totalPages = Math.ceil(totalItems / CONFIG.ITEMS_PER_PAGE);
-    
-    if (totalPages <= 1) { 
-        pagination.innerHTML = ''; 
-        return; 
+
+    if (totalPages <= 1) {
+        pagination.innerHTML = '';
+        return;
     }
-    
+
     let html = '';
-    
+
     html += `<button class="page-btn" data-page="${currentPage - 1}" ${currentPage === 1 ? 'disabled aria-disabled="true"' : ''} aria-label="Previous page">◀ पिछला</button>`;
-    
+
     let startPage = Math.max(1, currentPage - Math.floor(CONFIG.MAX_VISIBLE_PAGES / 2));
     let endPage = Math.min(totalPages, startPage + CONFIG.MAX_VISIBLE_PAGES - 1);
-    
+
     if (endPage - startPage < CONFIG.MAX_VISIBLE_PAGES - 1) {
         startPage = Math.max(1, endPage - CONFIG.MAX_VISIBLE_PAGES + 1);
     }
-    
+
     if (startPage > 1) {
         html += `<button class="page-btn" data-page="1">1</button>`;
         if (startPage > 2) {
             html += `<span class="pagination-ellipsis">...</span>`;
         }
     }
-    
+
     for (let i = startPage; i <= endPage; i++) {
         const isActive = i === currentPage;
         html += `
@@ -547,16 +547,16 @@ function renderPagination(totalItems) {
                 ${i}
             </button>`;
     }
-    
+
     if (endPage < totalPages) {
         if (endPage < totalPages - 1) {
             html += `<span class="pagination-ellipsis">...</span>`;
         }
         html += `<button class="page-btn" data-page="${totalPages}">${totalPages}</button>`;
     }
-    
+
     html += `<button class="page-btn" data-page="${currentPage + 1}" ${currentPage === totalPages ? 'disabled aria-disabled="true"' : ''} aria-label="Next page">अगला ▶</button>`;
-    
+
     pagination.innerHTML = html;
 }
 
@@ -564,25 +564,25 @@ function renderPagination(totalItems) {
 function setupPaginationListener() {
     const pagination = document.getElementById('pagination');
     if (!pagination) return;
-    
+
     // ✅ Use event delegation - one listener handles all pagination buttons
     pagination.addEventListener('click', (e) => {
         const btn = e.target.closest('.page-btn');
         if (!btn || btn.disabled || btn.hasAttribute('disabled')) return;
-        
+
         const page = parseInt(btn.dataset.page);
         if (isNaN(page) || page < 1 || page === currentPage) return;
-        
+
         currentPage = page;
         applyFamilyFilters();
-        
+
         // ✅ Smooth scroll to family section when changing pages
         const familySection = document.querySelector('.family-section') || document.getElementById('family-grid');
         if (familySection) {
             const offset = 100; // Account for sticky header
             const elementPosition = familySection.getBoundingClientRect().top;
             const offsetPosition = elementPosition + window.pageYOffset - offset;
-            
+
             window.scrollTo({
                 top: offsetPosition,
                 behavior: 'smooth'
