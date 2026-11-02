@@ -2,31 +2,64 @@
 // Optional: Public page, no auth needed
 ?>
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="hi" dir="ltr">
 
 <head>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="canonical" href="https://chhanyatvipralatur.com/gallery.php">
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#7B1A1A">
+
+    <title>गैलरी | छःन्यात राजस्थानी विप्र मंडल, लातूर</title>
     <meta name="description" content="छःन्यात राजस्थानी विप्र मंडल, लातूर की गैलरी - कार्यक्रम, समारोह और अन्य आयोजन की तस्वीरें">
     <meta name="keywords" content="Gallery Chhanyat Rajasthani Vipra Mandal Latur, Photos, Events, Programs, Brahmin Samaj Latur, छःन्यात राजस्थानी विप्र मंडल गैलरी">
     <meta property="og:title" content="गैलरी | छःन्यात राजस्थानी विप्र मंडल, लातूर">
     <meta property="og:description" content="छःन्यात राजस्थानी विप्र मंडल, लातूर की गैलरी - कार्यक्रम, समारोह और अन्य आयोजन की तस्वीरें">
     <meta property="og:url" content="https://chhanyatvipralatur.com/gallery.php">
     <meta property="og:type" content="website">
+
+    <!-- Schema.org Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ImageGallery",
+      "name": "छःन्यात राजस्थानी विप्र मंडल, लातूर - फोटो गैलरी",
+      "description": "छःन्यात राजस्थानी विप्र मंडल, लातूर की गैलरी - कार्यक्रम, समारोह और अन्य आयोजन की तस्वीरें",
+      "url": "https://chhanyatvipralatur.com/gallery.php"
+    }
+    </script>
+
+    <!-- Google Analytics & Counter -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DE5KD051LL"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-DE5KD051LL');
+    </script>
+    <script src="https://cdn.counter.dev/script.js" data-id="1f92108b-8857-410e-b5a8-c1ab33e859f8" data-utcoffset="6"></script>
+
+    <!-- Typography & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Yatra+One&family=Tiro+Devanagari+Hindi&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-    <title>गैलरी | छःन्यात राजस्थानी विप्र मंडल, लातूर</title>
-   <link rel="stylesheet" href="css/style.css?v=<?= @filemtime(__DIR__.'/css/style.css') ?: time()?>">
-
+    <link rel="stylesheet" href="css/style.css?v=<?= @filemtime(__DIR__.'/css/style.css') ?: time()?>">
 </head>
 <body>
     <div data-include="components/header.php"></div>
 
-    <div class="container">
-       <br>
+    <div class="container" style="padding-top: 15px;">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb no-print" aria-label="Breadcrumb">
+            <a href="index.php">🏠 मुख्य पृष्ठ</a>
+            <span class="separator">›</span>
+            <span class="current">फोटो गैलरी</span>
+        </nav>
+
         <section>
             <div class="gallery-hero">
                 <div class="gallery-hero-content">
@@ -45,11 +78,11 @@
     </div>
 
     <!-- 🖼️ PREMIUM LIGHTBOX -->
-    <div id="lightbox">
-        <div class="lb-close" id="lb-close-btn"><i class="fas fa-times"></i></div>
-        <button class="lb-nav lb-prev" id="lb-prev-btn"><i class="fas fa-chevron-left"></i></button>
-        <img id="lightbox-img" src="" alt="Full size">
-        <button class="lb-nav lb-next" id="lb-next-btn"><i class="fas fa-chevron-right"></i></button>
+    <div id="lightbox" role="dialog" aria-modal="true" aria-label="तस्वीर विस्तार (Lightbox)">
+        <button class="lb-close" id="lb-close-btn" aria-label="बंद करें (Close)" style="background:none;border:none;"><i class="fas fa-times"></i></button>
+        <button class="lb-nav lb-prev" id="lb-prev-btn" aria-label="पिछली तस्वीर (Previous)"><i class="fas fa-chevron-left"></i></button>
+        <img id="lightbox-img" src="" alt="तस्वीर विस्तार">
+        <button class="lb-nav lb-next" id="lb-next-btn" aria-label="अगली तस्वीर (Next)"><i class="fas fa-chevron-right"></i></button>
         <div class="lb-caption" id="lb-caption"></div>
         <div class="lb-counter-wrap">
             <div class="lb-counter" id="lb-counter"></div>
@@ -491,6 +524,7 @@ function updateLightboxDisplay() {
     img.style.opacity = '0';
     setTimeout(() => {
         img.src = data.src;
+        img.alt = `${data.albumTitle} - ${data.albumPosition || currentIndex + 1}`;
         img.style.opacity = '1';
     }, 150);
 
@@ -529,27 +563,32 @@ function closeLightbox() {
     }
 }
 
-// FIXED: navigateLightbox is now async. If Next/Prev lands on a photo whose
-// album hasn't been fetched yet (only the first album auto-loads), it loads
-// that album on demand instead of silently skipping it / wrapping around.
+// FIXED: navigateLightbox is async and handles gaps or albums mid-load safely
 async function navigateLightbox(direction) {
     if (allImages.length === 0) return;
 
-    const nextIndex = (currentIndex + direction + allImages.length) % allImages.length;
+    let attempts = 0;
+    let nextIndex = currentIndex;
 
-    if (!allImages[nextIndex]) {
-        const range = albumRanges.find(r => nextIndex >= r.start && nextIndex < r.end);
-        if (range) {
-            const state = albumState.get(range.albumId);
-            if (state && !state.imagesLoaded) {
-                await loadAlbumImages(range.albumId, range.folder, range.grid, range.gridWrap, range.header);
+    while (attempts < allImages.length) {
+        attempts++;
+        nextIndex = (nextIndex + direction + allImages.length) % allImages.length;
+
+        if (!allImages[nextIndex]) {
+            const range = albumRanges.find(r => nextIndex >= r.start && nextIndex < r.end);
+            if (range) {
+                const state = albumState.get(range.albumId);
+                if (state && !state.imagesLoaded) {
+                    await loadAlbumImages(range.albumId, range.folder, range.grid, range.gridWrap, range.header);
+                }
             }
         }
-    }
 
-    if (allImages[nextIndex]) {
-        currentIndex = nextIndex;
-        updateLightboxDisplay();
+        if (allImages[nextIndex] && allImages[nextIndex].src) {
+            currentIndex = nextIndex;
+            updateLightboxDisplay();
+            return;
+        }
     }
 }
 
