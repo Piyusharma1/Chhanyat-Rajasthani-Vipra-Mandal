@@ -122,22 +122,23 @@ for ($i = 0; $i < $fileCount; $i++) {
         continue;
     }
     
-    // Generate unique filename
-    $ext = pathinfo($fileName, PATHINFO_EXTENSION);
-    $newFileName = uniqid('img_', true) . '.' . strtolower($ext);
+    require_once __DIR__ . '/webp_utils.php';
+
+    // Generate unique WebP filename
+    $newFileName = uniqid('img_', true) . '.webp';
     $destination = $albumDir . $newFileName;
     
-    // Move uploaded file
-    if (move_uploaded_file($fileTmpName, $destination)) {
+    // Convert and save as WebP
+    if (convertToWebp($fileTmpName, $destination)) {
         $uploadedCount++;
         $uploadedFiles[] = [
             'name' => $fileName,
             'saved_as' => $newFileName,
             'url' => 'uploads/gallery/' . $albumFolder . '/' . $newFileName,
-            'size' => $fileSize
+            'size' => file_exists($destination) ? filesize($destination) : $fileSize
         ];
     } else {
-        $errors[] = "$fileName: Failed to move file";
+        $errors[] = "$fileName: Failed to convert and save image as WebP";
     }
 }
 

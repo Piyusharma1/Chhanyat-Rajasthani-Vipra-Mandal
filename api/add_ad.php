@@ -76,14 +76,14 @@ try {
             exit;
         }
 
-        $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-        $filename = uniqid('ad_', true) . '.' . $ext;
+        require_once __DIR__ . '/webp_utils.php';
+        $filename = uniqid('ad_', true) . '.webp';
         $destPath = $uploadDir . $filename;
 
-        if (move_uploaded_file($file['tmp_name'], $destPath)) {
+        if (convertToWebp($file['tmp_name'], $destPath)) {
             $imageUrl = 'uploads/ads/' . $filename;
         } else {
-            echo json_encode(['success' => false, 'error' => 'Failed to save uploaded image']);
+            echo json_encode(['success' => false, 'error' => 'Failed to convert and save uploaded image as WebP']);
             exit;
         }
     }

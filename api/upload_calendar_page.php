@@ -41,17 +41,16 @@ foreach (['jpg', 'jpeg', 'png', 'webp'] as $ext) {
     }
 }
 
-$extension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-if ($extension === 'jpeg') $extension = 'jpg';
-$targetFile = $targetDir . $month . '.' . $extension;
+require_once __DIR__ . '/webp_utils.php';
+$targetFile = $targetDir . $month . '.webp';
 
-if (move_uploaded_file($file['tmp_name'], $targetFile)) {
+if (convertToWebp($file['tmp_name'], $targetFile)) {
     echo json_encode([
         'success' => true,
-        'message' => "माह {$month} का कैलेंडर पृष्ठ सफलतापूर्वक अपलोड हुआ!",
-        'url' => "uploads/calendar/pages/{$month}.{$extension}"
+        'message' => "माह {$month} का कैलेंडर पृष्ठ WebP प्रारूप में सफलतापूर्वक अपलोड हुआ!",
+        'url' => "uploads/calendar/pages/{$month}.webp?v=" . time()
     ]);
 } else {
-    echo json_encode(['success' => false, 'error' => 'Failed to save uploaded image.']);
+    echo json_encode(['success' => false, 'error' => 'Failed to convert and save uploaded image.']);
 }
 ?>

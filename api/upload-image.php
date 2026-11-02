@@ -73,13 +73,14 @@ if (!in_array($fileType, $allowedTypes)) {
     exit;
 }
 
-// Generate unique filename
-$fileExtension = pathinfo($file['name'], PATHINFO_EXTENSION);
-$uniqueFilename = uniqid('committee_', true) . '.' . $fileExtension;
+require_once __DIR__ . '/webp_utils.php';
+
+// Generate unique WebP filename
+$uniqueFilename = uniqid('committee_', true) . '.webp';
 $uploadPath = $uploadDir . $uniqueFilename;
 
-// Move uploaded file
-if (move_uploaded_file($file['tmp_name'], $uploadPath)) {
+// Convert and save as WebP
+if (convertToWebp($file['tmp_name'], $uploadPath)) {
     // Get full URL
     $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
     $host = $_SERVER['HTTP_HOST'];
@@ -94,13 +95,14 @@ if (move_uploaded_file($file['tmp_name'], $uploadPath)) {
         exit;
     }
     
+    $finalSize = filesize($uploadPath);
     echo json_encode([
         'success' => true,
-        'message' => 'छवि सफलतापूर्वक अपलोड हुई।',
+        'message' => 'छवि सफलतापूर्वक अपलोड हुई और WebP में परिवर्तित की गई।',
         'url' => $imageUrl,
         'path' => $uploadPath,
         'filename' => $uniqueFilename,
-        'size' => $file['size']
+        'size' => $finalSize
     ]);
 } else {
     echo json_encode([
