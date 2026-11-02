@@ -42,7 +42,6 @@ try {
     $businessName = trim($data['business_name'] ?? '') ?: null;
     $linkUrl = trim($data['link_url'] ?? '') ?: null;
     $phone = trim($data['phone'] ?? '') ?: null;
-    $placement = in_array($data['placement'] ?? '', ['top', 'feed', 'bottom']) ? $data['placement'] : 'top';
     $status = in_array($data['status'] ?? '', ['active', 'inactive']) ? $data['status'] : 'active';
     $displayOrder = isset($data['display_order']) ? (int)$data['display_order'] : 0;
     $startDate = !empty($data['start_date']) ? $data['start_date'] : null;
@@ -94,15 +93,14 @@ try {
         exit;
     }
 
-    $stmt = $pdo->prepare("INSERT INTO local_ads (title, business_name, image_url, link_url, phone, placement, status, display_order, start_date, end_date) 
-                           VALUES (:title, :business_name, :image_url, :link_url, :phone, :placement, :status, :display_order, :start_date, :end_date)");
+    $stmt = $pdo->prepare("INSERT INTO local_ads (title, business_name, image_url, link_url, phone, status, display_order, start_date, end_date) 
+                           VALUES (:title, :business_name, :image_url, :link_url, :phone, :status, :display_order, :start_date, :end_date)");
     $stmt->execute([
         ':title' => $title,
         ':business_name' => $businessName,
         ':image_url' => $imageUrl,
         ':link_url' => $linkUrl,
         ':phone' => $phone,
-        ':placement' => $placement,
         ':status' => $status,
         ':display_order' => $displayOrder,
         ':start_date' => $startDate,

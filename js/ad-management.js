@@ -130,9 +130,6 @@ function renderAds(ads) {
                     <span class="ad-card-badge ${isActive ? 'active' : 'inactive'}">
                         ${isActive ? 'सक्रिय (Active)' : 'निष्क्रिय (Inactive)'}
                     </span>
-                    <span class="ad-card-placement-badge" style="position: absolute; bottom: 8px; left: 8px; background: rgba(0,0,0,0.7); color: #fff; font-size: 0.72rem; padding: 2px 8px; border-radius: 4px;">
-                        ${ad.placement === 'feed' ? 'इन-फीड (Feed)' : (ad.placement === 'bottom' ? 'तळ बैनर (Bottom)' : 'शीर्ष बैनर (Top)')}
-                    </span>
                     <span class="ad-card-order">#${ad.display_order || 0}</span>
                 </div>
                 <div class="ad-card-body">
@@ -258,8 +255,6 @@ function openEditModal(id) {
     document.getElementById('edit-ad-business').value = ad.business_name || '';
     document.getElementById('edit-ad-phone').value = ad.phone || '';
     document.getElementById('edit-ad-link').value = ad.link_url || '';
-    document.getElementById('edit-ad-placement').value = ad.placement || 'top';
-    document.getElementById('edit-ad-start-date').value = ad.start_date || '';
     document.getElementById('edit-ad-order').value = ad.display_order || 0;
     document.getElementById('edit-ad-status').value = ad.status || 'active';
 

@@ -13,19 +13,14 @@ try {
         image_url VARCHAR(500) NOT NULL,
         link_url VARCHAR(500) DEFAULT NULL,
         phone VARCHAR(50) DEFAULT NULL,
-        placement ENUM('top', 'feed', 'bottom') DEFAULT 'top',
         status ENUM('active', 'inactive') DEFAULT 'active',
         display_order INT DEFAULT 0,
         start_date DATE DEFAULT NULL,
         end_date DATE DEFAULT NULL,
-        clicks INT DEFAULT 0,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
     $pdo->exec($createTableSql);
-
-    try { $pdo->exec("ALTER TABLE local_ads ADD COLUMN placement ENUM('top', 'feed', 'bottom') DEFAULT 'top'"); } catch (\Exception $e) {}
-    try { $pdo->exec("ALTER TABLE local_ads ADD COLUMN clicks INT DEFAULT 0"); } catch (\Exception $e) {}
 
     $isAdmin = isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true;
     $adminView = isset($_GET['admin_view']) && ($_GET['admin_view'] === 'true' || $_GET['admin_view'] === '1');
