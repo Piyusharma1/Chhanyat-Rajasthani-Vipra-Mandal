@@ -37,7 +37,7 @@
                 <div class="about-icon">
                     <i class="fas fa-landmark"></i>
                 </div>
-                <h3>इतिहास (History)</h3>
+                <h3>इतिहास</h3>
                 <p>
                     छःन्यात राजस्थानी विप्र मंडल, लातूर की स्थापना समुदाय के बीच
                     <strong>एकता, भाईचारा और सांस्कृतिक मूल्यों</strong> को संरक्षित करने के
@@ -52,7 +52,7 @@
                 <div class="about-icon">
                     <i class="fas fa-bullseye"></i>
                 </div>
-                <h3>मिशन (Mission)</h3>
+                <h3>मिशन</h3>
                 <p>
                     समुदाय के सभी <strong>परिवारों</strong> के बीच सामंजस्य बनाए रखना,
                     पारस्परिक सहयोग को बढ़ावा देना, और प्रत्येक परिवार को सामाजिक, शैक्षिक
@@ -65,7 +65,7 @@
                 <div class="about-icon">
                     <i class="fas fa-eye"></i>
                 </div>
-                <h3>दृष्टि (Vision)</h3>
+                <h3>दृष्टि</h3>
                 <p>
                     हमारी परंपराओं, संस्कृति और मूल्यों को संरक्षित करते हुए आने वाली
                     पीढ़ियों के लिए एक <strong>सुदृढ़, शिक्षित और एकजुट</strong> समुदाय का
@@ -76,7 +76,7 @@
 
         <!-- Objectives Section -->
         <section class="objectives-section">
-            <h2 class="section-title"><i class="fas fa-star" style="color: var(--gold); font-size: 1.5rem; margin-right: 8px;"></i> मुख्य उद्देश्य (Objectives)</h2>
+            <h2 class="section-title"><i class="fas fa-star" style="color: var(--gold); font-size: 1.5rem; margin-right: 8px;"></i> मुख्य उद्देश्य</h2>
 
             <div class="objectives-grid">
                 <div class="objective-item">
