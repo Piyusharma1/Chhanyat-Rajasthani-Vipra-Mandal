@@ -212,9 +212,23 @@ session_start();
             box-shadow: 0 6px 20px rgba(255, 107, 0, 0.4);
         }
 
-        .btn-primary:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
+        .btn-secondary {
+            background: rgba(123, 26, 26, 0.1);
+            color: var(--maroon);
+            padding: 10px 22px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.92rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            border: none;
+        }
+        .btn-secondary:hover {
+            background: rgba(123, 26, 26, 0.2);
+            color: var(--maroon-deep);
         }
 
         /* ===== ANNOUNCEMENTS LIST ===== */
@@ -386,6 +400,15 @@ session_start();
     
     <!-- Main Container -->
     <div class="page-container">
+        <!-- Top Navigation -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+            <a href="admin-dashboard.php" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> डैशबोर्ड पर वापस जाएं
+            </a>
+            <div style="font-size: 0.9rem; color: var(--maroon);">
+                <i class="fas fa-shield-alt"></i> घोषणा प्रबंधन प्रणाली
+            </div>
+        </div>
         
         <!-- Add Announcement Form -->
         <div class="section-divider">

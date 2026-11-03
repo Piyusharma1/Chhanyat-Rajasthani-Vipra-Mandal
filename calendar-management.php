@@ -61,6 +61,33 @@ $months = [
             padding: 0 20px;
         }
 
+        .section-divider {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 25px 0 25px;
+        }
+        .section-divider::before,
+        .section-divider::after {
+            content: '';
+            flex: 1;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold, #C9941A), transparent);
+        }
+        .section-divider h2 {
+            font-family: 'Tiro Devanagari Hindi', serif;
+            color: var(--maroon, #7B1A1A);
+            font-size: 1.4rem;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0;
+        }
+        .section-divider h2 i {
+            color: var(--saffron, #FF6B00);
+        }
+
         .page-header {
             display: flex;
             justify-content: space-between;
@@ -556,20 +583,27 @@ $months = [
 
     <main class="page-container">
 
-        <!-- Page Header (Ref: committee-management) -->
-        <div class="page-header">
-            <h2><i class="fas fa-calendar-alt"></i> दिनदर्शिका प्रबंधन</h2>
+        <!-- Top Navigation -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
             <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                <a href="admin-dashboard.php" class="btn btn-secondary" style="width: auto;">
+                    <i class="fas fa-arrow-left"></i> डैशबोर्ड पर वापस जाएं
+                </a>
                 <button type="button" class="btn btn-secondary" id="btn-open-pdf-modal" style="width: auto;">
                     <i class="fas fa-file-pdf"></i> संपूर्ण PDF प्रबंधन
                 </button>
                 <a href="calendar.php" target="_blank" class="btn btn-secondary" style="width: auto; border-color: var(--saffron); color: var(--saffron-deep);">
                     <i class="fas fa-external-link-alt"></i> लाइव दिनदर्शिका
                 </a>
-                <a href="admin-dashboard.php" class="btn btn-secondary" style="width: auto;">
-                    <i class="fas fa-arrow-left"></i> डैशबोर्ड पर वापस जाएं
-                </a>
             </div>
+            <div style="font-size: 0.9rem; color: var(--maroon);">
+                <i class="fas fa-shield-alt"></i> दिनदर्शिका प्रबंधन प्रणाली
+            </div>
+        </div>
+
+        <!-- Section Divider -->
+        <div class="section-divider">
+            <h2><i class="fas fa-calendar-alt"></i> सनातन दिनदर्शिका प्रबंधन</h2>
         </div>
 
         <!-- 1. Page Info & Quick Action Card -->

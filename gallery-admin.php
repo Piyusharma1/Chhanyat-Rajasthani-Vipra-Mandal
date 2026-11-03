@@ -743,10 +743,17 @@
     <div data-include="components/header.php"></div>
     <!-- ===== HEADER ===== -->
 
-<!-- Toast Container (Same as committee page) -->
-<div id="toast-container" style="position:fixed;top:20px;right:20px;z-index:9999;"></div>
     <!-- ===== MAIN ===== -->
     <div class="page-container">
+        <!-- Top Navigation -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+            <a href="admin-dashboard.php" class="btn btn-secondary" style="background: rgba(123, 26, 26, 0.1); border: none; padding: 10px 22px; text-decoration: none;">
+                <i class="fas fa-arrow-left"></i> डैशबोर्ड पर वापस जाएं
+            </a>
+            <div style="font-size: 0.9rem; color: var(--maroon);">
+                <i class="fas fa-shield-alt"></i> गैलरी प्रबंधन प्रणाली
+            </div>
+        </div>
 
         <!-- ===== UPLOAD SECTION ===== -->
         <div class="section-divider">

@@ -175,19 +175,26 @@ foreach ($months as $num => $m) {
         }
 
         /* Control / Header Bar */
-        .cal-header-bar {
-            background: #fff;
-            padding: 12px 18px;
-            border-radius: 12px;
-            margin-bottom: 22px;
-            border: 1px solid rgba(201, 148, 26, 0.3);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-        }
+    .cal-header-bar {
+    width: 100%;
+    max-width: none;
+    box-sizing: border-box;
+
+    background: #fff;
+    padding: 12px 18px;
+    border-radius: 12px;
+    margin: 0 0 22px;
+
+    border: 1px solid rgba(201, 148, 26, 0.3);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
 
         .cal-main-title {
             font-family: 'Tiro Devanagari Hindi', serif;
@@ -338,7 +345,7 @@ foreach ($months as $num => $m) {
         }
 
         .card-action-btn.btn-dl {
-            background: var(--cal-saffron);
+            background: var(--cal-maroon);
             color: #fff;
             border-color: var(--cal-saffron);
         }
@@ -386,13 +393,19 @@ foreach ($months as $num => $m) {
                 font-size: 0.85rem;
             }
 
-            .cal-header-bar {
-                padding: 10px 14px;
-                justify-content: center;
-                text-align: center;
-                gap: 10px;
-                margin-bottom: 14px;
-            }
+        .cal-header-bar {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 14px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+
+    margin-bottom: 14px;
+}
 
             .cal-main-title {
                 font-size: 1.15rem;
@@ -609,23 +622,28 @@ foreach ($months as $num => $m) {
 </head>
 <body>
     <?php include __DIR__ . '/components/header.php'; ?>
-
+<div class="container" style="padding-top: 15px;">
+<div class="gallery-hero">
+                <div class="gallery-hero-content">
+                                <h2>सनातन दिनदर्शिका</h2>
+                    <p class="gallery-hero-subtitle" id="gallery-total-info"></p>
+                </div>
+            </div>
+    </div>
         <!-- Header Bar -->
         <div class="cal-header-bar">
             <div>
-                <h1 class="cal-main-title">
-                    <i class="fas fa-om" style="color:var(--cal-saffron);"></i> सनातन दिनदर्शिका
-                </h1>
-                <p style="margin: 3px 0 0; font-size: 0.9rem; color: #666; font-weight: 500;">
-                    छःन्यात राजस्थानी विप्र मंडल, लातूर (समस्त १२ माह)
-                </p>
+                
             </div>
 
-            <?php if ($hasPdf): ?>
-            <a href="<?= $calendarPdfPath ?>" download="सनातन_दिनदर्शिका.pdf" class="btn-pdf">
-                <i class="fas fa-file-pdf"></i> सम्पूर्ण PDF डाउनलोड
-            </a>
-            <?php endif; ?>
+           <?php if ($hasPdf): ?>
+    <a href="<?= htmlspecialchars($calendarPdfPath, ENT_QUOTES, 'UTF-8') ?>"
+       download="सनातन_दिनदर्शिका.pdf"
+       class="btn-pdf">
+        <i class="fas fa-file-pdf"></i>
+        सम्पूर्ण PDF डाउनलोड
+    </a>
+<?php endif; ?>
         </div>
 
         <!-- Sticky Month Bar: Desktop (All 12 in 1 Row) & Mobile (Swipeable Pills) -->

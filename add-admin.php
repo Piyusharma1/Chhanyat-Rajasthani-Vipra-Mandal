@@ -23,53 +23,70 @@
             -webkit-font-smoothing: antialiased;
         }
         
-        .page-container { max-width: 1100px; margin: 24px auto 60px; padding: 0 20px; }
-        
-        /* 🏰 Header Banner */
-        .page-header {
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            margin-bottom: 24px; 
-            flex-wrap: wrap; 
-            gap: 16px;
-            background: linear-gradient(135deg, var(--maroon, #7B1A1A), var(--maroon-deep, #550F0F));
-            padding: 24px 28px;
-            border-radius: var(--radius-md, 14px);
-            color: var(--white, #fff);
-            box-shadow: 0 10px 30px rgba(123, 26, 26, 0.15);
-            border-bottom: 4px solid var(--gold, #C9941A);
+        .page-container { max-width: 1200px; margin: 30px auto 60px; padding: 0 20px; }
+
+        .top-nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
-        .header-title-group h2 { 
-            font-family: 'Tiro Devanagari Hindi', serif; 
-            color: var(--gold-light, #F0C060); 
-            margin-bottom: 4px; 
-            font-size: clamp(1.4rem, 2.5vw, 1.9rem); 
+        .btn-secondary {
+            background: rgba(123, 26, 26, 0.1);
+            color: var(--maroon, #7B1A1A);
+            padding: 10px 22px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.92rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            border: none;
         }
-        .header-title-group p { 
-            font-size: 0.88rem; 
-            opacity: 0.9; 
-            color: rgba(255, 255, 255, 0.85); 
+        .btn-secondary:hover {
+            background: rgba(123, 26, 26, 0.2);
+            color: var(--maroon-deep, #550F0F);
         }
-        .btn-back { 
-            background: rgba(255, 255, 255, 0.15); 
-            color: var(--gold-pale, #FDF5E0); 
-            border: 1px solid var(--gold-light, #F0C060); 
-            padding: 10px 20px; 
-            border-radius: 25px; 
-            text-decoration: none; 
-            font-weight: 600; 
-            font-size: 0.88rem; 
-            display: inline-flex; 
-            align-items: center; 
-            gap: 8px; 
-            transition: all 0.25s ease;
-            backdrop-filter: blur(5px);
+        .system-badge {
+            font-size: 0.9rem;
+            color: var(--maroon, #7B1A1A);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 500;
         }
-        .btn-back:hover { 
-            background: var(--gold, #C9941A); 
-            color: var(--maroon-deep, #550F0F); 
-            transform: translateX(-3px); 
+        .system-badge i {
+            color: var(--saffron, #FF6B00);
+        }
+        .section-divider {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 25px 0 25px;
+        }
+        .section-divider::before,
+        .section-divider::after {
+            content: '';
+            flex: 1;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold, #C9941A), transparent);
+        }
+        .section-divider h2 {
+            font-family: 'Tiro Devanagari Hindi', serif;
+            color: var(--maroon, #7B1A1A);
+            font-size: 1.4rem;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0;
+        }
+        .section-divider h2 i {
+            color: var(--saffron, #FF6B00);
         }
 
         /* 📦 Card Grid Layout */
@@ -378,16 +395,20 @@
     <div data-include="components/header.php"></div>
 
     <div class="page-container" id="admin-page-content" style="display: none;">
-        <!-- 👑 Page Banner Header -->
-        <header class="page-header">
-            <div class="header-title-group">
-                <h2><i class="fas fa-user-shield"></i> एडमिन प्रबंधन (Manage Admins)</h2>
-                <p>नए एडमिन यूजर बनाएं, क्रेडेंशियल्स प्रबंधित करें एवं सिस्टम सुरक्षा बनाए रखें।</p>
-            </div>
-            <a href="admin-dashboard.php" class="btn-back">
+        <!-- Top Navigation -->
+        <div class="top-nav-bar">
+            <a href="admin-dashboard.php" class="btn-secondary">
                 <i class="fas fa-arrow-left"></i> डैशबोर्ड पर वापस जाएं
             </a>
-        </header>
+            <div class="system-badge">
+                <i class="fas fa-shield-alt"></i> एडमिन सुरक्षा एवं उपयोगकर्ता प्रबंधन
+            </div>
+        </div>
+
+        <!-- Section Divider -->
+        <div class="section-divider">
+            <h2><i class="fas fa-user-shield"></i> एडमिन प्रबंधन</h2>
+        </div>
 
         <div class="layout-grid">
             <!-- ➕ Form Card: Add Admin -->

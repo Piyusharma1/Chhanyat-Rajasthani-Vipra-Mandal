@@ -28,11 +28,32 @@
         
         .page-container { max-width: 1200px; margin: 20px auto; padding: 0 20px; }
         
-        .page-header {
-            display: flex; justify-content: space-between; align-items: center; 
-            margin-bottom: var(--spacing-xl); flex-wrap: wrap; gap: 16px;
+        .section-divider {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 25px 0 25px;
         }
-        .page-header h2 { color: var(--maroon); margin: 0; font-size: clamp(1.3rem, 2.5vw, 1.8rem); }
+        .section-divider::before,
+        .section-divider::after {
+            content: '';
+            flex: 1;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold, #C9941A), transparent);
+        }
+        .section-divider h2 {
+            font-family: 'Tiro Devanagari Hindi', serif;
+            color: var(--maroon);
+            font-size: 1.4rem;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0;
+        }
+        .section-divider h2 i {
+            color: var(--saffron);
+        }
 
         .card { 
             background: var(--bg-card); 
@@ -380,11 +401,19 @@
     <div id="toast-container"></div>
 
     <main class="page-container">
-        <div class="page-header">
-            <h2><i class="fas fa-users-cog"></i> कार्यकारिणी प्रबंधन</h2>
+        <!-- Top Navigation -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
             <a href="admin-dashboard.php" class="btn btn-secondary">
                 <i class="fas fa-arrow-left"></i> डैशबोर्ड पर वापस जाएं
             </a>
+            <div style="font-size: 0.9rem; color: var(--maroon);">
+                <i class="fas fa-shield-alt"></i> कार्यकारिणी प्रबंधन प्रणाली
+            </div>
+        </div>
+
+        <!-- Section Divider -->
+        <div class="section-divider">
+            <h2><i class="fas fa-users-cog"></i> कार्यकारिणी प्रबंधन</h2>
         </div>
 
         <!-- 1. CENTRAL COMMITTEE SECTION -->

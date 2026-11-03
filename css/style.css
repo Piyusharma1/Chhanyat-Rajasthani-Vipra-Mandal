@@ -4206,7 +4206,7 @@ body.dark-mode .obj-content p {
     background: var(--gold-gradient);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    margin: 0 0 0.5rem 0;
+
     letter-spacing: 1px;
 }
 
@@ -5030,7 +5030,7 @@ body.dark-mode .obj-content p {
 .ad-disclaimer {
     font-size: 0.75rem;
     color: #888;
-    background: rgba(0,0,0,0.04);
+    background: rgba(0, 0, 0, 0.04);
     padding: 2px 8px;
     border-radius: 4px;
     letter-spacing: 0.5px;
@@ -5108,7 +5108,7 @@ body.dark-mode .obj-content p {
     justify-content: space-between;
     align-items: center;
     gap: 10px;
-    border-top: 1px solid rgba(0,0,0,0.05);
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .sponsor-banner-title,
@@ -5528,37 +5528,44 @@ body.dark-mode .obj-content p {
         box-shadow: 0 8px 24px rgba(123, 26, 26, 0.08);
         margin-top: 10px;
     }
+
     .home-cal-preview-card {
         flex-direction: column;
         text-align: center;
         gap: 16px;
     }
+
     .home-cal-img-wrap {
         max-width: 200px;
         margin: 0 auto 2px;
         border-radius: 12px;
         box-shadow: 0 6px 20px rgba(123, 26, 26, 0.14);
     }
+
     .home-cal-badge {
         font-size: 0.78rem;
         padding: 4px 12px;
         margin-bottom: 8px;
     }
+
     .home-cal-title {
         font-size: 1.25rem;
         margin-bottom: 8px;
     }
+
     .home-cal-text {
         font-size: 0.85rem;
         line-height: 1.5;
         margin-bottom: 16px;
         padding: 0 4px;
     }
+
     .home-cal-months-label {
         justify-content: center;
         font-size: 0.78rem;
         margin-bottom: 10px;
     }
+
     .home-cal-months-label::before {
         content: "";
         flex: 1;
@@ -5566,16 +5573,19 @@ body.dark-mode .obj-content p {
         height: 1px;
         background: rgba(201, 148, 26, 0.35);
     }
+
     .home-cal-months-label::after {
         max-width: 35px;
         background: rgba(201, 148, 26, 0.35);
     }
+
     .home-cal-months-strip {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         gap: 7px 6px;
         margin-bottom: 18px;
     }
+
     .home-month-pill {
         padding: 8px 4px;
         font-size: 0.8rem;
@@ -5586,6 +5596,7 @@ body.dark-mode .obj-content p {
         text-overflow: ellipsis;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
     }
+
     .home-cal-action-btns {
         flex-direction: column;
         gap: 10px;
@@ -5593,6 +5604,7 @@ body.dark-mode .obj-content p {
         max-width: 360px;
         margin: 0 auto;
     }
+
     .home-cal-btn {
         width: 100%;
         padding: 12px 16px;
@@ -5606,16 +5618,20 @@ body.dark-mode .obj-content p {
     .home-cal-showcase {
         padding: 18px 12px 16px;
     }
+
     .home-cal-img-wrap {
         max-width: 180px;
     }
+
     .home-cal-title {
         font-size: 1.18rem;
     }
+
     .home-cal-months-strip {
         grid-template-columns: repeat(3, 1fr);
         gap: 6px 5px;
     }
+
     .home-month-pill {
         padding: 8px 2px;
         font-size: 0.78rem;

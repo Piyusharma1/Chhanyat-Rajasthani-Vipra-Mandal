@@ -10,14 +10,69 @@
     <title>नया परिवार जोड़ें | छःन्यात राजस्थानी विप्र मंडल</title>
     <link rel="stylesheet" href="css/style.css?v=<?= filemtime($_SERVER['DOCUMENT_ROOT'].'/css/style.css')?>">
     <style>
-        .page-header {
-            background: linear-gradient(135deg, var(--maroon-deep) 0%, var(--maroon) 50%, var(--saffron) 100%);
-            color: white;
-            padding: 2rem 1rem;
-            text-align: center;
-            margin-bottom: 2rem;
+        .top-nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
-        .page-header h2 { color: #FFD180; margin: 0; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .btn-secondary {
+            background: rgba(123, 26, 26, 0.1);
+            color: var(--maroon, #7B1A1A);
+            padding: 10px 22px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.92rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            border: none;
+        }
+        .btn-secondary:hover {
+            background: rgba(123, 26, 26, 0.2);
+            color: var(--maroon-deep, #550F0F);
+        }
+        .system-badge {
+            font-size: 0.9rem;
+            color: var(--maroon, #7B1A1A);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 500;
+        }
+        .system-badge i {
+            color: var(--saffron, #FF6B00);
+        }
+        .section-divider {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 25px 0 25px;
+        }
+        .section-divider::before,
+        .section-divider::after {
+            content: '';
+            flex: 1;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold, #C9941A), transparent);
+        }
+        .section-divider h2 {
+            font-family: 'Tiro Devanagari Hindi', serif;
+            color: var(--maroon, #7B1A1A);
+            font-size: 1.4rem;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0;
+        }
+        .section-divider h2 i {
+            color: var(--saffron, #FF6B00);
+        }
         
         .form-container {
             max-width: 900px;
@@ -189,10 +244,20 @@
         <p style="margin-top: 1rem; color: #666;">सत्यापन हो रहा है...</p>
     </div>
 
-    <div id="main-content" style="display: none;">
-        <div class="page-header">
+    <div id="main-content" style="display: none; max-width: 1200px; margin: 30px auto; padding: 0 20px;">
+        <!-- Top Navigation -->
+        <div class="top-nav-bar">
+            <a href="admin-dashboard.php" class="btn-secondary">
+                <i class="fas fa-arrow-left"></i> डैशबोर्ड पर वापस जाएं
+            </a>
+            <div class="system-badge">
+                <i class="fas fa-shield-alt"></i> परिवार प्रबंधन प्रणाली
+            </div>
+        </div>
+
+        <!-- Section Divider -->
+        <div class="section-divider">
             <h2><i class="fas fa-user-plus"></i> नया परिवार जोड़ें</h2>
-            <p style="opacity: 0.9; margin-top: 8px;">नए परिवार की जानकारी भरें</p>
         </div>
 
         <div class="form-container">
