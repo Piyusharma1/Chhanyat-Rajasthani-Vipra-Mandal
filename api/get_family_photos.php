@@ -7,6 +7,15 @@ try {
     $photos = [];
     $seen = [];
 
+    $normalizeKey = function($pathOrUrl) {
+        $clean = trim((string)$pathOrUrl);
+        $path = parse_url($clean, PHP_URL_PATH);
+        $basename = basename($path ?: $clean);
+        // URL decode in case database stored URL-encoded filename (%E0%A4%AC...)
+        $decoded = rawurldecode($basename);
+        return mb_strtolower($decoded, 'UTF-8');
+    };
+
     // 1. Fetch from database families table
     if (isset($pdo) && $pdo) {
         try {
@@ -16,10 +25,12 @@ try {
                 $rawUrl = trim($f['photo']);
                 if (empty($rawUrl)) continue;
 
-                $filename = basename(parse_url($rawUrl, PHP_URL_PATH));
-                $key = mb_strtolower($filename, 'UTF-8');
+                $key = $normalizeKey($rawUrl);
+                if (empty($key)) continue;
+
                 if (!isset($seen[$key])) {
                     $seen[$key] = true;
+                    $filename = rawurldecode(basename(parse_url($rawUrl, PHP_URL_PATH) ?: $rawUrl));
                     $photos[] = [
                         'url' => $rawUrl,
                         'head' => $f['head'] ?? '',
@@ -44,7 +55,7 @@ try {
             $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
             if (!in_array($ext, $allowedExtensions)) continue;
 
-            $key = mb_strtolower($file, 'UTF-8');
+            $key = $normalizeKey($file);
             if (!isset($seen[$key])) {
                 $seen[$key] = true;
                 $nameWithoutExt = pathinfo($file, PATHINFO_FILENAME);

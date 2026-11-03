@@ -217,7 +217,16 @@ async function loadFamilyPhotos() {
         const result = await response.json();
         if (!result.success) throw new Error(result.error || 'फोटो लोड करने में त्रुटि');
 
-        cachedFamilyPhotos = result.data || [];
+        const rawList = result.data || [];
+        const seenUrls = new Set();
+        cachedFamilyPhotos = [];
+        rawList.forEach(p => {
+            const normalized = (p.filename || p.url || '').toLowerCase();
+            if (!seenUrls.has(normalized)) {
+                seenUrls.add(normalized);
+                cachedFamilyPhotos.push(p);
+            }
+        });
 
         // Populate branch dropdown
         const branchFilter = document.getElementById('family-picker-branch-filter');
