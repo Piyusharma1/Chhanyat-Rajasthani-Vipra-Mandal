@@ -663,7 +663,7 @@ session_start();
                     </div>
 
                     <div class="form-group">
-                        <label for="ad-end-date"><i class="fas fa-calendar-times"></i> समाप्ति तिथि (वैकल्पिक)</label>
+                        <label for="ad-end-date"><i class="fas fa-calendar-times"></i> समाप्ति तिथि (डिफ़ॉल्ट: 10 दिन बाद)</label>
                         <input type="date" id="ad-end-date" name="end_date">
                     </div>
                 </div>

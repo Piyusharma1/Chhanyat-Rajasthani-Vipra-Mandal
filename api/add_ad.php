@@ -46,8 +46,9 @@ try {
     $position = in_array($data['position'] ?? '', $validPositions) ? $data['position'] : 'above_calendar';
     $status = in_array($data['status'] ?? '', ['active', 'inactive']) ? $data['status'] : 'active';
     $displayOrder = isset($data['display_order']) ? (int)$data['display_order'] : 0;
-    $startDate = !empty($data['start_date']) ? $data['start_date'] : null;
-    $endDate = !empty($data['end_date']) ? $data['end_date'] : null;
+    $startDate = !empty($data['start_date']) ? $data['start_date'] : date('Y-m-d');
+    // Default end date is 10 days from today if not specified
+    $endDate = !empty($data['end_date']) ? $data['end_date'] : date('Y-m-d', strtotime('+10 days'));
 
     if (empty($title)) {
         echo json_encode(['success' => false, 'error' => 'Advertisement title is required']);

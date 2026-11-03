@@ -29,6 +29,19 @@ try {
         // Column already exists or table has it
     }
 
+    // Auto-deactivate ads that have passed their end_date (do NOT delete, just mark inactive)
+    try {
+        $pdo->exec("UPDATE local_ads 
+                    SET status = 'inactive' 
+                    WHERE status = 'active' 
+                      AND end_date IS NOT NULL 
+                      AND end_date != '' 
+                      AND end_date != '0000-00-00' 
+                      AND end_date < CURDATE()");
+    } catch (\Exception $e) {
+        // Continue even if background auto-update fails
+    }
+
     $isAdmin = isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true;
     $adminView = isset($_GET['admin_view']) && ($_GET['admin_view'] === 'true' || $_GET['admin_view'] === '1');
 
@@ -36,7 +49,7 @@ try {
     $params = [];
 
     if (!$isAdmin || !$adminView) {
-        // Public view: only show active ads within valid date ranges (treating empty strings and nulls as unrestricted)
+        // Public view: only show active ads
         $whereClause = " WHERE status = 'active' 
                          AND (start_date IS NULL OR start_date = '' OR start_date = '0000-00-00' OR start_date <= CURDATE()) 
                          AND (end_date IS NULL OR end_date = '' OR end_date = '0000-00-00' OR end_date >= CURDATE()) ";

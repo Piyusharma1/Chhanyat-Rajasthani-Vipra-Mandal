@@ -218,6 +218,7 @@ async function handleAddAd(e) {
         if (result.success) {
             showToast('विज्ञापन सफलतापूर्वक जोड़ दिया गया!', 'success');
             form.reset();
+            setDefaultEndDate();
             const previewBox = document.getElementById('ad-image-preview');
             if (previewBox) previewBox.style.display = 'none';
             await loadAds();
@@ -362,12 +363,26 @@ async function executeDeleteAd() {
     }
 }
 
+// 📅 Helper: Set default end date to 10 days ahead
+function setDefaultEndDate() {
+    const endDateInput = document.getElementById('ad-end-date');
+    if (endDateInput) {
+        const d = new Date();
+        d.setDate(d.getDate() + 10);
+        const yyyy = d.getFullYear();
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        const dd = String(d.getDate()).padStart(2, '0');
+        endDateInput.value = `${yyyy}-${mm}-${dd}`;
+    }
+}
+
 // 🚀 10. Initialization
 document.addEventListener('DOMContentLoaded', async () => {
     const isAuthed = await checkPageAuth();
     if (!isAuthed) return;
 
     setupDropzone();
+    setDefaultEndDate();
 
     const addForm = document.getElementById('add-ad-form');
     if (addForm) addForm.addEventListener('submit', handleAddAd);
