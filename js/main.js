@@ -402,7 +402,7 @@ async function loadCriticalData() {
         const [branchesResult, announcementsResult] = await Promise.all([
             loadFromFirestore('branches', { limitCount: PAGE_SIZE }),
             loadFromFirestore('announcements', { 
-                limitCount: 5,
+                limitCount: 4,
                 orderByField: 'createdAt',
                 orderDirection: 'desc'
             })
@@ -519,7 +519,7 @@ function setupLoadMoreHandlers() {
 
             try {
                 const result = await loadFromFirestore('announcements', {
-                    limitCount: 5,
+                    limitCount: 4,
                     lastDoc: announcementsState.lastDoc,
                     orderByField: 'createdAt',
                     orderDirection: 'desc'

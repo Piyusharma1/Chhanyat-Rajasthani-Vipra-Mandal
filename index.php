@@ -326,7 +326,7 @@
     </div>
 
     <!-- ═══ SCRIPTS ═══ -->
-    <script src="js/include.js?v=<?= filemtime($_SERVER['DOCUMENT_ROOT'].'/js/include.js')?>" defer></script>
-    <script type="module" src="js/home.js?v=<?= filemtime($_SERVER['DOCUMENT_ROOT'].'/js/home.js')?>"></script>
+    <script src="js/include.js?v=<?= @filemtime(__DIR__ . '/js/include.js') ?: time()?>" defer></script>
+    <script type="module" src="js/home.js?v=<?= @filemtime(__DIR__ . '/js/home.js') ?: time()?>"></script>
 </body>
 </html>
