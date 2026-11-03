@@ -1,14 +1,6 @@
 <?php
-session_start();
-header('Content-Type: application/json; charset=utf-8');
-
-if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
-    http_response_code(401);
-    echo json_encode(['success' => false, 'error' => 'Unauthorized']);
-    exit;
-}
-
-require_once 'db.php';
+require_once __DIR__ . '/require_auth.php';
+require_once __DIR__ . '/db.php';
 
 try {
     $isFormData = !empty($_POST) || !empty($_FILES);

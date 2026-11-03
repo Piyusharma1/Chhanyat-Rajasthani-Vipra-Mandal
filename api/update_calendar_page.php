@@ -1,12 +1,6 @@
 <?php
-session_start();
+require_once __DIR__ . '/require_auth.php';
 header('Content-Type: application/json; charset=utf-8');
-
-if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
-    http_response_code(401);
-    echo json_encode(['success' => false, 'error' => 'अनधिकृत पहुंच। कृपया एडमिन लॉगिन करें।']);
-    exit;
-}
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);

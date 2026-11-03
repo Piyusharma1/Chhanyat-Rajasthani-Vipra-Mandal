@@ -1,13 +1,5 @@
 <?php
-session_start();
-header('Content-Type: application/json; charset=utf-8');
-
-// 🔐 Check admin authentication
-if (!isset($_SESSION['admin_logged_in']) || !$_SESSION['admin_logged_in']) {
-    http_response_code(403);
-    echo json_encode(['success' => false, 'error' => 'Unauthorized - Please login again']);
-    exit;
-}
+require_once __DIR__ . '/require_auth.php';
 
 // Only allow POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {

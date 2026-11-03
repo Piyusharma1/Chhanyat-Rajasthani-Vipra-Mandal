@@ -1,13 +1,7 @@
 <?php
-session_start();
+require_once __DIR__ . '/require_auth.php';
 header('Content-Type: application/json; charset=utf-8');
 @set_time_limit(180); // Allow ample time for PDF page rendering
-
-if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
-    http_response_code(401);
-    echo json_encode(['success' => false, 'error' => 'Unauthorized. Please login as admin.']);
-    exit;
-}
 
 if (!isset($_FILES['calendar_pdf']) || $_FILES['calendar_pdf']['error'] !== UPLOAD_ERR_OK) {
     $errorCodes = [

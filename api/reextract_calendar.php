@@ -1,15 +1,7 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+require_once __DIR__ . '/require_auth.php';
 header('Content-Type: application/json; charset=utf-8');
 @set_time_limit(180);
-
-if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
-    http_response_code(401);
-    echo json_encode(['success' => false, 'error' => 'अनधिकृत पहुंच। कृपया एडमिन लॉगिन करें।']);
-    exit;
-}
 
 $pdfPath = realpath(__DIR__ . '/../uploads/calendar/calendar.pdf');
 if (!$pdfPath || !file_exists($pdfPath)) {

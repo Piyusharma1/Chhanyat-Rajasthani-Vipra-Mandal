@@ -1,8 +1,28 @@
 <?php
-session_start();
-header('Content-Type: application/json');
+// api/logout.php
+// Properly invalidates session and removes PHPSESSID cookie from browser
 
-session_unset();
+require_once __DIR__ . '/session_helper.php';
+header('Content-Type: application/json; charset=utf-8');
+
+// Unset all session variables
+$_SESSION = [];
+
+// Invalidate and delete session cookie from browser
+if (ini_get("session.use_cookies")) {
+    $params = session_get_cookie_params();
+    setcookie(
+        session_name(),
+        '',
+        time() - 42000,
+        $params["path"] ?? '/',
+        $params["domain"] ?? '',
+        $params["secure"] ?? false,
+        $params["httponly"] ?? true
+    );
+}
+
+// Destroy session data on server
 session_destroy();
 
 echo json_encode(['success' => true, 'message' => 'Logged out successfully']);

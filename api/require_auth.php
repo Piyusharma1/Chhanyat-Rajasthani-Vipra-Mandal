@@ -1,30 +1,33 @@
 <?php
-$isSecure = (isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] === 'on' || $_SERVER['HTTPS'] == 1))
-    || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https');
+// api/require_auth.php
+// Enforces admin authentication and handles 24-hour expiration across all admin endpoints
 
-if (session_status() === PHP_SESSION_NONE) {
-    session_set_cookie_params([
-        'lifetime' => 86400, // 24 hours
-        'path' => '/',
-        'secure' => $isSecure,
-        'httponly' => true,
-        'samesite' => 'Lax'
-    ]);
-    session_start();
-}
+require_once __DIR__ . '/session_helper.php';
+
+header('Content-Type: application/json; charset=utf-8');
 
 if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
-    http_response_code(403);
-    header('Content-Type: application/json; charset=utf-8');
-    die(json_encode(['success' => false, 'error' => 'Unauthorized access.']));
+    http_response_code(401);
+    die(json_encode(['success' => false, 'error' => 'Unauthorized access. Please login.']));
 }
 
-// Check session expiration (24 hours)
+// Check session expiration (24 hours = 86400 seconds)
 if (isset($_SESSION['login_time']) && (time() - $_SESSION['login_time'] > 86400)) {
-    session_unset();
+    $_SESSION = [];
+    if (ini_get("session.use_cookies")) {
+        $params = session_get_cookie_params();
+        setcookie(
+            session_name(),
+            '',
+            time() - 42000,
+            $params["path"],
+            $params["domain"],
+            $params["secure"],
+            $params["httponly"]
+        );
+    }
     session_destroy();
     http_response_code(401);
-    header('Content-Type: application/json; charset=utf-8');
     die(json_encode(['success' => false, 'error' => 'Session expired. Please log in again.']));
 }
 ?>
