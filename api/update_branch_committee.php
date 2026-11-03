@@ -23,27 +23,27 @@ try {
             die(json_encode(['success' => false, 'error' => '❌ आप केवल अपनी ही शाखा की कार्यकारिणी अपडेट कर सकते हैं।']));
         }
     }
-    // 🔥 Delete photo file if provided
+    // 🔥 Delete photo file if provided (ONLY for committee uploads, NEVER delete family photos!)
     if (isset($data['deletePhoto']) && !empty($data['deletePhoto'])) {
         $photoUrl = $data['deletePhoto'];
         
-        // Convert URL to file path
-        // Example: https://chhanyatvipralatur.com/uploads/committee/committee_xxx.jpeg
-        // Becomes: /home/username/public_html/uploads/committee/committee_xxx.jpeg
-        
-        $baseUrl = 'https://chhanyatvipralatur.com/';
-        $basePath = $_SERVER['DOCUMENT_ROOT'] . '/';
-        
-        if (strpos($photoUrl, $baseUrl) === 0) {
-            // Remove base URL to get relative path
-            $relativePath = substr($photoUrl, strlen($baseUrl));
-            $fullPath = $basePath . $relativePath;
+        // Never delete photos that belong to families
+        if (strpos($photoUrl, 'uploads/families/') === false && (strpos($photoUrl, 'uploads/committee/') !== false || strpos($photoUrl, 'committee_') !== false)) {
+            $baseUrl = 'https://chhanyatvipralatur.com/';
+            $basePath = $_SERVER['DOCUMENT_ROOT'] . '/';
+            
+            $relativePath = $photoUrl;
+            if (strpos($photoUrl, $baseUrl) === 0) {
+                $relativePath = substr($photoUrl, strlen($baseUrl));
+            } elseif (strpos($photoUrl, 'uploads/') !== false) {
+                $relativePath = substr($photoUrl, strpos($photoUrl, 'uploads/'));
+            }
+            $fullPath = $basePath . ltrim($relativePath, '/');
             
             // Check if file exists and delete it
             if (file_exists($fullPath)) {
-                if (unlink($fullPath)) {
-                    // File deleted successfully
-                    error_log("✅ Deleted photo file: $fullPath");
+                if (@unlink($fullPath)) {
+                    error_log("✅ Deleted committee photo file: $fullPath");
                 } else {
                     error_log("❌ Failed to delete photo file: $fullPath");
                 }

@@ -211,21 +211,6 @@
             </div>
         </section>
 
-        <!-- ══ COMMITTEE ═══ -->
-        <section class="container" style="padding: 30px 16px 48px;" aria-labelledby="committee-title">
-            <div class="section-header">
-                <h2 class="section-title" id="committee-title">कार्यकारिणी सदस्य</h2>
-                <div class="ornament" aria-hidden="true"><span class="ornament-icon">❧</span></div>
-                <p class="section-desc" style="margin-top:10px;">मार्गदर्शक और प्रमुख सदस्य</p>
-            </div>
-            <div class="committee-grid" id="home-committee-grid" role="list" aria-busy="true">
-                <div class="committee-card" aria-hidden="true"><div class="skeleton skeleton-circle"></div><div class="skeleton" style="height: 18px; margin-bottom: 8px;"></div><div class="skeleton" style="height: 14px; width: 60%; margin: 0 auto;"></div></div>
-                <div class="committee-card" aria-hidden="true"><div class="skeleton skeleton-circle"></div><div class="skeleton" style="height: 18px; margin-bottom: 8px;"></div><div class="skeleton" style="height: 14px; width: 60%; margin: 0 auto;"></div></div>
-                <div class="committee-card" aria-hidden="true"><div class="skeleton skeleton-circle"></div><div class="skeleton" style="height: 18px; margin-bottom: 8px;"></div><div class="skeleton" style="height: 14px; width: 60%; margin: 0 auto;"></div></div>
-                <div class="committee-card" aria-hidden="true"><div class="skeleton skeleton-circle"></div><div class="skeleton" style="height: 18px; margin-bottom: 8px;"></div><div class="skeleton" style="height: 14px; width: 60%; margin: 0 auto;"></div></div>
-            </div>
-        </section>
-
         <!-- ═══ ANNOUNCEMENTS ═══ -->
         <section class="announcements-section" aria-labelledby="announcements-title">
             <div class="container">
@@ -239,6 +224,21 @@
                     <div class="ann-card" aria-hidden="true"><div class="skeleton" style="height: 22px; width: 70px; margin-bottom: 10px;"></div><div class="skeleton" style="height: 20px; margin-bottom: 8px;"></div><div class="skeleton" style="height: 14px; margin-bottom: 6px;"></div><div class="skeleton" style="height: 14px; width: 90%;"></div></div>
                 </div>
                 <button id="load-more-announcements" class="load-more-btn" style="display: none;">और घोषणाएँ लोड करें ↓</button>
+            </div>
+        </section>
+
+        <!-- ══ COMMITTEE ═══ -->
+        <section class="container" style="padding: 30px 16px 48px;" aria-labelledby="committee-title">
+            <div class="section-header">
+                <h2 class="section-title" id="committee-title">कार्यकारिणी सदस्य</h2>
+                <div class="ornament" aria-hidden="true"><span class="ornament-icon">❧</span></div>
+                <p class="section-desc" style="margin-top:10px;">मार्गदर्शक और प्रमुख सदस्य</p>
+            </div>
+            <div class="committee-grid" id="home-committee-grid" role="list" aria-busy="true">
+                <div class="committee-card" aria-hidden="true"><div class="skeleton skeleton-circle"></div><div class="skeleton" style="height: 18px; margin-bottom: 8px;"></div><div class="skeleton" style="height: 14px; width: 60%; margin: 0 auto;"></div></div>
+                <div class="committee-card" aria-hidden="true"><div class="skeleton skeleton-circle"></div><div class="skeleton" style="height: 18px; margin-bottom: 8px;"></div><div class="skeleton" style="height: 14px; width: 60%; margin: 0 auto;"></div></div>
+                <div class="committee-card" aria-hidden="true"><div class="skeleton skeleton-circle"></div><div class="skeleton" style="height: 18px; margin-bottom: 8px;"></div><div class="skeleton" style="height: 14px; width: 60%; margin: 0 auto;"></div></div>
+                <div class="committee-card" aria-hidden="true"><div class="skeleton skeleton-circle"></div><div class="skeleton" style="height: 18px; margin-bottom: 8px;"></div><div class="skeleton" style="height: 14px; width: 60%; margin: 0 auto;"></div></div>
             </div>
         </section>
     </main>

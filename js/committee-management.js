@@ -132,22 +132,212 @@ async function handleAddMember(e) {
         
         showToast('नया सदस्य जोड़ा गया!');
         branch.committee = committee; renderCommitteeList(branch); e.target.reset();
-        const preview = document.getElementById('comm-photo-preview'); if (preview) preview.style.display = 'none';
+        clearSelectedPhoto('branch');
     } catch (error) { showToast('जोड़ने में त्रुटि: ' + error.message, 'error'); } 
     finally { submitBtn.disabled = false; submitBtn.innerHTML = '<i class="fas fa-plus"></i> समाज सदस्य जोड़ें'; }
 }
 
 // =========================================
-// 👁️ IMAGE PREVIEW
 // =========================================
-function setupImagePreview(fileInputId, previewId) {
-    const fileInput = document.getElementById(fileInputId); const preview = document.getElementById(previewId);
+// 👁️ IMAGE PREVIEW & FAMILY PHOTO PICKER
+// =========================================
+let cachedFamilyPhotos = null;
+let currentPickerTarget = 'branch'; // 'branch' or 'central'
+
+function setupImagePreview(fileInputId, previewId, badgeId, labelId, hiddenId) {
+    const fileInput = document.getElementById(fileInputId); 
+    const preview = document.getElementById(previewId);
+    const badge = document.getElementById(badgeId);
+    const label = document.getElementById(labelId);
+    const hidden = document.getElementById(hiddenId);
     if (!fileInput || !preview) return;
+
     fileInput.addEventListener('change', function(e) {
         const file = e.target.files[0];
-        if (file) { const reader = new FileReader(); reader.onload = (e) => { preview.src = e.target.result; preview.style.display = 'block'; }; reader.readAsDataURL(file); } 
-        else { preview.style.display = 'none'; }
+        if (file) {
+            if (hidden) hidden.value = ''; // Clear selected family URL since local file is selected
+            const reader = new FileReader(); 
+            reader.onload = (e) => { 
+                preview.src = e.target.result; 
+                preview.style.display = 'block'; 
+                if (badge) badge.style.display = 'flex';
+                if (label) label.textContent = file.name;
+                const sourceEl = badge ? badge.querySelector('small') : null;
+                if (sourceEl) sourceEl.textContent = 'डिवाइस से चुनी गई फ़ाइल';
+            }; 
+            reader.readAsDataURL(file); 
+        } else { 
+            if (badge && (!hidden || !hidden.value)) {
+                badge.style.display = 'none';
+                preview.style.display = 'none';
+            }
+        }
     });
+}
+
+// 🖼️ Open Family Photo Modal
+async function openFamilyPhotoPicker(target) {
+    currentPickerTarget = target;
+    const modal = document.getElementById('family-photo-modal');
+    if (!modal) return;
+    
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+
+    // Reset filters
+    const searchInput = document.getElementById('family-picker-search');
+    const branchFilter = document.getElementById('family-picker-branch-filter');
+    if (searchInput) searchInput.value = '';
+    if (branchFilter) branchFilter.value = '';
+
+    if (!cachedFamilyPhotos) {
+        await loadFamilyPhotos();
+    } else {
+        renderFamilyPhotosGrid();
+    }
+
+    if (searchInput) {
+        setTimeout(() => searchInput.focus(), 100);
+    }
+}
+
+function closeFamilyPhotoPicker() {
+    const modal = document.getElementById('family-photo-modal');
+    if (modal) modal.style.display = 'none';
+    document.body.style.overflow = '';
+}
+
+async function loadFamilyPhotos() {
+    const grid = document.getElementById('family-photos-grid');
+    const countEl = document.getElementById('family-photos-count');
+    if (grid) grid.innerHTML = '<p style="text-align:center;color:var(--text-soft);grid-column:1/-1;"><i class="fas fa-spinner fa-spin"></i> परिवार फोटो लोड हो रही हैं...</p>';
+
+    try {
+        const response = await fetch('api/get_family_photos.php');
+        const result = await response.json();
+        if (!result.success) throw new Error(result.error || 'फोटो लोड करने में त्रुटि');
+
+        cachedFamilyPhotos = result.data || [];
+
+        // Populate branch dropdown
+        const branchFilter = document.getElementById('family-picker-branch-filter');
+        if (branchFilter) {
+            const branches = [...new Set(cachedFamilyPhotos.map(p => p.branch).filter(Boolean))].sort();
+            branchFilter.innerHTML = '<option value="">सभी समाज</option>' + branches.map(b => `<option value="${escapeHtml(b)}">${escapeHtml(b)}</option>`).join('');
+        }
+
+        renderFamilyPhotosGrid();
+    } catch (error) {
+        if (grid) grid.innerHTML = `<p style="text-align:center;color:var(--red);grid-column:1/-1;">त्रुटि: ${error.message}</p>`;
+    }
+}
+
+function renderFamilyPhotosGrid(searchTerm = '', branchFilter = '') {
+    const grid = document.getElementById('family-photos-grid');
+    const countEl = document.getElementById('family-photos-count');
+    if (!grid) return;
+
+    if (!cachedFamilyPhotos || cachedFamilyPhotos.length === 0) {
+        grid.innerHTML = '<p style="text-align:center;color:var(--text-soft);grid-column:1/-1;">कोई परिवार फोटो उपलब्ध नहीं है।</p>';
+        if (countEl) countEl.textContent = '';
+        return;
+    }
+
+    const term = searchTerm.trim().toLowerCase();
+    const branch = branchFilter.trim();
+
+    const filtered = cachedFamilyPhotos.filter(item => {
+        const headMatch = item.head && item.head.toLowerCase().includes(term);
+        const fileMatch = item.filename && item.filename.toLowerCase().includes(term);
+        const branchMatchSearch = item.branch && item.branch.toLowerCase().includes(term);
+        const matchSearch = !term || headMatch || fileMatch || branchMatchSearch;
+        const matchBranch = !branch || (item.branch === branch);
+        return matchSearch && matchBranch;
+    });
+
+    if (countEl) {
+        countEl.textContent = `कुल ${filtered.length} परिवार फोटो उपलब्ध`;
+    }
+
+    if (filtered.length === 0) {
+        grid.innerHTML = '<p style="text-align:center;color:var(--text-soft);grid-column:1/-1;">कोई परिणाम नहीं मिला।</p>';
+        return;
+    }
+
+    const currentSelectedUrl = currentPickerTarget === 'central'
+        ? document.getElementById('central-comm-photo')?.value
+        : document.getElementById('comm-photo')?.value;
+
+    grid.innerHTML = filtered.map(photo => {
+        const isSelected = currentSelectedUrl && currentSelectedUrl === photo.url;
+        const displayName = photo.head || photo.filename || 'परिवार सदस्य';
+        const displayBranch = photo.branch ? `<span class="family-photo-branch">${escapeHtml(photo.branch)}</span>` : '';
+
+        return `
+            <div class="family-photo-card ${isSelected ? 'selected' : ''}" onclick="selectFamilyPhoto('${escapeHtml(photo.url)}', '${escapeHtml(displayName)}')">
+                <img src="${escapeHtml(photo.url)}" alt="${escapeHtml(displayName)}" onerror="this.src='https://placehold.co/80x80/FF6B00/ffffff?text=P'">
+                <div class="family-photo-name" title="${escapeHtml(displayName)}">${escapeHtml(displayName)}</div>
+                ${displayBranch}
+            </div>
+        `;
+    }).join('');
+}
+
+function selectFamilyPhoto(url, headName) {
+    const isCentral = (currentPickerTarget === 'central');
+    const prefix = isCentral ? 'central-comm' : 'comm';
+
+    const hiddenInput = document.getElementById(`${prefix}-photo`);
+    const preview = document.getElementById(`${prefix}-photo-preview`);
+    const badge = document.getElementById(`${prefix}-photo-selected`);
+    const label = document.getElementById(`${prefix}-photo-label`);
+    const source = document.getElementById(`${prefix}-photo-source`);
+    const fileInput = document.getElementById(`${prefix}-photo-file`);
+    const nameInput = document.getElementById(`${prefix}-name`);
+
+    if (hiddenInput) hiddenInput.value = url;
+    if (preview) { preview.src = url; preview.style.display = 'block'; }
+    if (label) label.textContent = headName || 'परिवार फोटो';
+    if (source) source.textContent = url;
+    if (badge) badge.style.display = 'flex';
+    if (fileInput) fileInput.value = '';
+
+    // If member name is currently empty, auto-fill with head name
+    if (nameInput && !nameInput.value.trim() && headName) {
+        nameInput.value = headName;
+    }
+
+    closeFamilyPhotoPicker();
+    showToast('परिवार फोटो चुनी गई!');
+}
+
+window.clearSelectedPhoto = function(target) {
+    const isCentral = (target === 'central');
+    const prefix = isCentral ? 'central-comm' : 'comm';
+
+    const hiddenInput = document.getElementById(`${prefix}-photo`);
+    const preview = document.getElementById(`${prefix}-photo-preview`);
+    const badge = document.getElementById(`${prefix}-photo-selected`);
+    const fileInput = document.getElementById(`${prefix}-photo-file`);
+
+    if (hiddenInput) hiddenInput.value = '';
+    if (preview) { preview.src = ''; preview.style.display = 'none'; }
+    if (badge) badge.style.display = 'none';
+    if (fileInput) fileInput.value = '';
+};
+
+window.openFamilyPhotoPicker = openFamilyPhotoPicker;
+window.closeFamilyPhotoPicker = closeFamilyPhotoPicker;
+window.selectFamilyPhoto = selectFamilyPhoto;
+
+function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
 }
 
 // =========================================
@@ -314,7 +504,7 @@ async function handleAddCentralMember(e) {
         const result = await response.json(); if (!result.success) throw new Error(result.error || 'Save failed');
         
         showToast('केंद्रीय सदस्य जोड़ा गया!'); form.reset();
-        const preview = document.getElementById('central-comm-photo-preview'); if (preview) preview.style.display = 'none';
+        clearSelectedPhoto('central');
         loadCentralCommittee();
     } catch (error) { showToast('जोड़ने में त्रुटि: ' + error.message, 'error'); } 
     finally { submitBtn.disabled = false; submitBtn.innerHTML = '<i class="fas fa-plus"></i> केंद्रीय सदस्य जोड़ें'; }
@@ -416,12 +606,31 @@ window.deleteCommitteeMember = async function(index) {
 // =========================================
 function initCommitteePage() {
     loadBranches(); loadCentralCommittee();
-    setupImagePreview('comm-photo-file', 'comm-photo-preview');
-    setupImagePreview('central-comm-photo-file', 'central-comm-photo-preview');
+    setupImagePreview('comm-photo-file', 'comm-photo-preview', 'comm-photo-selected', 'comm-photo-label', 'comm-photo');
+    setupImagePreview('central-comm-photo-file', 'central-comm-photo-preview', 'central-comm-photo-selected', 'central-comm-photo-label', 'central-comm-photo');
+    
     const branchSelect = document.getElementById('committee-branch-select'); if (branchSelect) branchSelect.addEventListener('change', handleBranchChange);
     const branchForm = document.getElementById('committee-form'); if (branchForm) branchForm.addEventListener('submit', handleAddMember);
     const centralForm = document.getElementById('central-committee-form');
     if (centralForm) centralForm.addEventListener('submit', function(e) { e.preventDefault(); handleAddCentralMember(e); });
+
+    // Family photo picker events
+    const pickerSearch = document.getElementById('family-picker-search');
+    const branchFilter = document.getElementById('family-picker-branch-filter');
+    if (pickerSearch) {
+        pickerSearch.addEventListener('input', () => {
+            renderFamilyPhotosGrid(pickerSearch.value, branchFilter ? branchFilter.value : '');
+        });
+    }
+    if (branchFilter) {
+        branchFilter.addEventListener('change', () => {
+            renderFamilyPhotosGrid(pickerSearch ? pickerSearch.value : '', branchFilter.value);
+        });
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeFamilyPhotoPicker();
+    });
 }
 
 document.addEventListener('DOMContentLoaded', async () => {

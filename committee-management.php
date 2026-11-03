@@ -196,6 +196,181 @@
             .form-grid input, .form-grid select { font-size: 16px; padding: 10px 12px; }
             #toast-container { top: 8px; right: 8px; left: 8px; }
         }
+
+        /* 📸 Photo Selection Box & Family Photo Picker */
+        .photo-selection-box {
+            background: var(--cream);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 12px 14px;
+        }
+        .btn-choose-family {
+            background: var(--gold-pale);
+            color: var(--maroon);
+            border: 1.5px solid var(--gold);
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: var(--radius-sm);
+            padding: 8px 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: var(--transition);
+        }
+        .btn-choose-family:hover {
+            background: var(--maroon);
+            color: white;
+            border-color: var(--maroon);
+            transform: translateY(-1px);
+        }
+        .selected-photo-badge {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 107, 0, 0.08);
+            border: 1px dashed var(--saffron);
+            border-radius: var(--radius-sm);
+            padding: 8px 12px;
+            margin-top: 10px;
+        }
+        .family-photo-modal {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+        .family-modal-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(4px);
+        }
+        .family-modal-dialog {
+            position: relative;
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            width: 100%;
+            max-width: 820px;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 16px 40px rgba(0,0,0,0.3);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            animation: modalFadeIn 0.25s ease-out;
+        }
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.96); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .family-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            border-bottom: 2px solid var(--saffron-pale);
+            background: var(--cream);
+        }
+        .family-modal-header h3 {
+            margin: 0;
+            color: var(--maroon);
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .family-modal-close {
+            background: transparent;
+            border: none;
+            font-size: 28px;
+            color: var(--text-mid);
+            cursor: pointer;
+            line-height: 1;
+            padding: 0 8px;
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+        .family-modal-close:hover {
+            color: var(--red);
+            background: rgba(220, 38, 38, 0.1);
+        }
+        .family-modal-body {
+            padding: 16px 20px;
+            overflow-y: auto;
+            flex: 1;
+        }
+        .family-search-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .family-photos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 12px;
+            margin-top: 10px;
+            max-height: 460px;
+            overflow-y: auto;
+            padding: 4px;
+        }
+        .family-photo-card {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+        .family-photo-card:hover {
+            border-color: var(--saffron);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 14px rgba(255, 107, 0, 0.18);
+        }
+        .family-photo-card img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 8px;
+            border: 2px solid var(--saffron-pale);
+            transition: transform 0.2s;
+        }
+        .family-photo-card:hover img {
+            transform: scale(1.05);
+            border-color: var(--saffron);
+        }
+        .family-photo-name {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--maroon-deep);
+            line-height: 1.25;
+            margin-bottom: 4px;
+            word-break: break-word;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .family-photo-branch {
+            font-size: 0.72rem;
+            color: var(--text-soft);
+            background: var(--gold-pale);
+            padding: 2px 6px;
+            border-radius: 8px;
+            white-space: nowrap;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
     </style>
 </head>
 <body>
@@ -224,11 +399,34 @@
                 <input type="text" id="central-comm-name" placeholder="नाम *" required>
                 <input type="text" id="central-comm-designation" placeholder="पदनाम *" required>
                 <input type="text" id="central-comm-mobile" placeholder="मोबाइल नंबर">
-                <div class="upload-wrapper">
-                    <input type="file" id="central-comm-photo-file" accept="image/*">
-                    <img id="central-comm-photo-preview" class="preview-img" src="" alt="Preview">
+                
+                <div class="photo-selection-box full-width">
+                    <label style="font-weight: 600; font-size: 0.9rem; color: var(--text-mid); display: block; margin-bottom: 6px;">
+                        <i class="fas fa-camera"></i> सदस्य फोटो
+                    </label>
+                    <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                        <div class="upload-wrapper" style="flex: 1; min-width: 180px;">
+                            <input type="file" id="central-comm-photo-file" accept="image/*" title="डिवाइस से नई फोटो चुनें">
+                        </div>
+                        <span style="color: var(--text-soft); font-size: 0.85rem; font-weight: 600;">— अथवा —</span>
+                        <button type="button" class="btn-choose-family" onclick="openFamilyPhotoPicker('central')">
+                            <i class="fas fa-images"></i> परिवार फोटो से चुनें
+                        </button>
+                    </div>
+                    
+                    <div id="central-comm-photo-selected" class="selected-photo-badge" style="display: none;">
+                        <img id="central-comm-photo-preview" class="preview-img" src="" alt="Preview" style="display: block; width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid var(--saffron);">
+                        <div style="flex: 1; min-width: 0;">
+                            <div style="font-size: 0.85rem; font-weight: 600; color: var(--maroon-deep);" id="central-comm-photo-label">चयनित फोटो</div>
+                            <small style="color: var(--text-soft); font-size: 0.75rem; word-break: break-all;" id="central-comm-photo-source"></small>
+                        </div>
+                        <button type="button" onclick="clearSelectedPhoto('central')" style="background: transparent; border: none; color: var(--red); cursor: pointer; font-size: 1.1rem; padding: 4px 8px;" title="फोटो हटाएं">
+                            <i class="fas fa-times-circle"></i>
+                        </button>
+                    </div>
+                    <input type="hidden" id="central-comm-photo" value="">
                 </div>
-                <input type="text" id="central-comm-photo" placeholder="या फोटो URL (वैकल्पिक)" class="full-width">
+
                 <button type="submit" id="central-committee-submit" class="btn btn-success full-width">
                     <i class="fas fa-plus"></i> केंद्रीय सदस्य जोड़ें
                 </button>
@@ -255,17 +453,66 @@
                 <input type="text" id="comm-name" placeholder="नाम *" required>
                 <input type="text" id="comm-designation" placeholder="पदनाम *" required>
                 <input type="text" id="comm-mobile" placeholder="मोबाइल नंबर">
-                <div class="upload-wrapper">
-                    <input type="file" id="comm-photo-file" accept="image/*">
-                    <img id="comm-photo-preview" class="preview-img" src="" alt="Preview">
+                
+                <div class="photo-selection-box full-width">
+                    <label style="font-weight: 600; font-size: 0.9rem; color: var(--text-mid); display: block; margin-bottom: 6px;">
+                        <i class="fas fa-camera"></i> सदस्य फोटो
+                    </label>
+                    <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                        <div class="upload-wrapper" style="flex: 1; min-width: 180px;">
+                            <input type="file" id="comm-photo-file" accept="image/*" title="डिवाइस से नई फोटो चुनें">
+                        </div>
+                        <span style="color: var(--text-soft); font-size: 0.85rem; font-weight: 600;">— अथवा —</span>
+                        <button type="button" class="btn-choose-family" onclick="openFamilyPhotoPicker('branch')">
+                            <i class="fas fa-images"></i> परिवार फोटो से चुनें
+                        </button>
+                    </div>
+                    
+                    <div id="comm-photo-selected" class="selected-photo-badge" style="display: none;">
+                        <img id="comm-photo-preview" class="preview-img" src="" alt="Preview" style="display: block; width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid var(--saffron);">
+                        <div style="flex: 1; min-width: 0;">
+                            <div style="font-size: 0.85rem; font-weight: 600; color: var(--maroon-deep);" id="comm-photo-label">चयनित फोटो</div>
+                            <small style="color: var(--text-soft); font-size: 0.75rem; word-break: break-all;" id="comm-photo-source"></small>
+                        </div>
+                        <button type="button" onclick="clearSelectedPhoto('branch')" style="background: transparent; border: none; color: var(--red); cursor: pointer; font-size: 1.1rem; padding: 4px 8px;" title="फोटो हटाएं">
+                            <i class="fas fa-times-circle"></i>
+                        </button>
+                    </div>
+                    <input type="hidden" id="comm-photo" value="">
                 </div>
-                <input type="text" id="comm-photo" placeholder="या फोटो URL (वैकल्पिक)">
+
                 <button type="submit" class="btn btn-primary full-width">
                     <i class="fas fa-plus"></i> समाज सदस्य जोड़ें
                 </button>
             </form>
         </section>
     </main>
+
+    <!-- ══ FAMILY PHOTO PICKER MODAL ═══ -->
+    <div id="family-photo-modal" class="family-photo-modal" role="dialog" aria-modal="true" style="display: none;">
+        <div class="family-modal-backdrop" onclick="closeFamilyPhotoPicker()"></div>
+        <div class="family-modal-dialog">
+            <div class="family-modal-header">
+                <h3><i class="fas fa-portrait"></i> परिवार फोटो से चुनें</h3>
+                <button type="button" class="family-modal-close" onclick="closeFamilyPhotoPicker()" aria-label="बंद करें">&times;</button>
+            </div>
+            <div class="family-modal-body">
+                <div class="family-search-row">
+                    <div style="position: relative; flex: 1; min-width: 200px;">
+                        <i class="fas fa-search" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-soft);"></i>
+                        <input type="text" id="family-picker-search" placeholder="मुखिया के नाम, समाज या फ़ाइल नाम से खोजें..." style="padding-left: 38px; width: 100%;">
+                    </div>
+                    <select id="family-picker-branch-filter" style="width: auto; min-width: 140px;">
+                        <option value="">सभी समाज</option>
+                    </select>
+                </div>
+                <div id="family-photos-count" style="font-size: 0.82rem; color: var(--text-soft); margin: 8px 0 10px;"></div>
+                <div id="family-photos-grid" class="family-photos-grid">
+                    <p style="text-align: center; color: var(--text-soft); grid-column: 1/-1;">लोड हो रहा है...</p>
+                </div>
+            </div>
+        </div>
+    </div>
     
     <div data-include="components/footer.php"></div>
 
