@@ -317,6 +317,21 @@ session_start();
             font-weight: 600;
         }
 
+        .ad-card-position-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 3px 8px;
+            background: var(--saffron-pale);
+            color: var(--saffron-deep);
+            border: 1px solid rgba(255, 107, 0, 0.25);
+            border-radius: 6px;
+            font-size: 0.76rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            width: fit-content;
+        }
+
         .ad-card-body {
             padding: 15px;
             flex: 1;
@@ -621,12 +636,24 @@ session_start();
                     </div>
                 </div>
 
-                <div class="form-row-3">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="ad-position"><i class="fas fa-map-marker-alt"></i> विज्ञापन का स्थान (Ad Position) *</label>
+                        <select id="ad-position" name="position" required>
+                            <option value="above_calendar">1. सनातन दिनदर्शिका के ऊपर (Above Sanatan Dindarshika)</option>
+                            <option value="above_announcements">2. नवीनतम घोषणाएँ के ऊपर (Above Announcements)</option>
+                            <option value="above_committee">3. कार्यकारिणी सदस्य के ऊपर (Above Committee)</option>
+                            <option value="below_committee">4. कार्यकारिणी सदस्य के नीचे (Below Committee)</option>
+                        </select>
+                    </div>
+
                     <div class="form-group">
                         <label for="ad-order"><i class="fas fa-sort-numeric-down"></i> प्रदर्शन क्रम (Order)</label>
                         <input type="number" id="ad-order" name="display_order" value="0" min="0">
                     </div>
+                </div>
 
+                <div class="form-row">
                     <div class="form-group">
                         <label for="ad-status"><i class="fas fa-toggle-on"></i> स्थिति (Status)</label>
                         <select id="ad-status" name="status">
@@ -706,15 +733,31 @@ session_start();
 
                     <div class="form-row">
                         <div class="form-group">
+                            <label for="edit-ad-position"><i class="fas fa-map-marker-alt"></i> विज्ञापन का स्थान (Position) *</label>
+                            <select id="edit-ad-position" name="position" required>
+                                <option value="above_calendar">1. सनातन दिनदर्शिका के ऊपर (Above Sanatan Dindarshika)</option>
+                                <option value="above_announcements">2. नवीनतम घोषणाएँ के ऊपर (Above Announcements)</option>
+                                <option value="above_committee">3. कार्यकारिणी सदस्य के ऊपर (Above Committee)</option>
+                                <option value="below_committee">4. कार्यकारिणी सदस्य के नीचे (Below Committee)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
                             <label for="edit-ad-order">क्रम (Order)</label>
                             <input type="number" id="edit-ad-order" name="display_order" min="0">
                         </div>
+                    </div>
+
+                    <div class="form-row">
                         <div class="form-group">
                             <label for="edit-ad-status">स्थिति (Status)</label>
                             <select id="edit-ad-status" name="status">
                                 <option value="active">सक्रिय (Active)</option>
                                 <option value="inactive">निष्क्रिय (Inactive)</option>
                             </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-ad-end-date">समाप्ति तिथि (वैकल्पिक)</label>
+                            <input type="date" id="edit-ad-end-date" name="end_date">
                         </div>
                     </div>
 

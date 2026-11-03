@@ -112,6 +112,13 @@ async function loadAds() {
     }
 }
 
+const positionLabels = {
+    'above_calendar': '1. सनातन दिनदर्शिका के ऊपर',
+    'above_announcements': '2. नवीनतम घोषणाएँ के ऊपर',
+    'above_committee': '3. कार्यकारिणी सदस्य के ऊपर',
+    'below_committee': '4. कार्यकारिणी सदस्य के नीचे'
+};
+
 // 🎨 5. Render Ads in Grid
 function renderAds(ads) {
     const gridEl = document.getElementById('ads-grid-container');
@@ -122,6 +129,7 @@ function renderAds(ads) {
         const phoneLink = ad.phone ? `tel:${ad.phone.replace(/\D/g, '')}` : null;
         const waLink = ad.phone ? `https://wa.me/91${ad.phone.replace(/\D/g, '')}` : null;
         const webLink = ad.link_url || null;
+        const posText = positionLabels[ad.position] || positionLabels['above_calendar'];
 
         return `
             <div class="ad-card-item" id="ad-card-${ad.id}">
@@ -133,6 +141,9 @@ function renderAds(ads) {
                     <span class="ad-card-order">#${ad.display_order || 0}</span>
                 </div>
                 <div class="ad-card-body">
+                    <div class="ad-card-position-badge">
+                        <i class="fas fa-map-marker-alt"></i> ${posText}
+                    </div>
                     <div class="ad-card-title">${escapeHtml(ad.title)}</div>
                     ${ad.business_name ? `<div class="ad-card-biz"><i class="fas fa-store"></i> ${escapeHtml(ad.business_name)}</div>` : ''}
                     
@@ -255,8 +266,12 @@ function openEditModal(id) {
     document.getElementById('edit-ad-business').value = ad.business_name || '';
     document.getElementById('edit-ad-phone').value = ad.phone || '';
     document.getElementById('edit-ad-link').value = ad.link_url || '';
+    const posSelect = document.getElementById('edit-ad-position');
+    if (posSelect) posSelect.value = ad.position || 'above_calendar';
     document.getElementById('edit-ad-order').value = ad.display_order || 0;
     document.getElementById('edit-ad-status').value = ad.status || 'active';
+    const endDateEl = document.getElementById('edit-ad-end-date');
+    if (endDateEl) endDateEl.value = ad.end_date || '';
 
     const modal = document.getElementById('edit-ad-modal');
     if (modal) modal.classList.add('active');

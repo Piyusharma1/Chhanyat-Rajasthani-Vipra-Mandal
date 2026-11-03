@@ -405,13 +405,20 @@ async function loadCriticalData() {
 }
 
 // ============================================
-// 📢 DYNAMIC HOME ADS LOADER
+// 📢 DYNAMIC HOME ADS LOADER (4 POSITIONS)
+// 1. above_calendar (सनातन दिनदर्शिका के ऊपर)
+// 2. above_announcements (नवीनतम घोषणाएँ के ऊपर)
+// 3. above_committee (कार्यकारिणी सदस्य के ऊपर)
+// 4. below_committee (कार्यकारिणी सदस्य के नीचे)
 // ============================================
-async function loadHomeAds() {
-    const sectionEl = document.getElementById('home-ads-section');
-    const gridEl = document.getElementById('home-ads-grid');
-    if (!sectionEl || !gridEl) return;
+const AD_POSITIONS = [
+    { key: 'above_calendar', sectionId: 'ads-pos-above-calendar', gridId: 'ads-grid-above-calendar' },
+    { key: 'above_announcements', sectionId: 'ads-pos-above-announcements', gridId: 'ads-grid-above-announcements' },
+    { key: 'above_committee', sectionId: 'ads-pos-above-committee', gridId: 'ads-grid-above-committee' },
+    { key: 'below_committee', sectionId: 'ads-pos-below-committee', gridId: 'ads-grid-below-committee' }
+];
 
+async function loadHomeAds() {
     try {
         let response;
         try {
@@ -424,23 +431,42 @@ async function loadHomeAds() {
         const result = await response.json();
         const ads = (result && result.success && Array.isArray(result.data)) ? result.data : [];
 
-        if (ads.length === 0) {
-            sectionEl.style.display = 'none';
-            return;
-        }
+        // Distribute ads by position (default to above_calendar if not set)
+        const groupedAds = {
+            above_calendar: [],
+            above_announcements: [],
+            above_committee: [],
+            below_committee: []
+        };
 
-        renderHomeAds(ads);
-        sectionEl.style.display = 'block';
+        ads.forEach(ad => {
+            const pos = ad.position && groupedAds[ad.position] ? ad.position : 'above_calendar';
+            groupedAds[pos].push(ad);
+        });
+
+        // Render each position
+        AD_POSITIONS.forEach(({ key, sectionId, gridId }) => {
+            const sectionEl = document.getElementById(sectionId);
+            const gridEl = document.getElementById(gridId);
+            const posAds = groupedAds[key] || [];
+
+            if (!sectionEl || !gridEl) return;
+
+            if (posAds.length === 0) {
+                sectionEl.style.display = 'none';
+                gridEl.innerHTML = '';
+            } else {
+                gridEl.innerHTML = renderAdsHtml(posAds);
+                sectionEl.style.display = 'block';
+            }
+        });
     } catch (err) {
         console.warn('⚠️ Could not load home ads/sponsors:', err);
     }
 }
 
-function renderHomeAds(ads) {
-    const gridEl = document.getElementById('home-ads-grid');
-    if (!gridEl) return;
-
-    gridEl.innerHTML = ads.map(ad => {
+function renderAdsHtml(ads) {
+    return ads.map(ad => {
         const title = ad.title || '';
         const biz = ad.business_name || '';
         const img = ad.image_url || '';

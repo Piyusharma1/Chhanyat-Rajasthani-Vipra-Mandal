@@ -48,6 +48,8 @@ try {
     $businessName = isset($data['business_name']) ? (trim($data['business_name']) ?: null) : $existing['business_name'];
     $linkUrl = isset($data['link_url']) ? (trim($data['link_url']) ?: null) : $existing['link_url'];
     $phone = isset($data['phone']) ? (trim($data['phone']) ?: null) : $existing['phone'];
+    $validPositions = ['above_calendar', 'above_announcements', 'above_committee', 'below_committee'];
+    $position = isset($data['position']) && in_array($data['position'], $validPositions) ? $data['position'] : ($existing['position'] ?? 'above_calendar');
     $status = isset($data['status']) && in_array($data['status'], ['active', 'inactive']) ? $data['status'] : $existing['status'];
     $displayOrder = isset($data['display_order']) ? (int)$data['display_order'] : (int)$existing['display_order'];
     $startDate = isset($data['start_date']) ? ($data['start_date'] ?: null) : $existing['start_date'];
@@ -103,6 +105,7 @@ try {
                     image_url = :image_url, 
                     link_url = :link_url, 
                     phone = :phone, 
+                    position = :position, 
                     status = :status, 
                     display_order = :display_order, 
                     start_date = :start_date, 
@@ -115,6 +118,7 @@ try {
         ':image_url' => $imageUrl,
         ':link_url' => $linkUrl,
         ':phone' => $phone,
+        ':position' => $position,
         ':status' => $status,
         ':display_order' => $displayOrder,
         ':start_date' => $startDate,

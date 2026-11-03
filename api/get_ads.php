@@ -5,7 +5,6 @@ header('Content-Type: application/json; charset=utf-8');
 require_once 'db.php';
 
 try {
-    // 1. Self-healing table creation
     $createTableSql = "CREATE TABLE IF NOT EXISTS local_ads (
         id INT AUTO_INCREMENT PRIMARY KEY,
         title VARCHAR(255) NOT NULL,
@@ -13,6 +12,7 @@ try {
         image_url VARCHAR(500) NOT NULL,
         link_url VARCHAR(500) DEFAULT NULL,
         phone VARCHAR(50) DEFAULT NULL,
+        position VARCHAR(50) DEFAULT 'above_calendar',
         status ENUM('active', 'inactive') DEFAULT 'active',
         display_order INT DEFAULT 0,
         start_date DATE DEFAULT NULL,
@@ -21,6 +21,13 @@ try {
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
     $pdo->exec($createTableSql);
+
+    // Self-healing migration for existing table: ensure `position` column exists
+    try {
+        $pdo->exec("ALTER TABLE local_ads ADD COLUMN position VARCHAR(50) DEFAULT 'above_calendar' AFTER phone");
+    } catch (\Exception $e) {
+        // Column already exists or table has it
+    }
 
     $isAdmin = isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true;
     $adminView = isset($_GET['admin_view']) && ($_GET['admin_view'] === 'true' || $_GET['admin_view'] === '1');

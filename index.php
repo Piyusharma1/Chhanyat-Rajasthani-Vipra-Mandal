@@ -112,7 +112,7 @@
                 <div class="stats-grid" role="list">
                     <div class="stat-card" role="listitem">
                         <h3 id="total-branches" aria-live="polite">—</h3>
-                        <p>कुल घर</p>
+                        <p>कुल परिवार</p>
                         <div class="stat-sublabel">Total Branches</div>
                     </div>
                     <div class="stat-card" role="listitem">
@@ -129,8 +129,8 @@
             </div>
         </section>
 
-        <!-- ═══ LOCAL ADVERTISEMENTS / SPONSORS ═══ -->
-        <section class="promotions-outer-section ad-outer-section" id="home-ads-section" aria-label="स्थानीय विज्ञापन" style="display: none;">
+        <!-- ═══ AD POSITION 1: ABOVE सनातन दिनदर्शिका ═══ -->
+        <section class="promotions-outer-section ad-outer-section" id="ads-pos-above-calendar" aria-label="स्थानीय विज्ञापन - दिनदर्शिका" style="display: none;">
             <div class="container">
                 <div class="promotions-section ad-section">
                     <div class="promotions-header-row ad-header-row">
@@ -140,7 +140,7 @@
                         </div>
                         <span class="promotions-disclaimer ad-disclaimer">विज्ञापन</span>
                     </div>
-                    <div class="promotions-grid ad-grid" id="home-ads-grid" role="list">
+                    <div class="promotions-grid ad-grid" id="ads-grid-above-calendar" role="list">
                         <!-- Populated dynamically via home.js -->
                     </div>
                 </div>
@@ -211,6 +211,24 @@
             </div>
         </section>
 
+        <!-- ═══ AD POSITION 2: ABOVE नवीनतम घोषणाएँ ═══ -->
+        <section class="promotions-outer-section ad-outer-section" id="ads-pos-above-announcements" aria-label="स्थानीय विज्ञापन - सूचनाएँ" style="display: none;">
+            <div class="container">
+                <div class="promotions-section ad-section">
+                    <div class="promotions-header-row ad-header-row">
+                        <div class="promotions-badge ad-badge">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--saffron);"><path d="m3 11 18-5v12L3 14v-3z"></path><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"></path></svg>
+                            <span>प्रायोजक एवं विज्ञापन</span>
+                        </div>
+                        <span class="promotions-disclaimer ad-disclaimer">विज्ञापन</span>
+                    </div>
+                    <div class="promotions-grid ad-grid" id="ads-grid-above-announcements" role="list">
+                        <!-- Populated dynamically via home.js -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- ═══ ANNOUNCEMENTS ═══ -->
         <section class="announcements-section" aria-labelledby="announcements-title">
             <div class="container">
@@ -227,6 +245,24 @@
             </div>
         </section>
 
+        <!-- ═══ AD POSITION 3: ABOVE कार्यकारिणी सदस्य ═══ -->
+        <section class="promotions-outer-section ad-outer-section" id="ads-pos-above-committee" aria-label="स्थानीय विज्ञापन - कार्यकारिणी" style="display: none;">
+            <div class="container">
+                <div class="promotions-section ad-section">
+                    <div class="promotions-header-row ad-header-row">
+                        <div class="promotions-badge ad-badge">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--saffron);"><path d="m3 11 18-5v12L3 14v-3z"></path><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"></path></svg>
+                            <span>प्रायोजक एवं विज्ञापन</span>
+                        </div>
+                        <span class="promotions-disclaimer ad-disclaimer">विज्ञापन</span>
+                    </div>
+                    <div class="promotions-grid ad-grid" id="ads-grid-above-committee" role="list">
+                        <!-- Populated dynamically via home.js -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- ══ COMMITTEE ═══ -->
         <section class="container" style="padding: 30px 16px 48px;" aria-labelledby="committee-title">
             <div class="section-header">
@@ -239,6 +275,24 @@
                 <div class="committee-card" aria-hidden="true"><div class="skeleton skeleton-circle"></div><div class="skeleton" style="height: 18px; margin-bottom: 8px;"></div><div class="skeleton" style="height: 14px; width: 60%; margin: 0 auto;"></div></div>
                 <div class="committee-card" aria-hidden="true"><div class="skeleton skeleton-circle"></div><div class="skeleton" style="height: 18px; margin-bottom: 8px;"></div><div class="skeleton" style="height: 14px; width: 60%; margin: 0 auto;"></div></div>
                 <div class="committee-card" aria-hidden="true"><div class="skeleton skeleton-circle"></div><div class="skeleton" style="height: 18px; margin-bottom: 8px;"></div><div class="skeleton" style="height: 14px; width: 60%; margin: 0 auto;"></div></div>
+            </div>
+        </section>
+
+        <!-- ═══ AD POSITION 4: BELOW कार्यकारिणी सदस्य ═══ -->
+        <section class="promotions-outer-section ad-outer-section" id="ads-pos-below-committee" aria-label="स्थानीय विज्ञापन - समापन" style="display: none;">
+            <div class="container">
+                <div class="promotions-section ad-section">
+                    <div class="promotions-header-row ad-header-row">
+                        <div class="promotions-badge ad-badge">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--saffron);"><path d="m3 11 18-5v12L3 14v-3z"></path><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"></path></svg>
+                            <span>प्रायोजक एवं विज्ञापन</span>
+                        </div>
+                        <span class="promotions-disclaimer ad-disclaimer">विज्ञापन</span>
+                    </div>
+                    <div class="promotions-grid ad-grid" id="ads-grid-below-committee" role="list">
+                        <!-- Populated dynamically via home.js -->
+                    </div>
+                </div>
             </div>
         </section>
     </main>
