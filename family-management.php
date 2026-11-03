@@ -234,6 +234,99 @@
         .toast-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; }
         .toast.success .toast-icon { background: var(--orange); }
         .toast.error .toast-icon { background: var(--red); }
+
+        /* 📱 Mobile & Small Screen Responsiveness */
+        @media (max-width: 768px) {
+            #main-content {
+                padding: 0 12px !important;
+                margin: 15px auto !important;
+            }
+            .form-container {
+                padding: 0 0 2rem;
+            }
+            .section-divider h2 {
+                font-size: 1.15rem;
+                white-space: normal;
+                text-align: center;
+            }
+            .edit-section {
+                padding: 1.1rem 0.85rem;
+                margin-bottom: 1.25rem;
+                border-radius: 8px;
+            }
+            .edit-section h4 {
+                font-size: 1.05rem;
+                margin-bottom: 0.85rem;
+                flex-wrap: wrap;
+                gap: 6px;
+            }
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 0.85rem;
+                margin-bottom: 0.5rem;
+            }
+            .form-group input, 
+            .form-group select, 
+            .form-group textarea {
+                padding: 10px 12px;
+                font-size: 0.95rem;
+                box-sizing: border-box;
+            }
+            .member-edit-item {
+                padding: 1rem 0.85rem;
+                margin-bottom: 1rem;
+            }
+            .remove-member-btn {
+                top: 8px;
+                right: 8px;
+                width: 26px;
+                height: 26px;
+                font-size: 0.9rem;
+            }
+            .btn-save {
+                padding: 13px;
+                font-size: 1.05rem;
+            }
+            .toast {
+                top: 12px;
+                right: 12px;
+                left: 12px;
+                min-width: unset;
+                max-width: calc(100% - 24px);
+                transform: translateY(-80px);
+                border-radius: 8px;
+                padding: 12px 14px;
+            }
+            .toast.show {
+                transform: translateY(0);
+            }
+            #family-photo-preview {
+                max-width: 100% !important;
+                height: auto !important;
+                max-height: 180px !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .top-nav-bar {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 8px;
+            }
+            .btn-secondary {
+                justify-content: center;
+                width: 100%;
+            }
+            .system-badge {
+                justify-content: center;
+            }
+            .edit-section {
+                padding: 0.9rem 0.65rem;
+            }
+            .member-edit-item {
+                padding: 0.85rem 0.65rem;
+            }
+        }
     </style>
 </head>
 <body>
