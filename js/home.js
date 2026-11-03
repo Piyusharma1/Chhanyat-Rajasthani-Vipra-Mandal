@@ -477,7 +477,7 @@ function renderAdsHtml(ads) {
         return `
                 <div class="sponsor-banner ad-banner" role="listitem">
                     <a href="${targetUrl}" ${isExternal ? 'target="_blank" rel="noopener"' : ''} class="sponsor-banner-media ad-banner-media" aria-label="${title}">
-                        <img src="${img}" alt="${title}" loading="lazy" decoding="async" onerror="this.style.display='none'">
+                        <img src="${img}" alt="${title}" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='images/piyush.jpg';">
                     </a>
                     <div class="sponsor-banner-footer ad-banner-footer">
                         <div class="sponsor-banner-title ad-banner-title" title="${title}">
