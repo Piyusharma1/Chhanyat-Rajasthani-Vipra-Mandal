@@ -273,9 +273,14 @@ function renderFamilyPhotosGrid(searchTerm = '', branchFilter = '') {
         return;
     }
 
-    const currentSelectedUrl = currentPickerTarget === 'central'
-        ? document.getElementById('central-comm-photo')?.value
-        : document.getElementById('comm-photo')?.value;
+    let currentSelectedUrl = '';
+    if (currentPickerTarget === 'central') {
+        currentSelectedUrl = document.getElementById('central-comm-photo')?.value;
+    } else if (currentPickerTarget === 'edit') {
+        currentSelectedUrl = document.getElementById('edit-comm-photo')?.value;
+    } else {
+        currentSelectedUrl = document.getElementById('comm-photo')?.value;
+    }
 
     grid.innerHTML = filtered.map(photo => {
         const isSelected = currentSelectedUrl && currentSelectedUrl === photo.url;
@@ -293,8 +298,12 @@ function renderFamilyPhotosGrid(searchTerm = '', branchFilter = '') {
 }
 
 function selectFamilyPhoto(url, headName) {
-    const isCentral = (currentPickerTarget === 'central');
-    const prefix = isCentral ? 'central-comm' : 'comm';
+    let prefix = 'comm';
+    if (currentPickerTarget === 'central') {
+        prefix = 'central-comm';
+    } else if (currentPickerTarget === 'edit') {
+        prefix = 'edit-comm';
+    }
 
     const hiddenInput = document.getElementById(`${prefix}-photo`);
     const preview = document.getElementById(`${prefix}-photo-preview`);
@@ -321,8 +330,12 @@ function selectFamilyPhoto(url, headName) {
 }
 
 window.clearSelectedPhoto = function(target) {
-    const isCentral = (target === 'central');
-    const prefix = isCentral ? 'central-comm' : 'comm';
+    let prefix = 'comm';
+    if (target === 'central') {
+        prefix = 'central-comm';
+    } else if (target === 'edit') {
+        prefix = 'edit-comm';
+    }
 
     const hiddenInput = document.getElementById(`${prefix}-photo`);
     const preview = document.getElementById(`${prefix}-photo-preview`);
@@ -397,9 +410,9 @@ function renderCommitteeList(branch) {
                     <span style="font-size:0.8rem;font-weight:700;color:var(--saffron-deep);padding:4px 8px;background:rgba(255,107,0,0.12);border-radius:12px;min-width:32px;text-align:center;">#${index + 1}</span>
                     <img src="${uniqueImageUrl}" style="width:45px;height:45px;border-radius:50%;object-fit:cover;border:2px solid var(--saffron);" onerror="this.src='https://placehold.co/40x40/FF6B00/ffffff?text=P'">
                     <div>
-                        <strong style="color:var(--maroon-deep);">${m.name || 'अज्ञात'}</strong> 
-                        <small style="color:var(--text-soft);display:block;">${m.designation || '—'}</small>
-                        ${m.mobile ? `<small style="color:var(--text-mid);">📱 ${m.mobile}</small>` : ''}
+                        <strong style="color:var(--maroon-deep);">${escapeHtml(m.name || 'अज्ञात')}</strong> 
+                        <small style="color:var(--text-soft);display:block;">${escapeHtml(m.designation || '—')}</small>
+                        ${m.mobile ? `<small style="color:var(--text-mid);">📱 ${escapeHtml(m.mobile)}</small>` : ''}
                     </div>
                 </div>
                 <div class="member-actions-group">
@@ -408,6 +421,9 @@ function renderCommitteeList(branch) {
                     </button>
                     <button class="order-btn" onclick="moveCommitteeMember(${index}, 1)" ${index === committee.length - 1 ? 'disabled' : ''} title="नीचे ले जाएं">
                         <i class="fas fa-arrow-down"></i> नीचे
+                    </button>
+                    <button onclick="openEditCommitteeMember('branch', ${index})" style="background:var(--saffron);color:white;border:none;border-radius:var(--radius-sm);padding:8px 12px;cursor:pointer;font-size:0.85rem;transition:0.2s;display:inline-flex;align-items:center;gap:4px;" title="संपादित करें" onmouseover="this.style.background='var(--saffron-deep)'" onmouseout="this.style.background='var(--saffron)'">
+                        <i class="fas fa-edit"></i> एडिट
                     </button>
                     <button onclick="deleteCommitteeMember(${index})" style="background:var(--red);color:white;border:none;border-radius:var(--radius-sm);padding:8px 12px;cursor:pointer;font-size:0.85rem;transition:0.2s;display:inline-flex;align-items:center;gap:4px;" title="हटाएं" onmouseover="this.style.background='var(--red-dark)'" onmouseout="this.style.background='var(--red)'">
                         <i class="fas fa-trash"></i> हटाएं
@@ -455,6 +471,13 @@ function renderCentralCommitteeList() {
                 </button>
                 <button class="order-btn" onclick="moveCentralMember(${index}, 1)" ${index === centralCommittee.length - 1 ? 'disabled' : ''} title="नीचे ले जाएं">
                     <i class="fas fa-arrow-down"></i> नीचे
+                </button>
+                <button onclick="openEditCommitteeMember('central', '${m.id}')"
+                    style="background:var(--saffron);color:white;border:none;border-radius:var(--radius-sm);padding:8px 12px;cursor:pointer;font-size:0.85rem;transition:0.2s;display:inline-flex;align-items:center;gap:4px;"
+                    title="संपादित करें"
+                    onmouseover="this.style.background='var(--saffron-deep)'"
+                    onmouseout="this.style.background='var(--saffron)'">
+                    <i class="fas fa-edit"></i> एडिट
                 </button>
                 <button onclick="deleteCentralMember('${m.id}')"
                     style="background:var(--red-dark);color:white;border:none;border-radius:var(--radius-sm);padding:8px 12px;cursor:pointer;font-size:0.85rem;transition:0.2s;display:inline-flex;align-items:center;gap:4px;"
@@ -611,17 +634,197 @@ window.deleteCommitteeMember = async function(index) {
 };
 
 // =========================================
+// ✏️ EDIT COMMITTEE MEMBER
+// =========================================
+window.openEditCommitteeMember = function(type, idOrIndex) {
+    const modal = document.getElementById('edit-committee-modal');
+    if (!modal) return;
+
+    const typeInput = document.getElementById('edit-comm-type');
+    const indexInput = document.getElementById('edit-comm-index');
+    const idInput = document.getElementById('edit-comm-id');
+    const nameInput = document.getElementById('edit-comm-name');
+    const designationInput = document.getElementById('edit-comm-designation');
+    const mobileInput = document.getElementById('edit-comm-mobile');
+    const photoHidden = document.getElementById('edit-comm-photo');
+    const origPhotoHidden = document.getElementById('edit-comm-orig-photo');
+    const fileInput = document.getElementById('edit-comm-photo-file');
+    const preview = document.getElementById('edit-comm-photo-preview');
+    const badge = document.getElementById('edit-comm-photo-selected');
+    const label = document.getElementById('edit-comm-photo-label');
+    const source = document.getElementById('edit-comm-photo-source');
+
+    if (fileInput) fileInput.value = '';
+
+    typeInput.value = type;
+
+    let member = null;
+    if (type === 'branch') {
+        indexInput.value = idOrIndex;
+        idInput.value = '';
+        const branch = allBranches.find(b => String(b.id) === String(currentBranchId));
+        if (branch && branch.committee && branch.committee[idOrIndex]) {
+            member = branch.committee[idOrIndex];
+        }
+    } else {
+        idInput.value = idOrIndex;
+        indexInput.value = '';
+        member = centralCommittee.find(m => String(m.id) === String(idOrIndex));
+    }
+
+    if (!member) {
+        showToast('सदस्य जानकारी नहीं मिली।', 'error');
+        return;
+    }
+
+    nameInput.value = member.name || '';
+    designationInput.value = member.designation || '';
+    mobileInput.value = member.mobile || '';
+    
+    const existingPhoto = member.photo || '';
+    photoHidden.value = existingPhoto;
+    origPhotoHidden.value = existingPhoto;
+
+    if (existingPhoto) {
+        preview.src = existingPhoto;
+        preview.style.display = 'block';
+        if (badge) badge.style.display = 'flex';
+        if (label) label.textContent = 'वर्तमान फोटो';
+        if (source) source.textContent = existingPhoto;
+    } else {
+        preview.src = '';
+        preview.style.display = 'none';
+        if (badge) badge.style.display = 'none';
+    }
+
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    nameInput.focus();
+};
+
+window.closeEditCommitteeModal = function() {
+    const modal = document.getElementById('edit-committee-modal');
+    if (modal) modal.style.display = 'none';
+    document.body.style.overflow = '';
+};
+
+async function handleSaveEditMember(e) {
+    e.preventDefault();
+    const type = document.getElementById('edit-comm-type').value;
+    const saveBtn = document.getElementById('btn-save-edit-comm');
+    if (saveBtn) {
+        saveBtn.disabled = true;
+        saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> सहेज रहा है...';
+    }
+
+    try {
+        const name = document.getElementById('edit-comm-name').value.trim();
+        const designation = document.getElementById('edit-comm-designation').value.trim();
+        const mobile = document.getElementById('edit-comm-mobile').value.trim();
+        const origPhoto = document.getElementById('edit-comm-orig-photo').value.trim();
+        let photoUrl = document.getElementById('edit-comm-photo').value.trim();
+
+        const fileInput = document.getElementById('edit-comm-photo-file');
+        if (fileInput && fileInput.files[0]) {
+            if (saveBtn) saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> फोटो अपलोड...';
+            const uploadedUrl = await uploadImageToHostinger('edit-comm-photo-file', name);
+            if (uploadedUrl) {
+                photoUrl = uploadedUrl;
+            }
+        }
+
+        if (type === 'branch') {
+            const index = parseInt(document.getElementById('edit-comm-index').value, 10);
+            if (!currentBranchId) throw new Error('समाज चयनित नहीं है।');
+            const branch = allBranches.find(b => String(b.id) === String(currentBranchId));
+            if (!branch || !branch.committee || branch.committee[index] === undefined) {
+                throw new Error('सदस्य नहीं मिला।');
+            }
+
+            const updatedCommittee = [...branch.committee];
+            const updatedMember = {
+                ...updatedCommittee[index],
+                name: name,
+                designation: designation,
+                mobile: mobile,
+                photo: photoUrl || null
+            };
+            Object.keys(updatedMember).forEach(k => {
+                if (updatedMember[k] === null || updatedMember[k] === '') {
+                    delete updatedMember[k];
+                }
+            });
+
+            updatedCommittee[index] = updatedMember;
+
+            // If photo changed and old photo was a committee upload, request its deletion
+            const deletePhoto = (origPhoto && origPhoto !== photoUrl) ? origPhoto : null;
+
+            const response = await fetch('api/update_branch_committee.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    branchId: currentBranchId,
+                    committee: updatedCommittee,
+                    deletePhoto: deletePhoto
+                })
+            });
+            const result = await response.json();
+            if (!result.success) throw new Error(result.error || 'Update failed');
+
+            branch.committee = updatedCommittee;
+            renderCommitteeList(branch);
+            showToast('सदस्य विवरण सफलतापूर्वक अपडेट किया गया!');
+            closeEditCommitteeModal();
+
+        } else if (type === 'central') {
+            const memberId = document.getElementById('edit-comm-id').value;
+            const deletePhoto = (origPhoto && origPhoto !== photoUrl) ? origPhoto : null;
+
+            const response = await fetch('api/update_committee_member.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    id: memberId,
+                    name: name,
+                    designation: designation,
+                    mobile: mobile,
+                    photo: photoUrl,
+                    deletePhoto: deletePhoto
+                })
+            });
+            const result = await response.json();
+            if (!result.success) throw new Error(result.error || 'Update failed');
+
+            showToast('केंद्रीय कार्यकारिणी सदस्य अपडेट किया गया!');
+            closeEditCommitteeModal();
+            loadCentralCommittee();
+        }
+    } catch (error) {
+        showToast('अपडेट में त्रुटि: ' + error.message, 'error');
+    } finally {
+        if (saveBtn) {
+            saveBtn.disabled = false;
+            saveBtn.innerHTML = '<i class="fas fa-save"></i> बदलाव सहेजें';
+        }
+    }
+}
+
+// =========================================
 // 🚀 INITIALIZE PAGE
 // =========================================
 function initCommitteePage() {
     loadBranches(); loadCentralCommittee();
     setupImagePreview('comm-photo-file', 'comm-photo-preview', 'comm-photo-selected', 'comm-photo-label', 'comm-photo');
     setupImagePreview('central-comm-photo-file', 'central-comm-photo-preview', 'central-comm-photo-selected', 'central-comm-photo-label', 'central-comm-photo');
+    setupImagePreview('edit-comm-photo-file', 'edit-comm-photo-preview', 'edit-comm-photo-selected', 'edit-comm-photo-label', 'edit-comm-photo');
     
     const branchSelect = document.getElementById('committee-branch-select'); if (branchSelect) branchSelect.addEventListener('change', handleBranchChange);
     const branchForm = document.getElementById('committee-form'); if (branchForm) branchForm.addEventListener('submit', handleAddMember);
     const centralForm = document.getElementById('central-committee-form');
     if (centralForm) centralForm.addEventListener('submit', function(e) { e.preventDefault(); handleAddCentralMember(e); });
+    const editForm = document.getElementById('edit-committee-form');
+    if (editForm) editForm.addEventListener('submit', handleSaveEditMember);
 
     // Family photo picker events
     const pickerSearch = document.getElementById('family-picker-search');
@@ -638,7 +841,10 @@ function initCommitteePage() {
     }
 
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') closeFamilyPhotoPicker();
+        if (e.key === 'Escape') {
+            closeFamilyPhotoPicker();
+            closeEditCommitteeModal();
+        }
     });
 }
 

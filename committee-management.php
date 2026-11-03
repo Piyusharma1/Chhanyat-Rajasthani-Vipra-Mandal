@@ -586,6 +586,82 @@
         </section>
     </main>
 
+    <!-- ══ EDIT COMMITTEE MEMBER MODAL ═══ -->
+    <div id="edit-committee-modal" class="family-photo-modal" role="dialog" aria-modal="true" style="display: none;">
+        <div class="family-modal-backdrop" onclick="closeEditCommitteeModal()"></div>
+        <div class="family-modal-dialog" style="max-width: 580px;">
+            <div class="family-modal-header">
+                <h3><i class="fas fa-user-edit"></i> कार्यकारिणी सदस्य संपादित करें</h3>
+                <button type="button" class="family-modal-close" onclick="closeEditCommitteeModal()" aria-label="बंद करें">&times;</button>
+            </div>
+            <div class="family-modal-body">
+                <form id="edit-committee-form" class="form-grid" style="grid-template-columns: 1fr;">
+                    <input type="hidden" id="edit-comm-type" value="branch">
+                    <input type="hidden" id="edit-comm-index" value="">
+                    <input type="hidden" id="edit-comm-id" value="">
+                    <input type="hidden" id="edit-comm-orig-photo" value="">
+
+                    <div>
+                        <label style="font-weight: 600; font-size: 0.88rem; color: var(--text-mid); display: block; margin-bottom: 5px;">
+                            पूरा नाम <span style="color: var(--red);">*</span>
+                        </label>
+                        <input type="text" id="edit-comm-name" placeholder="नाम *" required style="width: 100%;">
+                    </div>
+
+                    <div>
+                        <label style="font-weight: 600; font-size: 0.88rem; color: var(--text-mid); display: block; margin-bottom: 5px;">
+                            पदनाम <span style="color: var(--red);">*</span>
+                        </label>
+                        <input type="text" id="edit-comm-designation" placeholder="पदनाम *" required style="width: 100%;">
+                    </div>
+
+                    <div>
+                        <label style="font-weight: 600; font-size: 0.88rem; color: var(--text-mid); display: block; margin-bottom: 5px;">
+                            मोबाइल नंबर
+                        </label>
+                        <input type="text" id="edit-comm-mobile" placeholder="मोबाइल नंबर" style="width: 100%;">
+                    </div>
+
+                    <div class="photo-selection-box" style="margin-top: 5px;">
+                        <label style="font-weight: 600; font-size: 0.88rem; color: var(--text-mid); display: block; margin-bottom: 6px;">
+                            <i class="fas fa-camera"></i> सदस्य फोटो
+                        </label>
+                        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                            <div class="upload-wrapper" style="flex: 1; min-width: 180px;">
+                                <input type="file" id="edit-comm-photo-file" accept="image/*" title="डिवाइस से नई फोटो चुनें">
+                            </div>
+                            <span style="color: var(--text-soft); font-size: 0.85rem; font-weight: 600;">— अथवा —</span>
+                            <button type="button" class="btn-choose-family" onclick="openFamilyPhotoPicker('edit')">
+                                <i class="fas fa-images"></i> परिवार फोटो से चुनें
+                            </button>
+                        </div>
+                        
+                        <div id="edit-comm-photo-selected" class="selected-photo-badge" style="display: none; margin-top: 10px;">
+                            <img id="edit-comm-photo-preview" class="preview-img" src="" alt="Preview" style="display: block; width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid var(--saffron);">
+                            <div style="flex: 1; min-width: 0;">
+                                <div style="font-size: 0.85rem; font-weight: 600; color: var(--maroon-deep);" id="edit-comm-photo-label">फोटो</div>
+                                <small style="color: var(--text-soft); font-size: 0.75rem; word-break: break-all;" id="edit-comm-photo-source"></small>
+                            </div>
+                            <button type="button" onclick="clearSelectedPhoto('edit')" style="background: transparent; border: none; color: var(--red); cursor: pointer; font-size: 1.1rem; padding: 4px 8px;" title="फोटो हटाएं">
+                                <i class="fas fa-times-circle"></i>
+                            </button>
+                        </div>
+                        <input type="hidden" id="edit-comm-photo" value="">
+                    </div>
+
+                    <div style="display: flex; gap: 10px; margin-top: 10px;">
+                        <button type="submit" id="btn-save-edit-comm" class="btn btn-primary" style="flex: 2;">
+                            <i class="fas fa-save"></i> बदलाव सहेजें
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="closeEditCommitteeModal()" style="flex: 1;">
+                            रद्द करें
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- ══ FAMILY PHOTO PICKER MODAL ═══ -->
     <div id="family-photo-modal" class="family-photo-modal" role="dialog" aria-modal="true" style="display: none;">
         <div class="family-modal-backdrop" onclick="closeFamilyPhotoPicker()"></div>
@@ -611,6 +687,7 @@
             </div>
         </div>
     </div>
+
     
     <div data-include="components/footer.php"></div>
 
