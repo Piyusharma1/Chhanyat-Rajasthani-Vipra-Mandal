@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once __DIR__ . '/session_helper.php';
 header('Content-Type: application/json; charset=utf-8');
 
 require_once 'db.php';
@@ -36,10 +36,10 @@ try {
     $params = [];
 
     if (!$isAdmin || !$adminView) {
-        // Public view: only show active ads within valid date ranges
+        // Public view: only show active ads within valid date ranges (treating empty strings and nulls as unrestricted)
         $whereClause = " WHERE status = 'active' 
-                         AND (start_date IS NULL OR start_date <= CURDATE()) 
-                         AND (end_date IS NULL OR end_date >= CURDATE()) ";
+                         AND (start_date IS NULL OR start_date = '' OR start_date = '0000-00-00' OR start_date <= CURDATE()) 
+                         AND (end_date IS NULL OR end_date = '' OR end_date = '0000-00-00' OR end_date >= CURDATE()) ";
     }
 
     $orderBy = " ORDER BY display_order ASC, id DESC ";
