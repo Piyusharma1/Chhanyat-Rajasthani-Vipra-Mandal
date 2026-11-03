@@ -89,13 +89,45 @@ function convertToWebp($sourcePath, $destWebpPath, $mime) {
     return false;
 }
 
+// Helper to create resized WebP thumbnail
+function createCalendarThumbnail($sourceWebpPath, $destThumbPath, $maxW = 600, $maxH = 800) {
+    $dir = dirname($destThumbPath);
+    if (!file_exists($dir)) {
+        @mkdir($dir, 0755, true);
+    }
+    if (function_exists('imagecreatefromwebp') && function_exists('imagewebp')) {
+        $src = @imagecreatefromwebp($sourceWebpPath);
+        if ($src) {
+            $w = imagesx($src);
+            $h = imagesy($src);
+            $ratio = min($maxW / $w, $maxH / $h, 1.0);
+            $newW = (int)round($w * $ratio);
+            $newH = (int)round($h * $ratio);
+            $thumb = imagecreatetruecolor($newW, $newH);
+            imagecopyresampled($thumb, $src, 0, 0, 0, 0, $newW, $newH, $w, $h);
+            imagewebp($thumb, $destThumbPath, 82);
+            imagedestroy($thumb);
+            imagedestroy($src);
+            return file_exists($destThumbPath);
+        }
+    }
+    return @copy($sourceWebpPath, $destThumbPath);
+}
+
+$thumbDir = $baseDir . 'thumbs/';
+if (!file_exists($thumbDir)) {
+    @mkdir($thumbDir, 0755, true);
+}
+
 if ($pageTarget === 'cover') {
     $targetWebp = $baseDir . 'cover.webp';
     $targetPng = $baseDir . 'cover.png';
+    $targetThumb = $thumbDir . 'cover.webp';
 
     if (convertToWebp($file['tmp_name'], $targetWebp, $mime)) {
         // Also keep PNG in sync
         @copy($file['tmp_name'], $targetPng);
+        createCalendarThumbnail($targetWebp, $targetThumb, 600, 900);
 
         echo json_encode([
             'success' => true,
@@ -112,12 +144,16 @@ if ($pageTarget === 'cover') {
     }
 
     $targetWebp = $pagesDir . $monthNum . '.webp';
+    $targetThumb = $thumbDir . $monthNum . '.webp';
+
     if (convertToWebp($file['tmp_name'], $targetWebp, $mime)) {
         if ($mime === 'image/jpeg') {
             @copy($file['tmp_name'], $pagesDir . $monthNum . '.jpg');
         } elseif ($mime === 'image/png') {
             @copy($file['tmp_name'], $pagesDir . $monthNum . '.png');
         }
+
+        createCalendarThumbnail($targetWebp, $targetThumb, 600, 750);
 
         echo json_encode([
             'success' => true,

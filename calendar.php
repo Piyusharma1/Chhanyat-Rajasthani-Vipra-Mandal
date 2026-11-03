@@ -24,6 +24,9 @@ $coverSrc = 'uploads/calendar/cover.webp';
 if (!file_exists(__DIR__ . '/' . $coverSrc)) $coverSrc = 'uploads/calendar/cover.jpg';
 if (!file_exists(__DIR__ . '/' . $coverSrc)) $coverSrc = 'uploads/calendar/cover.png';
 
+$coverThumb = 'uploads/calendar/thumbs/cover.webp';
+if (!file_exists(__DIR__ . '/' . $coverThumb)) $coverThumb = $coverSrc;
+
 $calendarPages = [
     [
         'key'      => 'cover',
@@ -31,6 +34,7 @@ $calendarPages = [
         'sub'      => 'छःन्यात राजस्थानी विप्र मंडल, लातूर',
         'short'    => 'मुखपृष्ठ',
         'src'      => $coverSrc,
+        'thumb'    => $coverThumb,
         'download' => 'सनातन_दिनदर्शिका_मुखपृष्ठ.webp',
     ]
 ];
@@ -40,12 +44,16 @@ foreach ($months as $num => $m) {
     if (!file_exists(__DIR__ . '/' . $pSrc)) $pSrc = "uploads/calendar/pages/{$num}.jpg";
     if (!file_exists(__DIR__ . '/' . $pSrc)) $pSrc = "uploads/calendar/pages/{$num}.png";
 
+    $pThumb = "uploads/calendar/thumbs/{$num}.webp";
+    if (!file_exists(__DIR__ . '/' . $pThumb)) $pThumb = $pSrc;
+
     $calendarPages[] = [
         'key'      => (string)$num,
         'title'    => "{$num}. {$m['hi']}",
         'sub'      => "{$m['en']}",
         'short'    => "{$num}. {$m['hi']}",
         'src'      => $pSrc,
+        'thumb'    => $pThumb,
         'download' => "सनातन_दिनदर्शिका_{$m['hi']}.webp",
     ];
 }
@@ -67,6 +75,7 @@ foreach ($months as $num => $m) {
     <link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Hindi&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css?v=<?= @filemtime(__DIR__.'/css/style.css') ?: time()?>">
+    <link rel="preload" as="image" href="<?= $coverThumb ?>" type="image/webp" fetchpriority="high">
 
     <style>
         :root {
@@ -622,28 +631,26 @@ foreach ($months as $num => $m) {
 </head>
 <body>
     <?php include __DIR__ . '/components/header.php'; ?>
-<div class="container" style="padding-top: 15px;">
-<div class="gallery-hero">
-                <div class="gallery-hero-content">
-                                <h2>सनातन दिनदर्शिका</h2>
-                    <p class="gallery-hero-subtitle" id="gallery-total-info"></p>
-                </div>
+
+    <main class="cal-container">
+        <div class="gallery-hero" style="margin-bottom: 15px;">
+            <div class="gallery-hero-content">
+                <h2>सनातन दिनदर्शिका</h2>
+                <p class="gallery-hero-subtitle" id="gallery-total-info">छःन्यात राजस्थानी विप्र मंडल, लातूर</p>
             </div>
-    </div>
+        </div>
+
         <!-- Header Bar -->
         <div class="cal-header-bar">
-            <div>
-                
-            </div>
-
+            <div></div>
            <?php if ($hasPdf): ?>
-    <a href="<?= htmlspecialchars($calendarPdfPath, ENT_QUOTES, 'UTF-8') ?>"
-       download="सनातन_दिनदर्शिका.pdf"
-       class="btn-pdf">
-        <i class="fas fa-file-pdf"></i>
-        सम्पूर्ण PDF डाउनलोड
-    </a>
-<?php endif; ?>
+                <a href="<?= htmlspecialchars($calendarPdfPath, ENT_QUOTES, 'UTF-8') ?>"
+                   download="सनातन_दिनदर्शिका.pdf"
+                   class="btn-pdf">
+                    <i class="fas fa-file-pdf"></i>
+                    सम्पूर्ण PDF डाउनलोड
+                </a>
+            <?php endif; ?>
         </div>
 
         <!-- Sticky Month Bar: Desktop (All 12 in 1 Row) & Mobile (Swipeable Pills) -->
@@ -671,8 +678,11 @@ foreach ($months as $num => $m) {
                 </div>
                 <div class="month-card-img-wrap">
                     <a href="<?= $coverPage['src'] ?>" class="cal-lb-trigger" data-lb-index="0" title="क्लिक कर पूरा देखें">
-                        <img src="<?= $coverPage['src'] ?>" alt="सनातन दिनदर्शिका मुखपृष्ठ"
-                             <?= ($targetMonth === 'cover') ? '' : 'loading="lazy"' ?>>
+                        <img src="<?= $coverPage['thumb'] ?>" 
+                             alt="सनातन दिनदर्शिका मुखपृष्ठ"
+                             width="600" height="900"
+                             decoding="async"
+                             <?= ($targetMonth === 'cover' || $targetMonth === '') ? 'fetchpriority="high"' : 'loading="lazy"' ?>>
                     </a>
                 </div>
                 <div class="month-card-actions">
@@ -695,8 +705,11 @@ foreach ($months as $num => $m) {
                     </div>
                     <div class="month-card-img-wrap">
                         <a href="<?= $page['src'] ?>" class="cal-lb-trigger" data-lb-index="<?= $num ?>" title="क्लिक कर पूरा देखें">
-                            <img src="<?= $page['src'] ?>" alt="सनातन दिनदर्शिका - <?= $m['hi'] ?> 2026"
-                                 <?= ((string)$num === (string)$targetMonth) ? '' : 'loading="lazy"' ?>>
+                            <img src="<?= $page['thumb'] ?>" 
+                                 alt="सनातन दिनदर्शिका - <?= $m['hi'] ?> 2026"
+                                 width="600" height="750"
+                                 decoding="async"
+                                 loading="lazy">
                         </a>
                     </div>
                     <div class="month-card-actions">
