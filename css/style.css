@@ -3811,14 +3811,25 @@ body.dark-mode .about-card {
 }
 
 .about-icon {
-    font-size: 3rem;
+    font-size: 2rem;
     margin-bottom: var(--spacing-md);
-    display: inline-block;
+    width: 58px;
+    height: 58px;
+    border-radius: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(255, 107, 0, 0.12), rgba(123, 26, 26, 0.12));
+    color: var(--maroon);
+    border: 1px solid rgba(201, 148, 26, 0.25);
+    transition: var(--transition);
+}
+
+.about-card:hover .about-icon {
     background: linear-gradient(135deg, var(--saffron), var(--maroon));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    filter: drop-shadow(0 2px 4px rgba(123, 26, 26, 0.2));
+    color: var(--white);
+    transform: scale(1.08) rotate(-4deg);
+    border-color: transparent;
 }
 
 .about-card h3 {
@@ -3904,16 +3915,25 @@ body.dark-mode .section-title {
 }
 
 .obj-icon {
-    font-size: 2.5rem;
+    font-size: 1.45rem;
     flex-shrink: 0;
-    width: 60px;
-    height: 60px;
+    width: 54px;
+    height: 54px;
     display: flex;
     align-items: center;
     justify-content: center;
     background: linear-gradient(135deg, var(--saffron-pale), var(--gold-pale));
     border-radius: var(--radius);
     border: 1px solid var(--border);
+    color: var(--maroon);
+    transition: var(--transition);
+}
+
+.objective-item:hover .obj-icon {
+    background: linear-gradient(135deg, var(--maroon), var(--maroon-deep));
+    color: var(--gold-light);
+    transform: scale(1.06);
+    border-color: transparent;
 }
 
 body.dark-mode .obj-icon {
