@@ -385,7 +385,7 @@ async function loadCriticalData() {
     try {
         const [allBranches, announcementsResult] = await Promise.all([
             loadAllFromAPI('branches'),
-            loadFromAPI('announcements', { limitCount: 5 })
+            loadFromAPI('announcements', { limitCount: 4 })
         ]);
 
         announcementsState = {
@@ -594,7 +594,7 @@ function setupLoadMoreHandlers() {
                 announcementsState.currentPage += 1;
                 const result = await loadFromAPI('announcements', {
                     page: announcementsState.currentPage,
-                    limitCount: 5
+                    limitCount: 4
                 });
 
                 announcementsState.hasMore = result.hasMore;
