@@ -333,9 +333,14 @@ body {
     letter-spacing: 0.8px;
     text-transform: uppercase;
 }
-.card-badge.badge-add    { background: #e8f5e9; color: #2e7d32; }
-.card-badge.badge-manage { background: #ffebee; color: var(--red-dark); }
-.card-badge.badge-new    { background: var(--gold-pale); color: #8a6200; }
+.card-badge.badge-add       { background: #e8f5e9; color: #2e7d32; }
+.card-badge.badge-manage    { background: #ffebee; color: var(--red-dark); }
+.card-badge.badge-committee { background: #FDF5E0; color: #7B1A1A; border: 1px solid rgba(123, 26, 26, 0.15); }
+.card-badge.badge-notice    { background: #FFF3E6; color: #D94F00; border: 1px solid rgba(255, 107, 0, 0.15); }
+.card-badge.badge-gallery   { background: var(--gold-pale); color: #8a6200; }
+.card-badge.badge-ads       { background: #FFF3E6; color: #FF6B00; border: 1px solid rgba(255, 107, 0, 0.2); }
+.card-badge.badge-calendar  { background: var(--gold-pale); color: #8a6200; }
+.card-badge.badge-security  { background: #F3E5F5; color: #7B1FA2; }
 
 /* ============================================================
    📐 MODAL BASE
@@ -643,6 +648,7 @@ body {
                 <!-- 👥 Committee Management -->
                 <div class="admin-card" onclick="location.href='committee-management.php'">
                     <div class="card-top-bar" style="background: linear-gradient(90deg, var(--maroon), var(--maroon-soft));"></div>
+                    <span class="card-badge badge-committee">COMMITTEE</span>
                     <div class="card-body">
                         <h3>कार्यकारिणी सदस्य</h3>
                         <p>समिति के नए सदस्य जोड़ें और कार्यकारिणी प्रबंधित करें।</p>
@@ -653,6 +659,7 @@ body {
                 <!-- 📢 Announcement Management -->
                 <div class="admin-card" onclick="location.href='announcement-management.php'">
                     <div class="card-top-bar" style="background: linear-gradient(90deg, var(--maroon), var(--maroon-soft));"></div>
+                    <span class="card-badge badge-notice">NOTICES</span>
                     <div class="card-body">
                         <h3>घोषणा प्रबंधन</h3>
                         <p>नई घोषणाएं जोड़ें या पुरानी घोषणाओं को देखें/हटाएं।</p>
@@ -663,7 +670,7 @@ body {
                 <!-- 📸 Gallery -->
                 <div class="admin-card" onclick="location.href='gallery-admin.php'">
                     <div class="card-top-bar"></div>
-                    <span class="card-badge badge-new">NEW</span>
+                    <span class="card-badge badge-gallery">GALLERY</span>
                     <div class="card-body">
                         <h3>गैलरी अपलोड</h3>
                         <p>नई फोटो और albums गैलरी में जोड़ें।</p>
@@ -674,7 +681,7 @@ body {
                 <!-- 📢 Local Ads Management -->
                 <div class="admin-card" onclick="location.href='ad-management.php'">
                     <div class="card-top-bar" style="background: linear-gradient(90deg, #FF6B00, #C9941A);"></div>
-                    <span class="card-badge badge-add" style="background: #FF6B00;">ADS</span>
+                    <span class="card-badge badge-ads">ADS</span>
                     <div class="card-body">
                         <h3>स्थानीय विज्ञापन प्रबंधन</h3>
                         <p>होमपेज के प्रायोजक एवं व्यापारिक विज्ञापन जोड़ें व प्रबंधित करें।</p>
@@ -685,7 +692,7 @@ body {
                 <!-- 📅 Calendar Management -->
                 <div class="admin-card" onclick="location.href='calendar-management.php'">
                     <div class="card-top-bar" style="background: linear-gradient(90deg, #FF6B00, #7B1A1A);"></div>
-                    <span class="card-badge badge-new" style="background: var(--gold-pale); color: #8a6200;">CALENDAR</span>
+                    <span class="card-badge badge-calendar">CALENDAR</span>
                     <div class="card-body">
                         <h3>सनातन दिनदर्शिका</h3>
                         <p>१२ माह पृष्ठ, मुखपृष्ठ, वार्षिक PDF एवं पंचांग पर्व/जयंतियां प्रबंधित करें।</p>
@@ -696,7 +703,7 @@ body {
                 <!-- 🔐 Add Admin Management -->
                 <div class="admin-card" onclick="location.href='add-admin.php'">
                     <div class="card-top-bar" style="background: linear-gradient(90deg, #8E24AA, #BA68C8);"></div>
-                    <span class="card-badge badge-add">SECURITY</span>
+                    <span class="card-badge badge-security">SECURITY</span>
                     <div class="card-body">
                         <h3>एडमिन यूजर जोड़ें</h3>
                         <p>नए एडमिन यूजर बनाएं, पासवर्ड व क्रेडेंशियल्स प्रबंधित करें।</p>
