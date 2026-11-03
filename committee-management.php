@@ -327,7 +327,76 @@
         .family-search-row {
             display: flex;
             gap: 12px;
-            flex-wrap: wrap;
+            align-items: center;
+            background: #fff;
+            padding: 8px;
+            border-radius: var(--radius-sm, 10px);
+            border: 1.5px solid rgba(201, 148, 26, 0.3);
+            box-shadow: 0 2px 10px rgba(123, 26, 26, 0.04);
+            margin-bottom: 6px;
+            transition: all 0.25s ease;
+        }
+        .family-search-row:focus-within {
+            border-color: var(--saffron);
+            box-shadow: 0 4px 16px rgba(255, 107, 0, 0.15);
+        }
+        .family-search-input-wrap {
+            position: relative;
+            flex: 1;
+            min-width: 200px;
+            display: flex;
+            align-items: center;
+        }
+        .family-search-input-wrap i {
+            position: absolute;
+            left: 14px;
+            color: var(--saffron);
+            font-size: 0.95rem;
+            pointer-events: none;
+            transition: color 0.2s;
+        }
+        .family-search-input {
+            width: 100%;
+            padding: 11px 16px 11px 40px !important;
+            border: 1px solid rgba(201, 148, 26, 0.2) !important;
+            border-radius: 8px !important;
+            font-size: 0.92rem !important;
+            color: var(--maroon-deep) !important;
+            background: var(--cream, #FEF9F0) !important;
+            outline: none !important;
+            font-family: inherit !important;
+            transition: all 0.25s ease !important;
+        }
+        .family-search-input:focus {
+            background: #fff !important;
+            border-color: var(--saffron) !important;
+        }
+        .family-branch-select {
+            padding: 11px 16px !important;
+            border: 1px solid rgba(201, 148, 26, 0.25) !important;
+            border-radius: 8px !important;
+            font-size: 0.92rem !important;
+            color: var(--maroon-deep) !important;
+            background: var(--cream, #FEF9F0) !important;
+            cursor: pointer !important;
+            outline: none !important;
+            font-family: inherit !important;
+            font-weight: 500 !important;
+            min-width: 150px !important;
+            transition: all 0.25s ease !important;
+        }
+        .family-branch-select:focus {
+            background: #fff !important;
+            border-color: var(--saffron) !important;
+        }
+        @media (max-width: 600px) {
+            .family-search-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .family-branch-select {
+                width: 100% !important;
+            }
         }
         .family-photos-grid {
             display: grid;
@@ -527,11 +596,11 @@
             </div>
             <div class="family-modal-body">
                 <div class="family-search-row">
-                    <div style="position: relative; flex: 1; min-width: 200px;">
-                        <i class="fas fa-search" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-soft);"></i>
-                        <input type="text" id="family-picker-search" placeholder="मुखिया के नाम, समाज या फ़ाइल नाम से खोजें..." style="padding-left: 38px; width: 100%;">
+                    <div class="family-search-input-wrap">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="family-picker-search" class="family-search-input" placeholder="मुखिया के नाम, समाज या फ़ाइल नाम से खोजें...">
                     </div>
-                    <select id="family-picker-branch-filter" style="width: auto; min-width: 140px;">
+                    <select id="family-picker-branch-filter" class="family-branch-select">
                         <option value="">सभी समाज</option>
                     </select>
                 </div>
