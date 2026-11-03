@@ -113,10 +113,10 @@ async function loadAds() {
 }
 
 const positionLabels = {
-    'above_calendar': '1. सनातन दिनदर्शिका के ऊपर',
-    'above_announcements': '2. नवीनतम घोषणाएँ के ऊपर',
-    'above_committee': '3. कार्यकारिणी सदस्य के ऊपर',
-    'below_committee': '4. कार्यकारिणी सदस्य के नीचे'
+    'above_calendar': 'Priority 1 : दिनदर्शिका के ऊपर',
+    'above_announcements': 'Priority 2 : घोषणाएँ के ऊपर',
+    'above_committee': 'Priority 3 : कार्यकारिणी के ऊपर',
+    'below_committee': 'Priority 4 : कार्यकारिणी के नीचे'
 };
 
 // 🎨 5. Render Ads in Grid

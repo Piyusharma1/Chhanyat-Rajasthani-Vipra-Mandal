@@ -638,12 +638,12 @@ session_start();
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="ad-position"><i class="fas fa-map-marker-alt"></i> विज्ञापन का स्थान (Ad Position) *</label>
+                        <label for="ad-position"><i class="fas fa-layer-group"></i> विज्ञापन प्राथमिकता (Priority) *</label>
                         <select id="ad-position" name="position" required>
-                            <option value="above_calendar">1. सनातन दिनदर्शिका के ऊपर (Above Sanatan Dindarshika)</option>
-                            <option value="above_announcements">2. नवीनतम घोषणाएँ के ऊपर (Above Announcements)</option>
-                            <option value="above_committee">3. कार्यकारिणी सदस्य के ऊपर (Above Committee)</option>
-                            <option value="below_committee">4. कार्यकारिणी सदस्य के नीचे (Below Committee)</option>
+                            <option value="above_calendar">Priority 1 : सनातन दिनदर्शिका के ऊपर</option>
+                            <option value="above_announcements">Priority 2 : नवीनतम घोषणाएँ के ऊपर</option>
+                            <option value="above_committee">Priority 3 : कार्यकारिणी सदस्य के ऊपर</option>
+                            <option value="below_committee">Priority 4 : कार्यकारिणी सदस्य के नीचे</option>
                         </select>
                     </div>
 
@@ -733,12 +733,12 @@ session_start();
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="edit-ad-position"><i class="fas fa-map-marker-alt"></i> विज्ञापन का स्थान (Position) *</label>
+                            <label for="edit-ad-position"><i class="fas fa-layer-group"></i> विज्ञापन प्राथमिकता (Priority) *</label>
                             <select id="edit-ad-position" name="position" required>
-                                <option value="above_calendar">1. सनातन दिनदर्शिका के ऊपर (Above Sanatan Dindarshika)</option>
-                                <option value="above_announcements">2. नवीनतम घोषणाएँ के ऊपर (Above Announcements)</option>
-                                <option value="above_committee">3. कार्यकारिणी सदस्य के ऊपर (Above Committee)</option>
-                                <option value="below_committee">4. कार्यकारिणी सदस्य के नीचे (Below Committee)</option>
+                                <option value="above_calendar">Priority 1 : सनातन दिनदर्शिका के ऊपर</option>
+                                <option value="above_announcements">Priority 2 : नवीनतम घोषणाएँ के ऊपर</option>
+                                <option value="above_committee">Priority 3 : कार्यकारिणी सदस्य के ऊपर</option>
+                                <option value="below_committee">Priority 4 : कार्यकारिणी सदस्य के नीचे</option>
                             </select>
                         </div>
                         <div class="form-group">
