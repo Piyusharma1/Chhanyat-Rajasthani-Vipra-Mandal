@@ -30,13 +30,6 @@
             </div>
         </div>
 
-        <!-- Breadcrumb -->
-        <nav class="breadcrumb" aria-label="Breadcrumb">
-            <a href="index.php"><i class="fas fa-home" style="margin-right: 5px;"></i> मुख्य पृष्ठ</a>
-            <span class="separator">›</span>
-            <span class="current">हमारे बारे में</span>
-        </nav>
-
         <!-- About Content Sections -->
         <div class="about-grid">
             <!-- History Section -->
@@ -118,31 +111,11 @@
 
                 <div class="objective-item">
                     <div class="obj-icon">
-                        <i class="fas fa-graduation-cap"></i>
-                    </div>
-                    <div class="obj-content">
-                        <h4>शैक्षिक सहायता</h4>
-                        <p>होनहार छात्र-छात्राओं को छात्रवृत्ति और शैक्षिक मार्गदर्शन प्रदान करना।</p>
-                    </div>
-                </div>
-
-                <div class="objective-item">
-                    <div class="obj-icon">
                         <i class="fas fa-om"></i>
                     </div>
                     <div class="obj-content">
                         <h4>सांस्कृतिक संरक्षण</h4>
                         <p>राजस्थानी विप्र परंपराओं, त्योहारों और रीति-रिवाजों को जीवित रखना।</p>
-                    </div>
-                </div>
-
-                <div class="objective-item">
-                    <div class="obj-icon">
-                        <i class="fas fa-book-reader"></i>
-                    </div>
-                    <div class="obj-content">
-                        <h4>ज्ञान का प्रसार</h4>
-                        <p>समुदाय के सदस्यों के बीच शिक्षा और जागरूकता को बढ़ावा देना।</p>
                     </div>
                 </div>
             </div>
