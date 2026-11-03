@@ -26,7 +26,7 @@ async function checkPageAuth() {
 function showToast(message, type = 'success') {
     const container = document.getElementById('toast-container');
     if (!container) return;
-    
+
     const toast = document.createElement('div');
     toast.className = `toast ${type}`;
     const icon = type === 'success' ? 'fa-check-circle' : type === 'info' ? 'fa-info-circle' : 'fa-exclamation-triangle';
@@ -45,7 +45,7 @@ function showToast(message, type = 'success') {
         min-width: 280px; max-width: 400px;
     `;
     container.appendChild(toast);
-    
+
     setTimeout(() => toast.style.transform = 'translateX(0)', 10);
     setTimeout(() => {
         toast.style.transform = 'translateX(120%)';
@@ -134,7 +134,7 @@ function renderAds(ads) {
         return `
             <div class="ad-card-item" id="ad-card-${ad.id}">
                 <div class="ad-card-image-wrap">
-                    <img src="${ad.image_url}" alt="${escapeHtml(ad.title)}" loading="lazy" onerror="this.src='images/piyush.jpg'">
+                    <img src="${ad.image_url}" alt="${escapeHtml(ad.title)}" loading="lazy" onerror="this.style.opacity='0.3'">
                     <span class="ad-card-badge ${isActive ? 'active' : 'inactive'}">
                         ${isActive ? 'सक्रिय (Active)' : 'निष्क्रिय (Inactive)'}
                     </span>
