@@ -134,6 +134,65 @@ for ($i = 0; $i < $fileCount; $i++) {
     }
 }
 
+// Automatically create announcement if requested and at least one image uploaded
+$announcementCreated = false;
+$autoAnnounce = isset($_POST['create_announcement']) 
+    ? filter_var($_POST['create_announcement'], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) !== false 
+    : true; // Default true
+
+if ($uploadedCount > 0 && $autoAnnounce) {
+    try {
+        // Ensure announcements table exists with priority and branch columns
+        $pdo->exec("CREATE TABLE IF NOT EXISTS announcements (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            title VARCHAR(255) NOT NULL,
+            description TEXT NOT NULL,
+            date DATE NULL,
+            link VARCHAR(255) NULL,
+            priority VARCHAR(20) DEFAULT 'normal',
+            branch VARCHAR(100) DEFAULT 'ALL',
+            createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
+        )");
+
+        try { $pdo->exec("ALTER TABLE announcements ADD COLUMN priority VARCHAR(20) DEFAULT 'normal'"); } catch (Exception $e) {}
+        try { $pdo->exec("ALTER TABLE announcements ADD COLUMN branch VARCHAR(100) DEFAULT 'ALL'"); } catch (Exception $e) {}
+
+        $announcementTitle = "गैलरी: " . $albumName;
+        $announcementDesc = "फोटो गैलरी में '{$albumName}' एल्बम में {$uploadedCount} नई तस्वीरें जोड़ी गई हैं। सभी तस्वीरें देखने के लिए गैलरी पर जाएं।";
+        $announcementLink = "gallery.php";
+
+        // Check if an announcement for this album was already made today to avoid spamming multiple announcements in quick succession
+        $checkStmt = $pdo->prepare("SELECT id FROM announcements WHERE title = :title AND date = CURDATE() ORDER BY id DESC LIMIT 1");
+        $checkStmt->execute([':title' => $announcementTitle]);
+        $existingAnnounce = $checkStmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($existingAnnounce) {
+            // Update existing announcement's description and timestamp
+            $upStmt = $pdo->prepare("UPDATE announcements SET description = :desc, branch = :branch, createdAt = NOW() WHERE id = :id");
+            $upStmt->execute([
+                ':desc' => $announcementDesc,
+                ':branch' => $branch,
+                ':id' => $existingAnnounce['id']
+            ]);
+            $announcementCreated = true;
+        } else {
+            // Insert new announcement
+            $insStmt = $pdo->prepare("INSERT INTO announcements (title, description, date, link, priority, branch, createdAt) 
+                                      VALUES (:title, :desc, CURDATE(), :link, 'normal', :branch, NOW())");
+            $insStmt->execute([
+                ':title' => $announcementTitle,
+                ':desc' => $announcementDesc,
+                ':link' => $announcementLink,
+                ':branch' => $branch
+            ]);
+            $announcementCreated = true;
+        }
+    } catch (Exception $e) {
+        // Log/record announcement failure without blocking the image upload response
+        $errors[] = "घोषणा बनाने में त्रुटि: " . $e->getMessage();
+    }
+}
+
 // Return response
 $response = [
     'success' => $uploadedCount > 0,
@@ -141,6 +200,7 @@ $response = [
     'total_files' => $fileCount,
     'album' => $albumName,
     'album_folder' => $albumFolder,
+    'announcement_created' => $announcementCreated,
     'files' => $uploadedFiles
 ];
 

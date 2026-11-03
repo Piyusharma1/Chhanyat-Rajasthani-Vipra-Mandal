@@ -781,6 +781,13 @@
                     </div>
                 </div>
 
+                <div style="margin-bottom: 18px; padding: 10px 14px; background: rgba(201, 148, 26, 0.08); border: 1px solid rgba(201, 148, 26, 0.25); border-radius: 8px; display: flex; align-items: center; gap: 10px;">
+                    <input type="checkbox" id="auto-announcement" name="auto-announcement" checked style="width: 18px; height: 18px; cursor: pointer; accent-color: var(--maroon, #7b1a1a);">
+                    <label for="auto-announcement" style="margin: 0; cursor: pointer; font-size: 0.92rem; font-weight: 600; color: var(--maroon, #7b1a1a);">
+                        <i class="fas fa-bullhorn" style="color: var(--saffron, #e65100); margin-right: 4px;"></i> फोटो अपलोड होने पर वेबसाइट पर स्वतः घोषणा (Announcement) प्रकाशित करें
+                    </label>
+                </div>
+
                 <div class="drop-zone" id="drop-zone">
                     <i class="fas fa-cloud-upload-alt"></i>
                     <p>📸 Photos यहाँ Drag & Drop करें या Click करें</p>

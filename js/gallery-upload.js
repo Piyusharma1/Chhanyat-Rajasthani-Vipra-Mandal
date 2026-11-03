@@ -304,10 +304,13 @@ async function handleGalleryUpload(e) {
 
     const branchSelect = document.getElementById('gallery-branch');
     const branch = branchSelect ? branchSelect.value : 'ALL';
+    const autoAnnounceEl = document.getElementById('auto-announcement');
+    const createAnnouncement = autoAnnounceEl ? (autoAnnounceEl.checked ? '1' : '0') : '1';
 
     const formData = new FormData();
     formData.append('album', albumName);
     formData.append('branch', branch);
+    formData.append('create_announcement', createAnnouncement);
     selectedFiles.forEach(file => formData.append('images[]', file));
 
     if (uploadBtn) {
@@ -347,10 +350,11 @@ async function handleGalleryUpload(e) {
                 try {
                     const result = JSON.parse(xhr.responseText);
                     if (result.success) {
-                        showToast(
-                            `✅ ${result.uploaded_count || selectedFiles.length} फोटो सफलतापूर्वक अपलोड हुईं! Album: ${result.album_title || result.album || albumName}`,
-                            'success'
-                        );
+                        let successMsg = `✅ ${result.uploaded_count || selectedFiles.length} फोटो सफलतापूर्वक अपलोड हुईं!`;
+                        if (result.announcement_created) {
+                            successMsg += ` (घोषणा भी प्रकाशित कर दी गई है 📢)`;
+                        }
+                        showToast(successMsg, 'success');
                         setTimeout(() => {
                             resetGalleryForm();
                             loadAlbumsList();
