@@ -6,10 +6,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Yatra+One&family=Tiro+Devanagari+Hindi&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="छःन्यात राजस्थानी विप्र मंडल, लातूर - समाज का गौरवशाली इतिहास, उद्देश्य एवं सामाजिक कार्य">
-    <meta name="keywords" content="छःन्यात राजस्थानी विप्र मंडल लातूर, इतिहास, उद्देश्य, ब्राह्मण समाज लातूर, Chhanyat Rajasthani Vipra Mandal Latur">
+    <meta name="description" content="छःन्यात राजस्थानी विप्र मंडल, लातूर के बारे में जानकारी - इतिहास, मिशन, दृष्टि और उद्देश्य">
+    <meta name="keywords" content="About Chhanyat Rajasthani Vipra Mandal Latur, History, Mission, Vision, Brahmin Samaj Latur, छःन्यात राजस्थानी विप्र मंडल के बारे में">
     <meta property="og:title" content="हमारे बारे में | छःन्यात राजस्थानी विप्र मंडल, लातूर">
-    <meta property="og:description" content="छःन्यात राजस्थानी विप्र मंडल, लातूर - परंपरा, संस्कार, एकता और सेवा की अनवरत यात्रा">
+    <meta property="og:description" content="छःन्यात राजस्थानी विप्र मंडल, लातूर के बारे में जानकारी - इतिहास, मिशन, दृष्टि और उद्देश्य">
     <meta property="og:url" content="https://chhanyatvipralatur.com/about.php">
     <meta property="og:type" content="website">
     <title>हमारे बारे में | छःन्यात राजस्थानी विप्र मंडल, लातूर</title>
@@ -22,11 +22,11 @@
 
     <div class="container" style="padding-top: 15px;">
         
-        <!-- Hero Banner -->
+        <!-- About Hero Banner -->
         <div class="gallery-hero" style="margin-bottom: 24px;">
             <div class="gallery-hero-content">
-                <h2>छःन्यात राजस्थानी विप्र मंडल</h2>
-                <p class="gallery-hero-subtitle">परंपरा, संस्कार, एकता और सेवा की गौरवशाली यात्रा</p>
+                <h2>हमारे बारे में</h2>
+                <p class="gallery-hero-subtitle" id="gallery-total-info">परंपरा, एकता और सेवा की अनमोल गाथा</p>
             </div>
         </div>
 
@@ -37,32 +37,33 @@
             <span class="current">हमारे बारे में</span>
         </nav>
 
-        <!-- About Content Cards (History, Mission, Vision) -->
+        <!-- About Content Sections -->
         <div class="about-grid">
             <!-- History Section -->
             <div class="about-card">
                 <div class="about-icon">
                     <i class="fas fa-landmark"></i>
                 </div>
-                <h3>गौरवशाली इतिहास</h3>
+                <h3>इतिहास (History)</h3>
                 <p>
-                    छःन्यात राजस्थानी विप्र मंडल, लातूर की स्थापना लातूर एवं मराठवाड़ा क्षेत्र में बसे 
-                    समस्त राजस्थानी विप्र परिवारों को एक सूत्र में पिरोने और सनातन संस्कृति तथा पारंपरिक 
-                    मूल्यों के संवर्धन के पावन उद्देश्य से हुई थी। विगत कई दशकों से यह मंडल सामाजिक सौहार्द, 
-                    शिक्षा, संस्कार एवं पारस्परिक बंधुत्व को सुदृढ़ बनाने हेतु समर्पित भाव से कार्यरत है।
+                    छःन्यात राजस्थानी विप्र मंडल, लातूर की स्थापना समुदाय के बीच
+                    <strong>एकता, भाईचारा और सांस्कृतिक मूल्यों</strong> को संरक्षित करने के
+                    उद्देश्य से की गई थी। दशकों से, यह मंडल लातूर और आसपास के क्षेत्रों में
+                    राजस्थानी विप्र समुदाय के विकास, शिक्षा और कल्याण के लिए अग्रणी भूमिका
+                    निभा रहा है।
                 </p>
             </div>
 
             <!-- Mission Section -->
             <div class="about-card">
                 <div class="about-icon">
-                    <i class="fas fa-compass"></i>
+                    <i class="fas fa-bullseye"></i>
                 </div>
-                <h3>हमारा ध्येय</h3>
+                <h3>मिशन (Mission)</h3>
                 <p>
-                    समाज के प्रत्येक परिवार के मध्य आत्मीय संवाद और सहयोग की भावना को जागृत करना। 
-                    युवा पीढ़ी को अपनी समृद्ध परंपराओं और संस्कारों से जोड़ते हुए सामाजिक, शैक्षिक 
-                    तथा आर्थिक रूप से समर्थ व स्वावलंबी समाज की संरचना करना।
+                    समुदाय के सभी <strong>परिवारों</strong> के बीच सामंजस्य बनाए रखना,
+                    पारस्परिक सहयोग को बढ़ावा देना, और प्रत्येक परिवार को सामाजिक, शैक्षिक
+                    और आर्थिक रूप से <strong>सशक्त</strong> बनाना।
                 </p>
             </div>
 
@@ -71,23 +72,18 @@
                 <div class="about-icon">
                     <i class="fas fa-eye"></i>
                 </div>
-                <h3>दूरदर्शिता</h3>
+                <h3>दृष्टि (Vision)</h3>
                 <p>
-                    विप्र समाज के गौरव, मर्यादा और आध्यात्मिक धरोहर को अक्षुण्ण रखते हुए 
-                    आधुनिक युग में प्रगतिशील, सुशिक्षित, संगठित और सेवाभावी समाज का निर्माण 
-                    करना जो राष्ट्र एवं मानवता के कल्याण में अपनी अमूल्य भागीदारी सुनिश्चित करे।
+                    हमारी परंपराओं, संस्कृति और मूल्यों को संरक्षित करते हुए आने वाली
+                    पीढ़ियों के लिए एक <strong>सुदृढ़, शिक्षित और एकजुट</strong> समुदाय का
+                    निर्माण करना।
                 </p>
             </div>
         </div>
 
         <!-- Objectives Section -->
         <section class="objectives-section">
-            <div style="text-align: center; margin-bottom: 25px;">
-                <h2 class="section-title" style="margin-bottom: 8px;">मुख्य उद्देश्य एवं कार्यप्रणाली</h2>
-                <p style="color: var(--text-mid); font-size: 0.95rem; max-width: 650px; margin: 0 auto;">
-                    विप्र मंडल द्वारा समाज के समग्र उत्थान और पारिवारिक समन्वय हेतु संचालित प्रमुख गतिविधियाँ
-                </p>
-            </div>
+            <h2 class="section-title"><i class="fas fa-star" style="color: var(--gold); font-size: 1.5rem; margin-right: 8px;"></i> मुख्य उद्देश्य (Objectives)</h2>
 
             <div class="objectives-grid">
                 <div class="objective-item">
@@ -95,18 +91,18 @@
                         <i class="fas fa-users"></i>
                     </div>
                     <div class="obj-content">
-                        <h4>पारिवारिक समन्वय</h4>
-                        <p>क्षेत्र के सभी राजस्थानी विप्र परिवारों को डिजिटल माध्यम से जोड़कर परस्पर संवाद स्थापित करना।</p>
+                        <h4>पारिवारिक नेटवर्किंग</h4>
+                        <p>सभी परिवारों के परिवारों को एक वेबसाइट के माध्यम से जोड़ना।</p>
                     </div>
                 </div>
 
                 <div class="objective-item">
                     <div class="obj-icon">
-                        <i class="fas fa-hand-holding-heart"></i>
+                        <i class="fas fa-heart"></i>
                     </div>
                     <div class="obj-content">
-                        <h4>वैवाहिक परामर्श व सहयोग</h4>
-                        <p>समुदाय के योग्य युवक-युवतियों हेतु सम्मानजनक एवं सुगम वैवाहिक संबंधों में सहयोग प्रदान करना।</p>
+                        <h4>वैवाहिक सहायता</h4>
+                        <p>समुदाय के भीतर उचित और सम्मानजनक वैवाहिक संबंधों को सुगम बनाना।</p>
                     </div>
                 </div>
 
@@ -115,8 +111,8 @@
                         <i class="fas fa-hands-helping"></i>
                     </div>
                     <div class="obj-content">
-                        <h4>सामाजिक एवं जनकल्याण</h4>
-                        <p>कठिन परिस्थितियों अथवा आकस्मिक आवश्यकता के समय स्वजातीय बंधुओं को यथासंभव सहयोग पहुंचाना।</p>
+                        <h4>सामुदायिक कल्याण</h4>
+                        <p>आवश्यकता के समय समुदाय के सदस्यों की आर्थिक और सामाजिक सहायता करना।</p>
                     </div>
                 </div>
 
@@ -125,28 +121,28 @@
                         <i class="fas fa-graduation-cap"></i>
                     </div>
                     <div class="obj-content">
-                        <h4>शिक्षा एवं छात्र मार्गदर्शन</h4>
-                        <p>प्रतिभाशाली विद्यार्थियों को उच्च शिक्षा हेतु छात्रवृत्ति, प्रोत्साहन एवं कैरियर मार्गदर्शन उपलब्ध कराना।</p>
+                        <h4>शैक्षिक सहायता</h4>
+                        <p>होनहार छात्र-छात्राओं को छात्रवृत्ति और शैक्षिक मार्गदर्शन प्रदान करना।</p>
                     </div>
                 </div>
 
                 <div class="objective-item">
                     <div class="obj-icon">
-                        <i class="fas fa-dharmachakra"></i>
+                        <i class="fas fa-om"></i>
                     </div>
                     <div class="obj-content">
-                        <h4>सांस्कृतिक एवं धार्मिक संवर्धन</h4>
-                        <p>सनातन विप्र परंपराओं, कुलदेवता पूजन, सामूहिक धार्मिक आयोजनों और उत्सवों को गरिमापूर्वक मनाना।</p>
+                        <h4>सांस्कृतिक संरक्षण</h4>
+                        <p>राजस्थानी विप्र परंपराओं, त्योहारों और रीति-रिवाजों को जीवित रखना।</p>
                     </div>
                 </div>
 
                 <div class="objective-item">
                     <div class="obj-icon">
-                        <i class="fas fa-book-open"></i>
+                        <i class="fas fa-book-reader"></i>
                     </div>
                     <div class="obj-content">
-                        <h4>संस्कार एवं ज्ञान का प्रसार</h4>
-                        <p>नयी पीढ़ी को वैदिक ज्ञान, सदाचार एवं संस्कारों के प्रति प्रेरित कर सामाजिक चेतना जागृत करना।</p>
+                        <h4>ज्ञान का प्रसार</h4>
+                        <p>समुदाय के सदस्यों के बीच शिक्षा और जागरूकता को बढ़ावा देना।</p>
                     </div>
                 </div>
             </div>
@@ -154,14 +150,11 @@
 
         <!-- Call to Action -->
         <section class="about-cta no-print">
-            <h3>परिवार निर्देशिका से जुड़ें</h3>
-            <p>मंडल के अंतर्गत पंजीकृत सभी परिवारों की विस्तृत जानकारी, शाखा विवरण एवं संपर्क सूत्र उपलब्ध हैं।</p>
+            <h3>अपने परिवार को खोजें</h3>
+            <p>मंडल के सभी पंजीकृत परिवारों की जानकारी यहाँ उपलब्ध है — शाखा, सदस्य और संपर्क विवरण एक ही जगह देखें।</p>
             <div class="cta-buttons">
                 <a href="families.php" class="btn-primary">
-                    <i class="fas fa-search" style="margin-right: 8px;"></i> परिवार निर्देशिका देखें
-                </a>
-                <a href="calendar.php" class="btn-secondary">
-                    <i class="fas fa-calendar-alt" style="margin-right: 8px;"></i> सनातन दिनदर्शिका
+                    <i class="fas fa-users" style="margin-right: 8px;"></i> परिवार की जानकारी देखें
                 </a>
             </div>
         </section>
