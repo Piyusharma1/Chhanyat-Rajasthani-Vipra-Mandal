@@ -294,6 +294,29 @@ session_start();
             color: var(--saffron);
         }
 
+        .announcement-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .edit-announcement-btn {
+            background: #1976d2;
+            color: white;
+            border: none;
+            border-radius: var(--radius-sm);
+            padding: 10px 14px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .edit-announcement-btn:hover {
+            background: #1565c0;
+            transform: scale(1.05);
+        }
+
         .delete-announcement-btn {
             background: var(--red);
             color: white;
@@ -311,9 +334,82 @@ session_start();
             transform: scale(1.05);
         }
 
-        .delete-announcement-btn:disabled {
+        .delete-announcement-btn:disabled,
+        .edit-announcement-btn:disabled {
             opacity: 0.6;
             cursor: not-allowed;
+        }
+
+        /* ===== EDIT MODAL ===== */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.65);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            padding: 20px;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-container {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 650px;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 2px solid var(--gold);
+            animation: modalFadeIn 0.25s ease-out;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, var(--maroon), var(--maroon-deep));
+            color: white;
+            padding: 16px 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-header h3 {
+            font-family: 'Tiro Devanagari Hindi', serif;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--gold-light);
+        }
+
+        .modal-close-btn {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 1.3rem;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .modal-close-btn:hover {
+            color: var(--saffron-light);
+            transform: scale(1.1);
+        }
+
+        .modal-body {
+            padding: 25px;
         }
 
         /* ===== LOADING & EMPTY STATES ===== */
@@ -471,6 +567,62 @@ session_start();
             <div id="announcements-list" style="display:none;"></div>
         </div>
     </div>
+
+    <!-- Edit Announcement Modal -->
+    <div id="edit-announcement-modal" class="modal-overlay">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3><i class="fas fa-edit"></i> घोषणा संपादित करें</h3>
+                <button type="button" class="modal-close-btn" id="close-edit-modal-btn" aria-label="बंद करें">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-announcement-form">
+                    <input type="hidden" id="edit-ann-id">
+
+                    <div class="form-group">
+                        <label for="edit-ann-title"><i class="fas fa-heading"></i> शीर्षक (Title) *</label>
+                        <input type="text" id="edit-ann-title" data-hindi-input="true" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edit-ann-desc"><i class="fas fa-align-left"></i> विवरण (Description) *</label>
+                        <textarea id="edit-ann-desc" data-hindi-input="true" required></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="edit-ann-date"><i class="fas fa-calendar-alt"></i> तिथि (Date)</label>
+                            <input type="date" id="edit-ann-date">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="edit-ann-link"><i class="fas fa-link"></i> लिंक (Link)</label>
+                            <input type="url" id="edit-ann-link" placeholder="https://example.com">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edit-ann-branch"><i class="fas fa-sitemap"></i> संबंधित समाज / शाखा (Branch)</label>
+                        <select id="edit-ann-branch" style="width: 100%; padding: 12px 15px; border: 2px solid rgba(201, 148, 26, 0.3); border-radius: var(--radius-sm); font-size: 0.95rem; background: var(--cream); color: var(--maroon-deep);">
+                            <option value="ALL">सभी समाज (ALL Central)</option>
+                        </select>
+                    </div>
+
+                    <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 20px;">
+                        <button type="button" class="btn btn-secondary" id="cancel-edit-btn">
+                            रद्द करें
+                        </button>
+                        <button type="submit" class="btn btn-primary" id="save-edit-btn">
+                            <i class="fas fa-save"></i> अपडेट करें
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <div data-include="components/footer.php"></div>
 
     <!-- ✅ Scripts -->

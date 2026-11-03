@@ -64,6 +64,7 @@ function showToast(message, type = 'success') {
 // =========================================
 async function loadBranchesForAnnouncement() {
     const branchSelect = document.getElementById('ann-branch');
+    const editBranchSelect = document.getElementById('edit-ann-branch');
     if (!branchSelect) return;
 
     try {
@@ -72,12 +73,23 @@ async function loadBranchesForAnnouncement() {
         allBranches = result.data || [];
 
         branchSelect.innerHTML = '<option value="ALL">सभी समाज (ALL Central)</option>';
+        if (editBranchSelect) {
+            editBranchSelect.innerHTML = '<option value="ALL">सभी समाज (ALL Central)</option>';
+        }
+
         allBranches.forEach(b => {
             if (b.branchName) {
                 const opt = document.createElement('option');
                 opt.value = b.branchName;
                 opt.textContent = b.branchName;
                 branchSelect.appendChild(opt);
+
+                if (editBranchSelect) {
+                    const optEdit = document.createElement('option');
+                    optEdit.value = b.branchName;
+                    optEdit.textContent = b.branchName;
+                    editBranchSelect.appendChild(optEdit);
+                }
             }
         });
 
@@ -87,6 +99,13 @@ async function loadBranchesForAnnouncement() {
             branchSelect.disabled = true;
             branchSelect.style.backgroundColor = '#f0f0f0';
             branchSelect.title = `आप केवल ${currentAdminAuth.branch} समाज की घोषणाएं जोड़ सकते हैं।`;
+
+            if (editBranchSelect) {
+                editBranchSelect.value = currentAdminAuth.branch;
+                editBranchSelect.disabled = true;
+                editBranchSelect.style.backgroundColor = '#f0f0f0';
+                editBranchSelect.title = `आप केवल ${currentAdminAuth.branch} समाज की घोषणाएं अपडेट कर सकते हैं।`;
+            }
         }
     } catch (error) {
         console.error('❌ Failed to load branches:', error);
@@ -199,6 +218,7 @@ async function loadAnnouncements() {
         
         const isSuperAdmin = currentAdminAuth ? currentAdminAuth.isSuperAdmin : true;
         const userBranch = currentAdminAuth ? currentAdminAuth.branch : 'ALL';
+        window._currentAnnouncements = announcements;
         
         announcements.forEach((announcement) => {
             const announcementEl = document.createElement('div');
@@ -208,12 +228,17 @@ async function loadAnnouncements() {
                            (announcement.createdAt ? new Date(announcement.createdAt).toLocaleDateString('hi-IN') : 'तिथि उपलब्ध नहीं');
             
             const annBranch = announcement.branch || 'ALL';
-            const canDelete = isSuperAdmin || (annBranch === userBranch);
+            const canManage = isSuperAdmin || (annBranch === userBranch);
 
-            const deleteButtonHtml = canDelete ? `
-                <button class="delete-announcement-btn" data-id="${announcement.id}" title="हटाएं">
-                    <i class="fas fa-trash"></i>
-                </button>
+            const actionsHtml = canManage ? `
+                <div class="announcement-actions">
+                    <button class="edit-announcement-btn" data-id="${announcement.id}" title="संपादित करें">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="delete-announcement-btn" data-id="${announcement.id}" title="हटाएं">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
             ` : '';
             
             announcementEl.innerHTML = `
@@ -230,11 +255,19 @@ async function loadAnnouncements() {
                         ${announcement.link ? `<a href="${announcement.link}" target="_blank"><i class="fas fa-link"></i> लिंक देखें</a>` : ''}
                     </small>
                 </div>
-                ${deleteButtonHtml}
+                ${actionsHtml}
             `;
             listDiv.appendChild(announcementEl);
         });
         
+        // Add edit event listeners
+        document.querySelectorAll('.edit-announcement-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const announcementId = e.currentTarget.getAttribute('data-id');
+                openEditModal(announcementId);
+            });
+        });
+
         // Add delete event listeners
         document.querySelectorAll('.delete-announcement-btn').forEach(btn => {
             btn.addEventListener('click', async (e) => {
@@ -304,12 +337,129 @@ async function deleteAnnouncement(announcementId) {
 }
 
 // =========================================
+// ✏️ EDIT ANNOUNCEMENT MODAL & HANDLERS
+// =========================================
+function openEditModal(announcementId) {
+    const announcements = window._currentAnnouncements || [];
+    const item = announcements.find(a => String(a.id) === String(announcementId));
+    if (!item) {
+        showToast('❌ घोषणा विवरण नहीं मिला।', 'error');
+        return;
+    }
+
+    const modal = document.getElementById('edit-announcement-modal');
+    if (!modal) return;
+
+    document.getElementById('edit-ann-id').value = item.id;
+    document.getElementById('edit-ann-title').value = item.title || '';
+    document.getElementById('edit-ann-desc').value = item.description || '';
+    document.getElementById('edit-ann-date').value = item.date ? item.date.substring(0, 10) : '';
+    document.getElementById('edit-ann-link').value = item.link || '';
+
+    const editBranchSelect = document.getElementById('edit-ann-branch');
+    if (editBranchSelect && (!currentAdminAuth || currentAdminAuth.isSuperAdmin)) {
+        editBranchSelect.value = item.branch || 'ALL';
+    }
+
+    modal.classList.add('active');
+}
+
+function closeEditModal() {
+    const modal = document.getElementById('edit-announcement-modal');
+    if (modal) {
+        modal.classList.remove('active');
+    }
+}
+
+async function handleUpdateAnnouncement(e) {
+    e.preventDefault();
+
+    const id = document.getElementById('edit-ann-id')?.value;
+    const title = document.getElementById('edit-ann-title')?.value.trim();
+    const description = document.getElementById('edit-ann-desc')?.value.trim();
+    const date = document.getElementById('edit-ann-date')?.value;
+    const link = document.getElementById('edit-ann-link')?.value.trim();
+    const branchSelect = document.getElementById('edit-ann-branch');
+    const branch = branchSelect ? branchSelect.value : 'ALL';
+    const submitBtn = document.getElementById('save-edit-btn');
+
+    if (!id || !title || !description) {
+        showToast('⚠️ कृपया शीर्षक और विवरण दोनों भरें।', 'error');
+        return;
+    }
+
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> अपडेट हो रहा है...';
+    }
+
+    try {
+        const payload = {
+            id: parseInt(id, 10),
+            title: title,
+            description: description,
+            date: date || null,
+            link: link || null,
+            branch: branch || 'ALL'
+        };
+
+        const response = await fetch('api/update_announcement.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+
+        if (!result.success) {
+            throw new Error(result.error || 'Failed to update announcement');
+        }
+
+        showToast('✅ घोषणा सफलतापूर्वक अपडेट की गई!', 'success');
+        closeEditModal();
+        await loadAnnouncements();
+
+    } catch (error) {
+        console.error('Error updating announcement:', error);
+        showToast('❌ अपडेट करने में त्रुटि: ' + error.message, 'error');
+    } finally {
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-save"></i> अपडेट करें';
+        }
+    }
+}
+
+// =========================================
 // 🚀 INITIALIZE PAGE
 // =========================================
 async function initAnnouncementPage() {
     const form = document.getElementById('announcement-form');
     if (form) {
         form.addEventListener('submit', handleAddAnnouncement);
+    }
+
+    const editForm = document.getElementById('edit-announcement-form');
+    if (editForm) {
+        editForm.addEventListener('submit', handleUpdateAnnouncement);
+    }
+
+    const closeBtn = document.getElementById('close-edit-modal-btn');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeEditModal);
+    }
+
+    const cancelBtn = document.getElementById('cancel-edit-btn');
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', closeEditModal);
+    }
+
+    const modal = document.getElementById('edit-announcement-modal');
+    if (modal) {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeEditModal();
+        });
     }
     
     const dateInput = document.getElementById('ann-date');
@@ -326,6 +476,10 @@ async function initAnnouncementPage() {
 
     if (typeof window.initHindiTransliteration === 'function') {
         window.initHindiTransliteration('[data-hindi-input="true"]', document.querySelector('.form-section'));
+        const modalForm = document.getElementById('edit-announcement-form');
+        if (modalForm) {
+            window.initHindiTransliteration('[data-hindi-input="true"]', modalForm);
+        }
     }
 }
 
