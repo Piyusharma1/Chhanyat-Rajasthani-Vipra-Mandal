@@ -534,51 +534,156 @@ body {
 /* ============================================================
    📱 RESPONSIVE
    ============================================================ */
+@media (max-width: 768px) {
+    .dash-header-inner {
+        padding: 24px 20px 20px;
+    }
+    .admin-section {
+        margin: 24px auto 40px;
+        padding: 0 15px;
+    }
+    .admin-grid {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 16px;
+    }
+}
+
 @media (max-width: 640px) {
     .dash-header-inner {
-        padding: 22px 18px 18px;
+        padding: 20px 16px 16px;
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
         align-items: center;
         justify-content: space-between;
-        gap: 14px;
+        gap: 12px;
     }
     .dash-header-brand {
         flex: 1 1 auto;
+        gap: 12px;
     }
-    .dash-header-text h1 { font-size: 1.3rem; }
+    .dash-header-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.4rem;
+        border-radius: 12px;
+    }
+    .dash-header-text h1 { font-size: 1.25rem; }
+    .dash-header-text .org-name { font-size: 0.8rem; }
+    .dash-header-text .welcome-line { font-size: 0.82rem; }
+
     #logout-btn { 
         width: auto; 
         margin-left: auto;
         align-self: center;
         justify-content: center;
-        padding: 9px 18px;
+        padding: 8px 16px;
+        font-size: 0.84rem;
+    }
+
+    .admin-grid { 
+        grid-template-columns: 1fr; 
+        gap: 14px; 
+    }
+
+    .admin-card {
+        border-radius: var(--radius-sm);
+    }
+    .card-body {
+        padding: 18px 16px;
+        gap: 8px;
+    }
+    .card-badge {
+        top: 10px;
+        right: 10px;
+        padding: 2px 8px;
+        font-size: 0.62rem;
+    }
+
+    /* ⚠️ Confirm and Delete Dialog responsiveness */
+    .confirm-delete-dialog {
+        width: calc(100% - 30px);
+        max-width: 360px;
+        padding: 24px 20px 20px;
+        border-radius: 14px;
+    }
+    .confirm-dialog-icon {
+        width: 52px;
+        height: 52px;
+        font-size: 1.35rem;
+        margin-bottom: 14px;
+    }
+    .confirm-delete-dialog h4 {
+        font-size: 1.05rem;
+    }
+    .confirm-delete-dialog p {
+        font-size: 0.84rem;
+        margin-bottom: 18px;
+    }
+    .confirm-delete-buttons { 
+        flex-direction: column; 
+        gap: 8px;
+    }
+    .btn-cancel, .btn-confirm-delete { 
+        width: 100%; 
+        padding: 11px 14px;
         font-size: 0.88rem;
     }
 
-    .admin-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
+    /* Modal dialog */
+    .modal {
+        padding: 12px;
+    }
+    .modal-content {
+        max-width: 100%;
+        max-height: 92vh;
+        border-radius: 14px;
+    }
 
-    .delete-modal-header { padding: 20px; }
-    .delete-modal-body   { padding: 16px 18px 22px; }
+    .delete-modal-header { padding: 18px; }
+    .delete-modal-body   { padding: 14px 16px 18px; }
 
     .button-group { flex-direction: column; }
     .button-group button { width: 100%; justify-content: center; }
 
-    .confirm-delete-buttons { flex-direction: column; }
-    .btn-cancel, .btn-confirm-delete { width: 100%; }
-
     .file-info { flex-direction: column; }
     .file-info-cell:not(:last-child) { border-right: none; border-bottom: 1px solid var(--border); }
+
+    /* Toast */
+    .toast {
+        top: 12px;
+        right: 12px;
+        left: 12px;
+        min-width: unset;
+        max-width: calc(100% - 24px);
+        transform: translateY(-80px);
+        border-radius: 8px;
+        padding: 12px 14px;
+    }
+    .toast.show {
+        transform: translateY(0);
+    }
 }
 
 @media (max-width: 380px) {
-    .admin-grid { grid-template-columns: 1fr; }
-    .dash-header-icon { width: 50px; height: 50px; font-size: 1.3rem; }
+    .dash-header-inner {
+        padding: 16px 12px 12px;
+    }
+    .dash-header-icon { 
+        width: 44px; 
+        height: 44px; 
+        font-size: 1.2rem; 
+    }
+    .dash-header-text h1 {
+        font-size: 1.15rem;
+    }
     #logout-btn {
         margin-left: auto;
-        padding: 8px 14px;
-        font-size: 0.82rem;
+        padding: 7px 12px;
+        font-size: 0.78rem;
+    }
+    .confirm-delete-dialog {
+        padding: 20px 15px 16px;
     }
 }
 </style>
