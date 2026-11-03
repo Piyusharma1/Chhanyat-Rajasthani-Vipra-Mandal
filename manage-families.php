@@ -427,6 +427,109 @@
             box-shadow: none;
         }
 
+        /* 📱 Mobile & Small Screen Responsiveness */
+        @media (max-width: 768px) {
+            .modal {
+                padding: 10px;
+                align-items: flex-end;
+            }
+            .modal-content {
+                width: 100%;
+                max-width: 100%;
+                max-height: 94vh;
+                padding: 1.25rem 1rem;
+                border-radius: 16px 16px 8px 8px;
+                overflow-x: hidden;
+            }
+            .modal-close {
+                top: 12px;
+                right: 12px;
+                width: 34px;
+                height: 34px;
+                font-size: 1.2rem;
+            }
+            .modal-content h3 {
+                font-size: 1.35rem;
+                margin-bottom: 1.25rem;
+                padding-bottom: 1rem;
+                padding-right: 36px;
+                text-align: left;
+            }
+            .edit-section {
+                padding: 1.1rem 0.85rem;
+                margin-bottom: 1.5rem;
+                border-radius: 10px;
+                border-left-width: 4px;
+            }
+            .edit-section h4 {
+                font-size: 1.1rem;
+                margin-bottom: 1rem;
+            }
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                margin-bottom: 0.5rem;
+            }
+            .form-group input, 
+            .form-group select, 
+            .form-group textarea {
+                padding: 10px 12px;
+                font-size: 0.95rem;
+                box-sizing: border-box;
+            }
+            .member-edit-item {
+                padding: 1rem 0.85rem;
+                margin-bottom: 1.2rem;
+                border-radius: 8px;
+            }
+            .member-edit-item h5 {
+                font-size: 1rem;
+                margin-bottom: 0.85rem;
+            }
+            .remove-member-btn {
+                top: 10px;
+                right: 10px;
+                width: 28px;
+                height: 28px;
+                font-size: 0.85rem;
+            }
+            .add-member-btn {
+                padding: 12px;
+                font-size: 0.95rem;
+            }
+            .btn-save {
+                padding: 14px;
+                font-size: 1.05rem;
+                margin-top: 1.25rem;
+            }
+            #edit-current-photo-container img,
+            #edit-new-photo-container img {
+                max-width: 100% !important;
+                height: auto !important;
+                max-height: 180px !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .modal {
+                padding: 0;
+            }
+            .modal-content {
+                max-height: 96vh;
+                padding: 1rem 0.75rem;
+                border-radius: 14px 14px 0 0;
+            }
+            .modal-content h3 {
+                font-size: 1.2rem;
+            }
+            .edit-section {
+                padding: 0.9rem 0.65rem;
+            }
+            .member-edit-item {
+                padding: 0.85rem 0.65rem;
+            }
+        }
+
         .toast {
             position: fixed; top: 20px; right: 20px; background: var(--bg-card);
             padding: 16px 20px; border-radius: 10px; box-shadow: 0 8px 25px rgba(0,0,0,0.15);
