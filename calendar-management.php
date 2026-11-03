@@ -589,12 +589,6 @@ $months = [
                 <a href="admin-dashboard.php" class="btn btn-secondary" style="width: auto;">
                     <i class="fas fa-arrow-left"></i> डैशबोर्ड पर वापस जाएं
                 </a>
-                <button type="button" class="btn btn-secondary" id="btn-open-pdf-modal" style="width: auto;">
-                    <i class="fas fa-file-pdf"></i> संपूर्ण PDF प्रबंधन
-                </button>
-                <a href="calendar.php" target="_blank" class="btn btn-secondary" style="width: auto; border-color: var(--saffron); color: var(--saffron-deep);">
-                    <i class="fas fa-external-link-alt"></i> लाइव दिनदर्शिका
-                </a>
             </div>
             <div style="font-size: 0.9rem; color: var(--maroon);">
                 <i class="fas fa-shield-alt"></i> दिनदर्शिका प्रबंधन प्रणाली
@@ -614,7 +608,7 @@ $months = [
                     यहाँ से आप मुखपृष्ठ एवं समस्त १२ माह के पृष्ठों की इमेज सीधे बदल सकते हैं। प्रत्येक बदलाव तुरंत वेबसाइट पर लाइव हो जाता है।
                 </p>
                 <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                    <button type="button" class="btn btn-primary" onclick="document.getElementById('btn-open-pdf-modal').click()" style="width: auto; padding: 10px 18px; min-height: 42px; font-size: 0.9rem;">
+                    <button type="button" class="btn btn-primary" id="btn-open-pdf-modal" style="width: auto; padding: 10px 18px; min-height: 42px; font-size: 0.9rem;">
                         <i class="fas fa-cloud-upload-alt"></i> नई PDF अपलोड करें
                     </button>
                     <?php if ($hasPdf): ?>
