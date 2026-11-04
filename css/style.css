@@ -1350,18 +1350,27 @@ body.dark-mode .member-name {
 .committee-card .designation,
 .member-role,
 .designation {
-    color: var(--saffron, #FF6B00);
-    font-weight: 600;
-    margin: 4px 0;
-    font-size: 0.78rem;
-    text-transform: uppercase;
-    letter-spacing: 0.4px;
-    padding: 4px 12px;
-    background: rgba(255, 107, 0, 0.08);
-    border-radius: 14px;
+    color: #9C2A00;
+    font-weight: 700;
+    margin: 6px 0;
+    font-size: 0.88rem;
+    letter-spacing: 0.3px;
+    padding: 5px 14px;
+    background: #FFF1E6;
+    border: 1px solid rgba(217, 79, 0, 0.3);
+    border-radius: 16px;
     display: inline-block;
     word-wrap: break-word;
     line-height: 1.4;
+    box-shadow: 0 1px 4px rgba(156, 42, 0, 0.08);
+}
+
+body.dark-mode .committee-card .designation,
+body.dark-mode .member-role,
+body.dark-mode .designation {
+    color: #FFB077;
+    background: rgba(255, 107, 0, 0.18);
+    border-color: rgba(255, 107, 0, 0.4);
 }
 
 .committee-card .detail,
@@ -1433,7 +1442,7 @@ body.dark-mode .detail {
     .committee-card .designation,
     .member-role,
     .designation {
-        font-size: 0.82rem;
+        font-size: 0.88rem;
         padding: 5px 14px;
     }
 }
@@ -1462,8 +1471,8 @@ body.dark-mode .detail {
     .committee-card .designation,
     .member-role,
     .designation {
-        font-size: 0.85rem;
-        padding: 5px 16px;
+        font-size: 0.9rem;
+        padding: 6px 16px;
     }
 
     .committee-card .detail,
