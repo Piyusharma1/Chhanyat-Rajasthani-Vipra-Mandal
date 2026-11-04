@@ -1,8 +1,31 @@
+<?php
+$galleryDir = __DIR__ . '/gallerys';
+$firstHeroImage = 'gallerys/गायत्री माता.webp';
+$firstHeroTitle = 'गायत्री माता';
+if (is_dir($galleryDir)) {
+    $files = scandir($galleryDir);
+    foreach ($files as $f) {
+        if ($f !== '.' && $f !== '..' && preg_match('/\.(webp|jpg|jpeg|png)$/i', $f)) {
+            $firstHeroImage = 'gallerys/' . rawurlencode($f);
+            $firstHeroTitle = htmlspecialchars(pathinfo($f, PATHINFO_FILENAME), ENT_QUOTES, 'UTF-8');
+            break;
+        }
+    }
+}
+$cssPath = __DIR__ . '/css/style.css';
+$cssVersion = file_exists($cssPath) ? filemtime($cssPath) : time();
+?>
 <!DOCTYPE html>
 <html lang="hi" dir="ltr">
 <head>
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+
+    <!-- Preconnect to Google Fonts and external origins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="image" href="<?= $firstHeroImage ?>" type="image/webp" fetchpriority="high">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Tiro+Devanagari+Hindi:ital@0;1&display=swap" rel="stylesheet">
 
     <script type="application/ld+json">
     {
@@ -14,19 +37,15 @@
     }
     </script>
     
-
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-DE5KD051LL"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-DE5KD051LL');
-</script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DE5KD051LL"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-DE5KD051LL');
+    </script>
     
-    
-    
-    <script src="https://cdn.counter.dev/script.js" data-id="1f92108b-8857-410e-b5a8-c1ab33e859f8" data-utcoffset="6"></script>
+    <script src="https://cdn.counter.dev/script.js" data-id="1f92108b-8857-410e-b5a8-c1ab33e859f8" data-utcoffset="6" defer></script>
     <link rel="canonical" href="https://chhanyatvipralatur.com/" />
     
     <meta charset="UTF-8">
@@ -44,48 +63,57 @@
     <meta name="twitter:title" content="छःन्यात राजस्थानी विप्र मंडल, लातूर">
     <meta name="twitter:description" content="आधिकारिक वेबसाइट | Official website of Chhanyat Rajasthani Vipra Mandal Latur">
   
-    <link rel="stylesheet" href="css/style.css?v=<?= filemtime($_SERVER['DOCUMENT_ROOT'].'/css/style.css')?>">
+    <link rel="stylesheet" href="css/style.css?v=<?= $cssVersion ?>">
 </head>
 <body>
     <a href="#main-content" class="skip-link">मुख्य सामग्री पर जाएं</a>
     
-    <div data-include="components/header.php"></div>
+    <?php include __DIR__ . '/components/header.php'; ?>
 
     <main id="main-content">
         <!-- ═══ PROFESSIONAL HERO SLIDER ═══ -->
-
-<!-- ═══ PROFESSIONAL HERO SLIDER ═══ -->
-<section class="hero-slider" aria-label="इमेज स्लाइडर" aria-roledescription="carousel">
-    <div class="slider-wrapper">
-        <!-- Loading & Error States -->
-        <div class="slider-state slider-loading" id="slider-loading">
-            <div class="spinner"></div>
-            <span>छवियाँ लोड हो रही हैं...</span>
-        </div>
-        
-        <div class="slider-state slider-error" id="slider-error" style="display: none;">
-            <h3>⚠️ छवियाँ लोड नहीं हो सकीं</h3>
-            <p id="error-message">कृपया बाद में पुनः प्रयास करें</p>
-            <button onclick="loadGalleryImages()">पुनः प्रयास करें</button>
-        </div>
-        
-        <!-- Slider Track (Slides are injected here) -->
-        <div class="slider-track" id="slider-track"></div>
-        
-        <!-- Navigation Arrows -->
-        <button class="slider-nav slider-nav-prev" aria-label="पिछली स्लाइड" onclick="moveSlide(-1)">
-            <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
-        </button>
-        <button class="slider-nav slider-nav-next" aria-label="अगली स्लाइड" onclick="moveSlide(1)">
-            <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
-        </button>
-        
-        <!-- Progress Bar directly on the image edge -->
-        <div class="slider-progress-bar">
-            <div class="slider-progress" id="slider-progress"></div>
-        </div>
-    </div>
-</section>
+        <section class="hero-slider" aria-label="इमेज स्लाइडर" aria-roledescription="carousel">
+            <div class="slider-wrapper">
+                <!-- Loading & Error States -->
+                <div class="slider-state slider-loading" id="slider-loading" style="display: none;">
+                    <div class="spinner"></div>
+                    <span>छवियाँ लोड हो रही हैं...</span>
+                </div>
+                
+                <div class="slider-state slider-error" id="slider-error" style="display: none;">
+                    <h3>⚠️ छवियाँ लोड नहीं हो सकीं</h3>
+                    <p id="error-message">कृपया बाद में पुनः प्रयास करें</p>
+                    <button onclick="loadGalleryImages()">पुनः प्रयास करें</button>
+                </div>
+                
+                <!-- Slider Track (Pre-rendered first hero slide for instant LCP) -->
+                <div class="slider-track" id="slider-track">
+                    <div class="slide active" role="group" aria-roledescription="slide" aria-label="स्लाइड 1">
+                        <picture class="slide-picture">
+                            <source media="(max-width: 768px)" srcset="<?= $firstHeroImage ?>">
+                            <img src="<?= $firstHeroImage ?>" alt="<?= $firstHeroTitle ?>" width="1376" height="768" loading="eager" fetchpriority="high" decoding="async">
+                        </picture>
+                        <div class="slide-gradient"></div>
+                        <div class="slide-caption">
+                            <h3><?= $firstHeroTitle ?></h3>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Navigation Arrows -->
+                <button class="slider-nav slider-nav-prev" aria-label="पिछली स्लाइड" onclick="moveSlide(-1)">
+                    <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                </button>
+                <button class="slider-nav slider-nav-next" aria-label="अगली स्लाइड" onclick="moveSlide(1)">
+                    <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </button>
+                
+                <!-- Progress Bar directly on the image edge -->
+                <div class="slider-progress-bar">
+                    <div class="slider-progress" id="slider-progress"></div>
+                </div>
+            </div>
+        </section>
 <section class="samaj-instruction-section">
     <p class="samaj-description">
         अपने परिवार की जानकारी देखने के लिए नीचे दिए गए परिवारों में से किसी एक परिवार का चयन करें।
@@ -160,7 +188,7 @@
                 <div class="home-cal-preview-card">
                     <div class="home-cal-img-wrap">
                         <a href="calendar.php" title="संपूर्ण सनातन दिनदर्शिका देखें" class="home-cal-img-link">
-                            <img id="home-cal-preview-img" src="uploads/calendar/cover.webp" alt="सनातन दिनदर्शिका" loading="lazy">
+                            <img id="home-cal-preview-img" src="uploads/calendar/cover.webp" alt="सनातन दिनदर्शिका" width="340" height="511" loading="lazy">
                             <span class="home-cal-img-zoom-hint">
                                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h6v6"></path><path d="M10 14L21 3"></path><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg>
                                 बड़ा देखें
@@ -297,7 +325,7 @@
         </section>
     </main>
 
-    <div data-include="components/footer.php"></div>
+    <?php include __DIR__ . '/components/footer.php'; ?>
 
     <!-- ══ IMAGE MODAL / LIGHTBOX ═══ -->
     <div id="image-modal" class="image-modal" role="dialog" aria-modal="true" aria-hidden="true">

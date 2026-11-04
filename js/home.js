@@ -699,25 +699,6 @@ async function loadGalleryImages() {
         }
 
         galleryImages = result.data;
-
-        // 🚀 PERFORMANCE FIX 1: Preload the FIRST image immediately!
-        // This forces the browser to download it at maximum priority before we even build the DOM.
-        if (galleryImages.length > 0) {
-            const firstImgUrl = galleryImages[0].url;
-
-            // Inject <link rel="preload"> into <head>
-            const preloadLink = document.createElement('link');
-            preloadLink.rel = 'preload';
-            preloadLink.as = 'image';
-            preloadLink.href = firstImgUrl;
-            preloadLink.setAttribute('fetchpriority', 'high');
-            document.head.appendChild(preloadLink);
-
-            // Force browser to start downloading it right now in memory
-            const preloader = new Image();
-            preloader.src = firstImgUrl;
-        }
-
         loadingEl.style.display = 'none';
         buildSlider(galleryImages);
     } catch (error) {
@@ -753,7 +734,7 @@ function buildSlider(images) {
                 onclick="openModal(${index})">
             <picture class="slide-picture">
                 <source media="(max-width: 768px)" srcset="${img.mobileUrl || img.url}">
-                <img src="${img.desktopUrl || img.url}" alt="${img.title}" loading="${loadingAttr}" ${priorityAttr} decoding="async">
+                <img src="${img.desktopUrl || img.url}" alt="${img.title}" width="1376" height="768" loading="${loadingAttr}" ${priorityAttr} decoding="async">
             </picture>
             <div class="slide-gradient"></div>
             <div class="slide-caption">

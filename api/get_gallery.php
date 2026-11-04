@@ -68,7 +68,8 @@ foreach ($files as $file) {
         ? 'https'
         : 'http';
 
-    $fullUrl = $protocol . '://' . $_SERVER['HTTP_HOST'] . '/' . $relativePath;
+    $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+    $fullUrl = $protocol . '://' . $host . '/' . $relativePath;
 
     $images[] = [
         'id' => md5($file),

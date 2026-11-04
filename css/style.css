@@ -3156,6 +3156,7 @@ body.dark-mode #auth-container input {
     /* Show only on mobile screens */
     background: linear-gradient(90deg, var(--gold) 0%, var(--gold-light) 50%, var(--gold) 100%);
     padding: 8px 0;
+    min-height: 38px;
     overflow: hidden;
     position: relative;
     border-bottom: 2px solid rgba(85, 15, 15, 0.2);

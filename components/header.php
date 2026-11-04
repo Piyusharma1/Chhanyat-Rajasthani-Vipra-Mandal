@@ -2,7 +2,12 @@
 <header class="site-header">
   <!-- Sliding Name Band -->
   <div class="sliding-name-band">
-    <div class="sliding-name-track" id="sliding-name-track"></div>
+    <div class="sliding-name-track" id="sliding-name-track">
+      <span class="sliding-name-item">छःन्यात राजस्थानी विप्र मंडल, लातूर</span><span class="sliding-name-separator">✦</span>
+      <span class="sliding-name-item">छःन्यात राजस्थानी विप्र मंडल, लातूर</span><span class="sliding-name-separator">✦</span>
+      <span class="sliding-name-item">छःन्यात राजस्थानी विप्र मंडल, लातूर</span><span class="sliding-name-separator">✦</span>
+      <span class="sliding-name-item">छःन्यात राजस्थानी विप्र मंडल, लातूर</span><span class="sliding-name-separator">✦</span>
+    </div>
   </div>
   
 <div class="header-top">
