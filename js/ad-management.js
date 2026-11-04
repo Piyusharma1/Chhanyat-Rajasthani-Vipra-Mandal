@@ -406,5 +406,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.openEditModal = openEditModal;
     window.confirmDeleteAd = confirmDeleteAd;
 
+    // Initialize Hindi transliteration for ad titles and sponsor names
+    if (typeof window.initHindiTransliteration === 'function') {
+        const toggleContainer = document.getElementById('ad-translit-toggle');
+        window.initHindiTransliteration('[data-hindi-input="true"]', toggleContainer);
+    }
+
     await loadAds();
 });

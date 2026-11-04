@@ -760,6 +760,9 @@
             <h2><i class="fas fa-cloud-upload-alt"></i> नई Photos अपलोड करें</h2>
         </div>
 
+        <!-- Hindi Transliteration Toggle Container -->
+        <div id="gallery-translit-toggle" style="margin-bottom: 15px;"></div>
+
         <div class="upload-section">
             <form id="gallery-upload-form">
                 <div class="album-select-row">
@@ -771,7 +774,7 @@
                     </div>
                     <div class="field">
                         <label for="album-name"><i class="fas fa-plus-circle"></i> या नया Album नाम</label>
-                        <input type="text" id="album-name" placeholder="उदा: वार्षिक सामुदायिक मिलन समारोह 2025">
+                        <input type="text" id="album-name" placeholder="उदा: वार्षिक सामुदायिक मिलन समारोह 2025" data-hindi-input="true">
                     </div>
                     <div class="field">
                         <label for="gallery-branch"><i class="fas fa-sitemap"></i> संबंधित समाज / शाखा (Branch)</label>
@@ -872,6 +875,7 @@
 
 
     <script src="js/include.js?v=<?= @filemtime(__DIR__.'/js/include.js') ?: time()?>"></script>
+    <script src="js/hindi-transliteration.js?v=<?= @filemtime(__DIR__.'/js/hindi-transliteration.js') ?: time()?>"></script>
     <script src="js/gallery-upload.js?v=<?= @filemtime(__DIR__.'/js/gallery-upload.js') ?: time()?>"></script>
 </body>
 </html>

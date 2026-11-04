@@ -596,17 +596,20 @@ session_start();
             <h2><i class="fas fa-plus-circle"></i> नया विज्ञापन जोड़ें</h2>
         </div>
 
+        <!-- Hindi Transliteration Toggle Container -->
+        <div id="ad-translit-toggle" style="margin-bottom: 15px;"></div>
+
         <div class="form-section">
             <form id="add-ad-form" enctype="multipart/form-data">
                 <div class="form-row">
                     <div class="form-group">
                         <label for="ad-title"><i class="fas fa-heading"></i> विज्ञापन का नाम / शीर्षक *</label>
-                        <input type="text" id="ad-title" name="title" placeholder="उदा: श्री बालाजी ज्वेलर्स & संस" required>
+                        <input type="text" id="ad-title" name="title" placeholder="उदा: श्री बालाजी ज्वेलर्स & संस" required data-hindi-input="true">
                     </div>
 
                     <div class="form-group">
                         <label for="ad-business"><i class="fas fa-store"></i> व्यापार / प्रायोजक का नाम</label>
-                        <input type="text" id="ad-business" name="business_name" placeholder="उदा: प्रो. रमेश शर्मा">
+                        <input type="text" id="ad-business" name="business_name" placeholder="उदा: प्रो. रमेश शर्मा" data-hindi-input="true">
                     </div>
                 </div>
 
@@ -707,12 +710,12 @@ session_start();
 
                     <div class="form-group">
                         <label for="edit-ad-title">शीर्षक *</label>
-                        <input type="text" id="edit-ad-title" name="title" required>
+                        <input type="text" id="edit-ad-title" name="title" required data-hindi-input="true">
                     </div>
 
                     <div class="form-group">
                         <label for="edit-ad-business">व्यापार / प्रायोजक का नाम</label>
-                        <input type="text" id="edit-ad-business" name="business_name">
+                        <input type="text" id="edit-ad-business" name="business_name" data-hindi-input="true">
                     </div>
 
                     <div class="form-row">
@@ -790,6 +793,7 @@ session_start();
     <div data-include="components/footer.php"></div>
 
     <script src="js/include.js?v=<?= @filemtime(__DIR__.'/js/include.js') ?: time()?>"></script>
+    <script src="js/hindi-transliteration.js?v=<?= @filemtime(__DIR__.'/js/hindi-transliteration.js') ?: time()?>"></script>
     <script type="module" src="js/ad-management.js?v=<?= @filemtime(__DIR__.'/js/ad-management.js') ?: time()?>"></script>
 </body>
 </html>

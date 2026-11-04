@@ -913,6 +913,13 @@ function initGalleryPage() {
     loadAlbumsList();
     setupAlbumDetailNavigation();
     setupLightbox();
+    
+    // Initialize Hindi transliteration for album name
+    if (typeof window.initHindiTransliteration === 'function') {
+        const toggleContainer = document.getElementById('gallery-translit-toggle');
+        window.initHindiTransliteration('[data-hindi-input="true"]', toggleContainer);
+    }
+    
     console.log('📸 Gallery upload page initialized');
 }
 
