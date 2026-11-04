@@ -700,6 +700,10 @@ window.openEditCommitteeMember = function(type, idOrIndex) {
     modal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
     nameInput.focus();
+
+    if (typeof window.initHindiTransliteration === 'function') {
+        window.initHindiTransliteration('#edit-committee-form [data-hindi-input="true"]', modal);
+    }
 };
 
 window.closeEditCommitteeModal = function() {
@@ -846,6 +850,11 @@ function initCommitteePage() {
             closeEditCommitteeModal();
         }
     });
+
+    // Initialize Hindi transliteration for forms
+    if (typeof window.initHindiTransliteration === 'function') {
+        window.initHindiTransliteration('[data-hindi-input="true"]', null);
+    }
 }
 
 document.addEventListener('DOMContentLoaded', async () => {

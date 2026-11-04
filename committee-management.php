@@ -494,8 +494,8 @@
             
             <h4>नया केंद्रीय सदस्य जोड़ें</h4>
             <form id="central-committee-form" class="form-grid">
-                <input type="text" id="central-comm-name" placeholder="नाम *" required>
-                <input type="text" id="central-comm-designation" placeholder="पदनाम *" required>
+                <input type="text" id="central-comm-name" placeholder="नाम *" required data-hindi-input="true">
+                <input type="text" id="central-comm-designation" placeholder="पदनाम *" required data-hindi-input="true">
                 <input type="text" id="central-comm-mobile" placeholder="मोबाइल नंबर">
                 
                 <div class="photo-selection-box full-width">
@@ -548,8 +548,8 @@
 
             <h4>नया समाज सदस्य जोड़ें</h4>
             <form id="committee-form" class="form-grid">
-                <input type="text" id="comm-name" placeholder="नाम *" required>
-                <input type="text" id="comm-designation" placeholder="पदनाम *" required>
+                <input type="text" id="comm-name" placeholder="नाम *" required data-hindi-input="true">
+                <input type="text" id="comm-designation" placeholder="पदनाम *" required data-hindi-input="true">
                 <input type="text" id="comm-mobile" placeholder="मोबाइल नंबर">
                 
                 <div class="photo-selection-box full-width">
@@ -605,14 +605,14 @@
                         <label style="font-weight: 600; font-size: 0.88rem; color: var(--text-mid); display: block; margin-bottom: 5px;">
                             पूरा नाम <span style="color: var(--red);">*</span>
                         </label>
-                        <input type="text" id="edit-comm-name" placeholder="नाम *" required style="width: 100%;">
+                        <input type="text" id="edit-comm-name" placeholder="नाम *" required data-hindi-input="true" style="width: 100%;">
                     </div>
 
                     <div>
                         <label style="font-weight: 600; font-size: 0.88rem; color: var(--text-mid); display: block; margin-bottom: 5px;">
                             पदनाम <span style="color: var(--red);">*</span>
                         </label>
-                        <input type="text" id="edit-comm-designation" placeholder="पदनाम *" required style="width: 100%;">
+                        <input type="text" id="edit-comm-designation" placeholder="पदनाम *" required data-hindi-input="true" style="width: 100%;">
                     </div>
 
                     <div>
@@ -692,6 +692,7 @@
     <div data-include="components/footer.php"></div>
 
     <script src="js/include.js?v=<?= @filemtime(__DIR__.'/js/include.js') ?: time()?>"></script>
+    <script src="js/hindi-transliteration.js?v=<?= @filemtime(__DIR__.'/js/hindi-transliteration.js') ?: time()?>"></script>
     <script src="js/committee-management.js?v=<?= @filemtime(__DIR__.'/js/committee-management.js') ?: time()?>"></script>
 </body>
 </html>
