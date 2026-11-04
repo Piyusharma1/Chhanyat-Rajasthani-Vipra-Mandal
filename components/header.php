@@ -13,7 +13,7 @@
 <div class="header-top">
     <a href="/" class="logo-block" aria-label="मुखपृष्ठ">
       <div class="logo-emblem" aria-hidden="true">
-        <img src="/favicon.ico" alt="छःन्यात राजस्थानी विप्र मंडल लोगो" width="60" height="60">
+        <img src="/images/logo.webp" alt="छःन्यात राजस्थानी विप्र मंडल लोगो" width="60" height="60">
       </div>
       <div class="logo-text">
         <div class="logo-title">छःन्यात राजस्थानी विप्र मंडल</div>
