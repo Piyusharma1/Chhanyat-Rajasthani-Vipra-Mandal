@@ -853,7 +853,8 @@ function initCommitteePage() {
 
     // Initialize Hindi transliteration for forms
     if (typeof window.initHindiTransliteration === 'function') {
-        window.initHindiTransliteration('[data-hindi-input="true"]', null);
+        const toggleContainer = document.getElementById('committee-translit-toggle');
+        window.initHindiTransliteration('[data-hindi-input="true"]', toggleContainer);
     }
 }
 

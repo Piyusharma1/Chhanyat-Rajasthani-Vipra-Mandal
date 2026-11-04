@@ -485,6 +485,9 @@
             <h2><i class="fas fa-users-cog"></i> कार्यकारिणी प्रबंधन</h2>
         </div>
 
+        <!-- Hindi Transliteration Toggle Container -->
+        <div id="committee-translit-toggle" style="margin-bottom: 15px;"></div>
+
         <!-- 1. CENTRAL COMMITTEE SECTION -->
         <section class="card">
             <h3><i class="fas fa-landmark"></i> केंद्रीय कार्यकारिणी (छःन्यात राजस्थानी विप्र मंडल) </h3>
