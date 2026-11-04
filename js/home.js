@@ -734,7 +734,7 @@ function buildSlider(images) {
                 onclick="openModal(${index})">
             <picture class="slide-picture">
                 <source media="(max-width: 768px)" srcset="${img.mobileUrl || img.url}">
-                <img src="${img.desktopUrl || img.url}" alt="${img.title}" width="1376" height="768" loading="${loadingAttr}" ${priorityAttr} decoding="async">
+                <img src="${img.desktopUrl || img.url}" alt="${img.title}" width="768" height="432" loading="${loadingAttr}" ${priorityAttr} decoding="async">
             </picture>
             <div class="slide-gradient"></div>
             <div class="slide-caption">

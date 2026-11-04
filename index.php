@@ -25,7 +25,10 @@ $cssVersion = file_exists($cssPath) ? filemtime($cssPath) : time();
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preload" as="image" href="<?= $firstHeroImage ?>" type="image/webp" fetchpriority="high">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Tiro+Devanagari+Hindi:ital@0;1&display=swap" rel="stylesheet">
+    <!-- Google Fonts loaded asynchronously to eliminate render blocking -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Tiro+Devanagari+Hindi:ital@0;1&display=swap">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Tiro+Devanagari+Hindi:ital@0;1&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Tiro+Devanagari+Hindi:ital@0;1&display=swap" rel="stylesheet"></noscript>
 
     <script type="application/ld+json">
     {
@@ -91,7 +94,7 @@ $cssVersion = file_exists($cssPath) ? filemtime($cssPath) : time();
                     <div class="slide active" role="group" aria-roledescription="slide" aria-label="स्लाइड 1">
                         <picture class="slide-picture">
                             <source media="(max-width: 768px)" srcset="<?= $firstHeroImage ?>">
-                            <img src="<?= $firstHeroImage ?>" alt="<?= $firstHeroTitle ?>" width="1376" height="768" loading="eager" fetchpriority="high" decoding="async">
+                            <img src="<?= $firstHeroImage ?>" alt="<?= $firstHeroTitle ?>" width="768" height="428" loading="eager" fetchpriority="high" decoding="async">
                         </picture>
                         <div class="slide-gradient"></div>
                         <div class="slide-caption">
@@ -188,7 +191,7 @@ $cssVersion = file_exists($cssPath) ? filemtime($cssPath) : time();
                 <div class="home-cal-preview-card">
                     <div class="home-cal-img-wrap">
                         <a href="calendar.php" title="संपूर्ण सनातन दिनदर्शिका देखें" class="home-cal-img-link">
-                            <img id="home-cal-preview-img" src="uploads/calendar/cover.webp" alt="सनातन दिनदर्शिका" width="340" height="511" loading="lazy">
+                            <img id="home-cal-preview-img" src="uploads/calendar/thumbs/cover.webp" alt="सनातन दिनदर्शिका" width="340" height="511" loading="lazy">
                             <span class="home-cal-img-zoom-hint">
                                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h6v6"></path><path d="M10 14L21 3"></path><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg>
                                 बड़ा देखें
