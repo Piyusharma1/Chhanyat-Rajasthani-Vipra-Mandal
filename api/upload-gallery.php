@@ -80,7 +80,7 @@ if (!isset($_FILES['images']) || empty($_FILES['images']['name'][0])) {
 }
 
 $allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
-$maxSize = 5 * 1024 * 1024; // 5MB
+$maxSize = 15 * 1024 * 1024; // 15MB
 $uploadedCount = 0;
 $errors = [];
 $uploadedFiles = [];

@@ -31,7 +31,7 @@ if (!empty($rawName)) {
 }
 
 $uploadDir = '../uploads/' . $folderName . '/';
-$maxFileSize = 5 * 1024 * 1024; // 5MB
+$maxFileSize = 15 * 1024 * 1024; // 15MB
 $allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'];
 
 // Create upload directory if it doesn't exist

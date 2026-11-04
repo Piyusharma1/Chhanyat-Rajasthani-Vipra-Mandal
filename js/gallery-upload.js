@@ -167,7 +167,7 @@ function setupUploadSection() {
 // =========================================
 function handleFiles(files) {
     const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
-    const maxSize = 5 * 1024 * 1024;
+    const maxSize = 15 * 1024 * 1024; // 15MB
 
     Array.from(files).forEach(file => {
         if (!allowedTypes.includes(file.type)) {
@@ -175,7 +175,7 @@ function handleFiles(files) {
             return;
         }
         if (file.size > maxSize) {
-            showToast(`❌ ${file.name} - Too large (max 5MB)`, 'error');
+            showToast(`❌ ${file.name} - Too large (max 15MB)`, 'error');
             return;
         }
         selectedFiles.push(file);
