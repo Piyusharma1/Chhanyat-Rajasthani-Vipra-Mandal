@@ -292,7 +292,7 @@ function renderFamilyPhotosGrid(searchTerm = '', branchFilter = '') {
 
         return `
             <div class="family-photo-card ${isSelected ? 'selected' : ''}" onclick="selectFamilyPhoto('${escapeHtml(photo.url)}', '${escapeHtml(displayName)}', '${escapeHtml(familyId)}')">
-                <img src="${escapeHtml(photo.url)}" alt="${escapeHtml(displayName)}" onerror="this.src='https://placehold.co/80x80/FF6B00/ffffff?text=P'">
+                <img src="${escapeHtml(photo.url)}" alt="${escapeHtml(displayName)}" onerror="this.onerror=null; this.src='images/user.webp'">
                 <div class="family-photo-name" title="${escapeHtml(displayName)}">${escapeHtml(displayName)}</div>
                 ${displayBranch}
             </div>
@@ -410,12 +410,12 @@ function renderCommitteeList(branch) {
     if (committee.length === 0) { list.innerHTML = '<p style="color:var(--text-secondary);text-align:center;margin:0;">इस समाज में कोई सदस्य नहीं है।</p>'; return; }
     
     list.innerHTML = committee.map((m, index) => {
-        const uniqueImageUrl = m.photo ? `${m.photo}?v=${new Date().getTime()}` : 'https://placehold.co/40x40/FF6B00/ffffff?text=P';
+        const uniqueImageUrl = m.photo ? `${m.photo}?v=${new Date().getTime()}` : 'images/user.webp';
         return `
            <div class="member-item-row">
                 <div style="display:flex;align-items:center;gap:12px;flex:1;min-width:0;">
                     <span style="font-size:0.8rem;font-weight:700;color:var(--saffron-deep);padding:4px 8px;background:rgba(255,107,0,0.12);border-radius:12px;min-width:32px;text-align:center;">#${index + 1}</span>
-                    <img src="${uniqueImageUrl}" style="width:45px;height:45px;border-radius:50%;object-fit:cover;border:2px solid var(--saffron);" onerror="this.src='https://placehold.co/40x40/FF6B00/ffffff?text=P'">
+                    <img src="${uniqueImageUrl}" style="width:45px;height:45px;border-radius:50%;object-fit:cover;border:2px solid var(--saffron);" onerror="this.onerror=null; this.src='images/user.webp'">
                     <div>
                         <strong style="color:var(--maroon-deep);">${escapeHtml(m.name || 'अज्ञात')}</strong> 
                         <small style="color:var(--text-soft);display:block;">${escapeHtml(m.designation || '—')}</small>
@@ -470,7 +470,7 @@ function renderCentralCommitteeList() {
     const isSuperAdmin = currentAdminAuth && currentAdminAuth.isSuperAdmin;
 
     list.innerHTML = centralCommittee.map((m, index) => {
-        const uniqueImageUrl = m.photo ? `${m.photo}?v=${new Date().getTime()}` : 'https://placehold.co/40x40/7B1A1A/ffffff?text=P';
+        const uniqueImageUrl = m.photo ? `${m.photo}?v=${new Date().getTime()}` : 'images/user.webp';
         const actionsHtml = isSuperAdmin ? `
             <div class="member-actions-group">
                 <button class="order-btn" onclick="moveCentralMember(${index}, -1)" ${index === 0 ? 'disabled' : ''} title="ऊपर लाएं">
@@ -500,7 +500,7 @@ function renderCentralCommitteeList() {
           <div class="member-item-row central">
                 <div style="display:flex;align-items:center;gap:12px;flex:1;min-width:0;">
                     <span style="font-size:0.8rem;font-weight:700;color:var(--maroon);padding:4px 8px;background:rgba(123,26,26,0.12);border-radius:12px;min-width:32px;text-align:center;">#${index + 1}</span>
-                    <img src="${uniqueImageUrl}" style="width:45px;height:45px;border-radius:50%;object-fit:cover;border:2px solid var(--maroon);" onerror="this.src='https://placehold.co/40x40/7B1A1A/ffffff?text=P'">
+                    <img src="${uniqueImageUrl}" style="width:45px;height:45px;border-radius:50%;object-fit:cover;border:2px solid var(--maroon);" onerror="this.onerror=null; this.src='images/user.webp'">
                     <div>
                         <strong style="color:var(--maroon-deep);">${m.name || 'अज्ञात'}</strong> 
                         <small style="color:var(--text-soft);display:block;">${m.designation || '—'}</small>

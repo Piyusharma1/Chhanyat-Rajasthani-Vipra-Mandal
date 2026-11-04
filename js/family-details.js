@@ -10,7 +10,7 @@ function getDisplayValue(obj, fieldName, fallback = '—') {
 
 // 🖼️ HELPER: Load Photo directly to BOTH hero + hidden container
 function loadFamilyPhoto(photoUrl, fallbackText = 'Family') {
-    const defaultPhoto = `https://placehold.net/avatar-4.png`;
+    const defaultPhoto = `images/user.webp`;
     const src = photoUrl || defaultPhoto;
 
     // Hero photo element

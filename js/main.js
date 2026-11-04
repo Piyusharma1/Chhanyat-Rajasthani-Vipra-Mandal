@@ -274,7 +274,7 @@ function renderHomeCommittee(committee) {
         return;
     }
 
-    const defaultPhoto = 'https://placehold.co/150x150/cccccc/ffffff?text=Photo';
+    const defaultPhoto = 'images/user.webp';
     
     grid.innerHTML = committee.map(m => {
         const name = m.name || 'अज्ञात';
@@ -289,7 +289,7 @@ function renderHomeCommittee(committee) {
                  width="100"
                  height="100"
                  style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid var(--orange); margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);"
-                 onerror="this.src='${defaultPhoto}'">
+                 onerror="this.onerror=null; this.src='${defaultPhoto}'">
             <h3 style="margin: 5px 0; color: var(--dark-blue); font-size: 1.1rem;">${name}</h3>
             ${designation ? `<p style="color: var(--orange); font-weight: bold; margin: 5px 0; font-size: 0.9rem;">${designation}</p>` : ''}
             ${m.mobile ? `<a href="https://wa.me/91${m.mobile.replace(/\D/g,'')}" target="_blank" style="display: inline-block; margin-top: 10px; background: #25D366; color: white; padding: 6px 12px; border-radius: 20px; text-decoration: none; font-size: 0.85rem;">💬 WhatsApp</a>` : ''}

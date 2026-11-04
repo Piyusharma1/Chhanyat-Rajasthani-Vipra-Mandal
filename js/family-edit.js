@@ -195,7 +195,7 @@ function renderFamilies(families) {
     grid.innerHTML = families.map(f => {
         const safeId = String(f.id || 'unknown').replace(/"/g, '&quot;');
         const safeName = String(f.head || 'अज्ञात').replace(/"/g, '&quot;');
-        const photoUrl = f.photo || 'https://placehold.net/avatar-4.png';
+        const photoUrl = f.photo || 'images/user.webp';
         const uniquePhoto = `${photoUrl}?v=${Date.now()}`; // Prevent caching
 
         return `
@@ -204,7 +204,7 @@ function renderFamilies(families) {
                 <img src="${uniquePhoto}" 
                      alt="${safeName}"
                      style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid var(--orange); flex-shrink: 0;"
-                     onerror="this.src='https://chhanyatvipralatur.com/uploads/avatar.png'">
+                     onerror="this.src='images/user.webp'">
                 <div style="flex: 1;">
                     <h3 style="margin: 0 0 5px 0; font-size: 1.2rem;">${f.head || 'अज्ञात'}</h3>
                     <div class="family-meta"><i class="fas fa-id-card"></i> ${f.id || 'N/A'}</div>

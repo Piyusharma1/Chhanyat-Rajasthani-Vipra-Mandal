@@ -67,7 +67,7 @@
         let allBranches = [];
         let currentPage = 1;
         const ITEMS_PER_PAGE = 12;
-        const DEFAULT_PHOTO = 'https://placehold.co/150x150/cccccc/ffffff?text=No+Photo';
+        const DEFAULT_PHOTO = 'images/user.webp';
 
         const grid = document.getElementById('family-grid');
         const pagination = document.getElementById('pagination');

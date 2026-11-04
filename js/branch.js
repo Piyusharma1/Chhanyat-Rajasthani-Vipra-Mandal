@@ -13,9 +13,9 @@ const CONFIG = {
 };
 
 const IMAGE_CONFIG = {
-    DEFAULT_PHOTO: 'https://placehold.net/avatar-4.png',
+    DEFAULT_PHOTO: 'images/user.webp',
     DEFAULT_IDEAL_PHOTO: 'https://chhanyatvipralatur.com/idel/Gayatri%20mata.webp',
-    DEFAULT_AVATAR: 'https://placehold.net/avatar-4.png',
+    DEFAULT_AVATAR: 'images/user.webp',
     ROOT_MARGIN: '300px 0px'
 };
 

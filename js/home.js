@@ -337,7 +337,7 @@ function renderHomeCommittee(committee, families = []) {
         return;
     }
 
-    const defaultPhoto = 'https://placehold.co/150x150/C9941A/FFFFFF?text=Photo';
+    const defaultPhoto = 'images/user.webp';
 
     // Helper to normalize photo path for comparing
     const getPhotoBasename = (url) => {
@@ -409,7 +409,7 @@ function renderHomeCommittee(committee, families = []) {
                     <div class="avatar">
                         <img src="${photoUrl}" alt="${name}" width="300" height="300" loading="lazy" decoding="async" 
         style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;"
-        onerror="this.parentElement.innerHTML='👤'">
+        onerror="this.onerror=null; this.src='images/user.webp';">
                     </div>
                     <div class="member-name">${name}</div>
                     ${designation ? `<div class="member-role">${designation}</div>` : ''}
