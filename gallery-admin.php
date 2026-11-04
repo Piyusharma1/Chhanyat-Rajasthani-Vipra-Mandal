@@ -794,7 +794,7 @@
                 <div class="drop-zone" id="drop-zone">
                     <i class="fas fa-cloud-upload-alt"></i>
                     <p>📸 Photos यहाँ Drag & Drop करें या Click करें</p>
-                    <small>JPEG, PNG, WEBP, GIF — अधिकतम 5MB प्रति फोटो</small>
+                    <small>JPEG, PNG, WEBP, GIF — अधिकतम 15MB प्रति फोटो</small>
                     <input type="file" id="file-input" multiple accept="image/*" hidden>
                 </div>
 

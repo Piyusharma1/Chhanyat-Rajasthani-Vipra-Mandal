@@ -49,7 +49,7 @@ function showToast(message, type = 'success') {
         document.body.appendChild(newContainer);
     }
     const toastContainer = document.getElementById('toast-container');
-    
+
     const toast = document.createElement('div');
     toast.className = `toast ${type}`;
     const icon = type === 'success' ? 'fa-check' : type === 'info' ? 'fa-info-circle' : 'fa-times';
@@ -65,7 +65,7 @@ function showToast(message, type = 'success') {
         min-width: 280px; max-width: 400px;
     `;
     toastContainer.appendChild(toast);
-    
+
     setTimeout(() => toast.style.transform = 'translateX(0)', 10);
     setTimeout(() => {
         toast.style.transform = 'translateX(120%)';
@@ -80,11 +80,11 @@ async function uploadSingleImage(fileInputId) {
     const fileInput = document.getElementById(fileInputId);
     if (!fileInput || !fileInput.files[0]) return null;
     const file = fileInput.files[0];
-    if (file.size > 5 * 1024 * 1024) {
-        showToast('फ़ाइल 5MB से बड़ी है।', 'error');
+    if (file.size > 15 * 1024 * 1024) {
+        showToast('फ़ाइल 15MB से बड़ी है।', 'error');
         return null;
     }
-    
+
     const formData = new FormData();
     formData.append('image', file);
     try {
@@ -716,7 +716,7 @@ function closeAlbumDetail() {
 // =========================================
 // 🗑️ DELETE IMAGE (Global)
 // =========================================
-window.deleteImage = async function(imageSrc, albumFolder) {
+window.deleteImage = async function (imageSrc, albumFolder) {
     if (!confirm('⚠️ क्या आप यह photo हटाना चाहते हैं?')) return;
 
     try {
@@ -765,7 +765,7 @@ window.deleteImage = async function(imageSrc, albumFolder) {
 // =========================================
 // 🗑️ DELETE ALBUM (Global)
 // =========================================
-window.deleteAlbum = async function(albumFolder, albumTitle = '') {
+window.deleteAlbum = async function (albumFolder, albumTitle = '') {
     if (!confirm(`⚠️ क्या आप "${albumTitle}" Album और इसकी सभी Photos हटाना चाहते हैं?`)) return;
 
     try {
@@ -913,13 +913,13 @@ function initGalleryPage() {
     loadAlbumsList();
     setupAlbumDetailNavigation();
     setupLightbox();
-    
+
     // Initialize Hindi transliteration for album name
     if (typeof window.initHindiTransliteration === 'function') {
         const toggleContainer = document.getElementById('gallery-translit-toggle');
         window.initHindiTransliteration('[data-hindi-input="true"]', toggleContainer);
     }
-    
+
     console.log('📸 Gallery upload page initialized');
 }
 
