@@ -35,6 +35,7 @@ try {
                         'url' => $rawUrl,
                         'head' => $f['head'] ?? '',
                         'branch' => $f['branch'] ?? '',
+                        'family_id' => $f['id'] ?? '',
                         'filename' => $filename,
                         'source' => 'db'
                     ];

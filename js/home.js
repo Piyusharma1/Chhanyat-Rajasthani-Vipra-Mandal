@@ -328,7 +328,7 @@ function renderAnnouncements(announcements, append = false) {
     }
 }
 
-function renderHomeCommittee(committee) {
+function renderHomeCommittee(committee, families = []) {
     const grid = document.getElementById('home-committee-grid');
     if (!grid) return;
 
@@ -339,14 +339,73 @@ function renderHomeCommittee(committee) {
 
     const defaultPhoto = 'https://placehold.co/150x150/C9941A/FFFFFF?text=Photo';
 
+    // Helper to normalize photo path for comparing
+    const getPhotoBasename = (url) => {
+        if (!url) return '';
+        const clean = String(url).split('?')[0].split('#')[0];
+        const parts = clean.split('/');
+        return decodeURIComponent(parts[parts.length - 1] || '').trim().toLowerCase();
+    };
+
+    // Pre-index families by id and photo filename for quick lookup
+    const familyById = new Map();
+    const familyByPhoto = new Map();
+    const familyByName = new Map();
+
+    if (Array.isArray(families)) {
+        families.forEach(f => {
+            if (f.id) familyById.set(String(f.id), f);
+            if (f.photo) {
+                const base = getPhotoBasename(f.photo);
+                if (base && !familyByPhoto.has(base)) {
+                    familyByPhoto.set(base, f);
+                }
+            }
+            if (f.head) {
+                const normHead = String(f.head).trim().toLowerCase();
+                if (normHead && !familyByName.has(normHead)) {
+                    familyByName.set(normHead, f);
+                }
+            }
+        });
+    }
+
     grid.innerHTML = committee.map(m => {
         const name = m.name || 'अज्ञात';
         const designation = m.designation || '';
         const photoUrl = m.photo || defaultPhoto;
         const branch = m.branch || '';
 
+        // Resolve matching family ID:
+        // 1. Direct explicit family_id from committee record
+        // 2. Matching photo filename if photo was picked from uploads/families/
+        // 3. Fallback: match by head name
+        let matchedFamilyId = m.family_id ? String(m.family_id) : null;
+        if (!matchedFamilyId && m.photo) {
+            const base = getPhotoBasename(m.photo);
+            if (base && familyByPhoto.has(base)) {
+                matchedFamilyId = familyByPhoto.get(base).id;
+            }
+        }
+        if (!matchedFamilyId && m.name) {
+            const norm = String(m.name).trim().toLowerCase();
+            if (familyByName.has(norm)) {
+                matchedFamilyId = familyByName.get(norm).id;
+            }
+        }
+
+        const cardClickAttr = matchedFamilyId
+            ? `onclick="window.location.href='family-details.php?id=${encodeURIComponent(matchedFamilyId)}'" role="link" tabindex="0" title="परिवार विवरण देखें" style="cursor: pointer;" class="committee-card committee-card-clickable"`
+            : `class="committee-card"`;
+
+        const viewFamilyBadge = matchedFamilyId
+            ? `<div class="committee-family-link" style="margin-top: 8px; font-size: 0.76rem; color: var(--maroon); font-weight: 600; display: inline-flex; align-items: center; gap: 4px; background: rgba(201, 148, 26, 0.15); padding: 3px 8px; border-radius: 10px;">
+                    <i class="fas fa-home" style="color: var(--saffron);"></i> परिवार विवरण देखें →
+               </div>`
+            : '';
+
         return `
-                <div class="committee-card">
+                <div ${cardClickAttr}>
                     <div class="avatar">
                         <img src="${photoUrl}" alt="${name}" width="300" height="300" loading="lazy" decoding="async" 
         style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;"
@@ -355,9 +414,11 @@ function renderHomeCommittee(committee) {
                     <div class="member-name">${name}</div>
                     ${designation ? `<div class="member-role">${designation}</div>` : ''}
                     ${branch ? `<div class="member-branch">${branch}</div>` : ''}
+                    ${viewFamilyBadge}
                     ${m.mobile ? `<a href="https://wa.me/91${m.mobile.replace(/\D/g, '')}?text=${encodeURIComponent('नमस्कार, मैं छःन्यात राजस्थानी विप्र मंडल वेबसाइट के माध्यम से संपर्क कर रहा हूँ।')}"
     target="_blank"
     class="whatsapp-btn"
+    onclick="event.stopPropagation();"
     rel="noopener">        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-whatsapp" viewBox="0 0 16 16">
     <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/>
     </svg> Chat on whatsapp</a>` : ''}
@@ -571,7 +632,7 @@ async function loadBackgroundData(branchCount) {
         const memberCount = familyData.reduce((acc, f) => acc + (f.members?.length || 0), 0);
 
         updateStatistics(branchCount, familyCount, memberCount);
-        renderHomeCommittee(committee);
+        renderHomeCommittee(committee, familyData);
     } catch (error) {
         console.error('❌ Background load error:', error);
     }

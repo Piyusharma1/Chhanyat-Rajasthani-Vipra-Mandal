@@ -526,6 +526,7 @@
                         </button>
                     </div>
                     <input type="hidden" id="central-comm-photo" value="">
+                    <input type="hidden" id="central-comm-family-id" value="">
                 </div>
 
                 <button type="submit" id="central-committee-submit" class="btn btn-success full-width">
@@ -580,6 +581,7 @@
                         </button>
                     </div>
                     <input type="hidden" id="comm-photo" value="">
+                    <input type="hidden" id="comm-family-id" value="">
                 </div>
 
                 <button type="submit" class="btn btn-primary full-width">
@@ -603,6 +605,7 @@
                     <input type="hidden" id="edit-comm-index" value="">
                     <input type="hidden" id="edit-comm-id" value="">
                     <input type="hidden" id="edit-comm-orig-photo" value="">
+                    <input type="hidden" id="edit-comm-orig-family-id" value="">
 
                     <div>
                         <label style="font-weight: 600; font-size: 0.88rem; color: var(--text-mid); display: block; margin-bottom: 5px;">
@@ -650,6 +653,7 @@
                             </button>
                         </div>
                         <input type="hidden" id="edit-comm-photo" value="">
+                        <input type="hidden" id="edit-comm-family-id" value="">
                     </div>
 
                     <div style="display: flex; gap: 10px; margin-top: 10px;">

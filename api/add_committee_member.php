@@ -20,9 +20,14 @@ try {
     $orderStmt = $pdo->query("SELECT COALESCE(MAX(display_order), 0) + 1 AS next_order FROM committee");
     $nextOrder = (int)$orderStmt->fetchColumn();
 
+    // Ensure family_id column exists
+    try {
+        $pdo->exec("ALTER TABLE committee ADD COLUMN family_id VARCHAR(100) DEFAULT NULL");
+    } catch (Exception $e) { }
+
     $stmt = $pdo->prepare("
-        INSERT INTO committee (name, designation, photo, mobile, display_order) 
-        VALUES (:name, :designation, :photo, :mobile, :display_order)
+        INSERT INTO committee (name, designation, photo, mobile, display_order, family_id) 
+        VALUES (:name, :designation, :photo, :mobile, :display_order, :family_id)
     ");
     
     $stmt->execute([
@@ -30,7 +35,8 @@ try {
         ':designation' => $data['designation'],
         ':photo' => $data['photo'] ?? '',
         ':mobile' => $data['mobile'] ?? '',
-        ':display_order' => $nextOrder
+        ':display_order' => $nextOrder,
+        ':family_id' => !empty($data['family_id']) ? $data['family_id'] : null
     ]);
     
     echo json_encode(['success' => true, 'id' => $pdo->lastInsertId()]);

@@ -341,14 +341,46 @@ function renderCommittee(committee) {
         return;
     }
 
+    const getPhotoBasename = (url) => {
+        if (!url) return '';
+        const clean = String(url).split('?')[0].split('#')[0];
+        const parts = clean.split('/');
+        return decodeURIComponent(parts[parts.length - 1] || '').trim().toLowerCase();
+    };
+
     grid.innerHTML = committee.map((m, index) => {
         const name = escapeHTML(m.name || 'अज्ञात');
         const designation = escapeHTML(m.designation || '');
         const photoUrl = m.photo || IMAGE_CONFIG.DEFAULT_PHOTO;
         const mobile = m.mobile ? m.mobile.replace(/\D/g, '') : '';
 
+        // Resolve matching family ID
+        let matchedFamilyId = m.family_id ? String(m.family_id) : null;
+        if (!matchedFamilyId && m.photo && Array.isArray(branchFamilies)) {
+            const base = getPhotoBasename(m.photo);
+            if (base) {
+                const match = branchFamilies.find(f => f.photo && getPhotoBasename(f.photo) === base);
+                if (match) matchedFamilyId = match.id;
+            }
+        }
+        if (!matchedFamilyId && m.name && Array.isArray(branchFamilies)) {
+            const norm = String(m.name).trim().toLowerCase();
+            const match = branchFamilies.find(f => f.head && String(f.head).trim().toLowerCase() === norm);
+            if (match) matchedFamilyId = match.id;
+        }
+
+        const cardClickAttr = matchedFamilyId
+            ? `onclick="window.location.href='family-details.php?id=${encodeURIComponent(matchedFamilyId)}'" role="link" tabindex="0" title="परिवार विवरण देखें" style="cursor: pointer;" class="committee-card committee-card-clickable"`
+            : `class="committee-card"`;
+
+        const viewFamilyBadge = matchedFamilyId
+            ? `<div class="committee-family-link" style="margin-top: 8px; font-size: 0.76rem; color: var(--maroon, #7B1A1A); font-weight: 600; display: inline-flex; align-items: center; gap: 4px; background: rgba(201, 148, 26, 0.15); padding: 3px 8px; border-radius: 10px;">
+                    <i class="fas fa-home" style="color: var(--saffron, #FF6B00);"></i> परिवार विवरण देखें →
+               </div>`
+            : '';
+
         return `
-        <div class="committee-card">
+        <div ${cardClickAttr}>
             <img class="committee-photo"
                  src="${escapeHTML(photoUrl)}"
                  alt="${name}"
@@ -360,11 +392,13 @@ function renderCommittee(committee) {
             
             <h3 class="member-name">${name}</h3>
             ${designation ? `<p class="designation">${designation}</p>` : ''}
+            ${viewFamilyBadge}
             ${mobile ? `${mobile ? `
 <a href="https://wa.me/${CONFIG.WHATSAPP_COUNTRY_CODE}${mobile}?text=${encodeURIComponent('नमस्कार, मैं छःन्यात राजस्थानी विप्र मंडल वेबसाइट के माध्यम से संपर्क कर रहा हूँ।')}"
    target="_blank"
    rel="noopener noreferrer"
-   class="whatsapp-btn">
+   class="whatsapp-btn"
+   onclick="event.stopPropagation();">
 
    <svg xmlns="http://www.w3.org/2000/svg"
         width="16"

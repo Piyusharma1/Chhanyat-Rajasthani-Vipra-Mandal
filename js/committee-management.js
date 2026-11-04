@@ -108,12 +108,14 @@ async function handleAddMember(e) {
             photoUrl = await uploadImageToHostinger('comm-photo-file', memberName);
         }
         if (!photoUrl) photoUrl = document.getElementById('comm-photo')?.value.trim() || null;
+        const familyId = document.getElementById('comm-family-id')?.value.trim() || null;
         
         const newMember = {
             name: document.getElementById('comm-name').value.trim(),
             designation: document.getElementById('comm-designation').value.trim(),
             mobile: document.getElementById('comm-mobile').value.trim(),
-            photo: photoUrl
+            photo: photoUrl,
+            family_id: familyId
         };
         Object.keys(newMember).forEach(key => { if (!newMember[key]) delete newMember[key]; });
         
@@ -286,9 +288,10 @@ function renderFamilyPhotosGrid(searchTerm = '', branchFilter = '') {
         const isSelected = currentSelectedUrl && currentSelectedUrl === photo.url;
         const displayName = photo.head || photo.filename || 'परिवार सदस्य';
         const displayBranch = photo.branch ? `<span class="family-photo-branch">${escapeHtml(photo.branch)}</span>` : '';
+        const familyId = photo.family_id || '';
 
         return `
-            <div class="family-photo-card ${isSelected ? 'selected' : ''}" onclick="selectFamilyPhoto('${escapeHtml(photo.url)}', '${escapeHtml(displayName)}')">
+            <div class="family-photo-card ${isSelected ? 'selected' : ''}" onclick="selectFamilyPhoto('${escapeHtml(photo.url)}', '${escapeHtml(displayName)}', '${escapeHtml(familyId)}')">
                 <img src="${escapeHtml(photo.url)}" alt="${escapeHtml(displayName)}" onerror="this.src='https://placehold.co/80x80/FF6B00/ffffff?text=P'">
                 <div class="family-photo-name" title="${escapeHtml(displayName)}">${escapeHtml(displayName)}</div>
                 ${displayBranch}
@@ -297,7 +300,7 @@ function renderFamilyPhotosGrid(searchTerm = '', branchFilter = '') {
     }).join('');
 }
 
-function selectFamilyPhoto(url, headName) {
+function selectFamilyPhoto(url, headName, familyId = '') {
     let prefix = 'comm';
     if (currentPickerTarget === 'central') {
         prefix = 'central-comm';
@@ -306,6 +309,7 @@ function selectFamilyPhoto(url, headName) {
     }
 
     const hiddenInput = document.getElementById(`${prefix}-photo`);
+    const hiddenFamilyId = document.getElementById(`${prefix}-family-id`);
     const preview = document.getElementById(`${prefix}-photo-preview`);
     const badge = document.getElementById(`${prefix}-photo-selected`);
     const label = document.getElementById(`${prefix}-photo-label`);
@@ -314,9 +318,10 @@ function selectFamilyPhoto(url, headName) {
     const nameInput = document.getElementById(`${prefix}-name`);
 
     if (hiddenInput) hiddenInput.value = url;
+    if (hiddenFamilyId) hiddenFamilyId.value = familyId || '';
     if (preview) { preview.src = url; preview.style.display = 'block'; }
     if (label) label.textContent = headName || 'परिवार फोटो';
-    if (source) source.textContent = url;
+    if (source) source.textContent = familyId ? `${headName} (${familyId})` : url;
     if (badge) badge.style.display = 'flex';
     if (fileInput) fileInput.value = '';
 
@@ -338,11 +343,13 @@ window.clearSelectedPhoto = function(target) {
     }
 
     const hiddenInput = document.getElementById(`${prefix}-photo`);
+    const hiddenFamilyId = document.getElementById(`${prefix}-family-id`);
     const preview = document.getElementById(`${prefix}-photo-preview`);
     const badge = document.getElementById(`${prefix}-photo-selected`);
     const fileInput = document.getElementById(`${prefix}-photo-file`);
 
     if (hiddenInput) hiddenInput.value = '';
+    if (hiddenFamilyId) hiddenFamilyId.value = '';
     if (preview) { preview.src = ''; preview.style.display = 'none'; }
     if (badge) badge.style.display = 'none';
     if (fileInput) fileInput.value = '';
@@ -522,12 +529,14 @@ async function handleAddCentralMember(e) {
             photoUrl = await uploadImageToHostinger('central-comm-photo-file', memberName); 
         }
         if (!photoUrl) photoUrl = document.getElementById('central-comm-photo')?.value.trim() || null;
+        const familyId = document.getElementById('central-comm-family-id')?.value.trim() || null;
         
         const newMember = {
             name: document.getElementById('central-comm-name').value.trim(),
             designation: document.getElementById('central-comm-designation').value.trim(),
             mobile: document.getElementById('central-comm-mobile')?.value.trim() || null,
-            photo: photoUrl
+            photo: photoUrl,
+            family_id: familyId
         };
         Object.keys(newMember).forEach(key => { if (!newMember[key]) delete newMember[key]; });
         
@@ -682,15 +691,20 @@ window.openEditCommitteeMember = function(type, idOrIndex) {
     mobileInput.value = member.mobile || '';
     
     const existingPhoto = member.photo || '';
+    const existingFamilyId = member.family_id || '';
     photoHidden.value = existingPhoto;
     origPhotoHidden.value = existingPhoto;
+    const familyIdHidden = document.getElementById('edit-comm-family-id');
+    const origFamilyIdHidden = document.getElementById('edit-comm-orig-family-id');
+    if (familyIdHidden) familyIdHidden.value = existingFamilyId;
+    if (origFamilyIdHidden) origFamilyIdHidden.value = existingFamilyId;
 
     if (existingPhoto) {
         preview.src = existingPhoto;
         preview.style.display = 'block';
         if (badge) badge.style.display = 'flex';
         if (label) label.textContent = 'वर्तमान फोटो';
-        if (source) source.textContent = existingPhoto;
+        if (source) source.textContent = existingFamilyId ? `${existingPhoto} (${existingFamilyId})` : existingPhoto;
     } else {
         preview.src = '';
         preview.style.display = 'none';
@@ -727,6 +741,7 @@ async function handleSaveEditMember(e) {
         const mobile = document.getElementById('edit-comm-mobile').value.trim();
         const origPhoto = document.getElementById('edit-comm-orig-photo').value.trim();
         let photoUrl = document.getElementById('edit-comm-photo').value.trim();
+        let familyId = document.getElementById('edit-comm-family-id')?.value.trim() || null;
 
         const fileInput = document.getElementById('edit-comm-photo-file');
         if (fileInput && fileInput.files[0]) {
@@ -734,6 +749,7 @@ async function handleSaveEditMember(e) {
             const uploadedUrl = await uploadImageToHostinger('edit-comm-photo-file', name);
             if (uploadedUrl) {
                 photoUrl = uploadedUrl;
+                familyId = null; // New uploaded photo replaces previous family association
             }
         }
 
@@ -751,7 +767,8 @@ async function handleSaveEditMember(e) {
                 name: name,
                 designation: designation,
                 mobile: mobile,
-                photo: photoUrl || null
+                photo: photoUrl || null,
+                family_id: familyId
             };
             Object.keys(updatedMember).forEach(k => {
                 if (updatedMember[k] === null || updatedMember[k] === '') {
@@ -794,6 +811,7 @@ async function handleSaveEditMember(e) {
                     designation: designation,
                     mobile: mobile,
                     photo: photoUrl,
+                    family_id: familyId,
                     deletePhoto: deletePhoto
                 })
             });

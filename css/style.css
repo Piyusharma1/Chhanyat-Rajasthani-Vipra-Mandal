@@ -1291,6 +1291,18 @@ body.dark-mode .branch-stats {
     box-shadow: 0 10px 25px rgba(123, 26, 26, 0.12);
 }
 
+.committee-card.committee-card-clickable {
+    cursor: pointer;
+}
+.committee-card.committee-card-clickable:hover {
+    border-color: var(--saffron, #FF6B00);
+    box-shadow: 0 10px 28px rgba(255, 107, 0, 0.18);
+}
+.committee-card.committee-card-clickable:hover .committee-family-link {
+    background: var(--maroon, #7B1A1A) !important;
+    color: var(--gold-light, #F0C060) !important;
+}
+
 .committee-card:hover::before {
     opacity: 1;
 }

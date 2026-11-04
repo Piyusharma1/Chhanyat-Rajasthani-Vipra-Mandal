@@ -4,9 +4,14 @@ header('Content-Type: application/json; charset=utf-8');
 
 $table = 'committee';
 try {
-    // Self-healing migration to ensure display_order column exists
+    // Self-healing migration to ensure display_order and family_id columns exist
     try {
         $pdo->exec("ALTER TABLE committee ADD COLUMN display_order INT DEFAULT 0");
+    } catch (Exception $e) {
+        // Column already exists or ignored
+    }
+    try {
+        $pdo->exec("ALTER TABLE committee ADD COLUMN family_id VARCHAR(100) DEFAULT NULL");
     } catch (Exception $e) {
         // Column already exists or ignored
     }

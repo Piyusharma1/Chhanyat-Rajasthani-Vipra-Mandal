@@ -35,12 +35,18 @@ try {
         }
     }
 
+    // Ensure family_id column exists
+    try {
+        $pdo->exec("ALTER TABLE committee ADD COLUMN family_id VARCHAR(100) DEFAULT NULL");
+    } catch (Exception $e) { }
+
     $stmt = $pdo->prepare("
         UPDATE committee 
         SET name = :name, 
             designation = :designation, 
             photo = :photo, 
-            mobile = :mobile 
+            mobile = :mobile,
+            family_id = :family_id
         WHERE id = :id
     ");
     
@@ -49,6 +55,7 @@ try {
         ':designation' => $data['designation'],
         ':photo' => $data['photo'] ?? '',
         ':mobile' => $data['mobile'] ?? '',
+        ':family_id' => !empty($data['family_id']) ? $data['family_id'] : null,
         ':id' => $data['id']
     ]);
     
