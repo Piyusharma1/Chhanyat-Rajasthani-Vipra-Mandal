@@ -59,9 +59,7 @@
     </button>
 
     <div data-include="components/footer.php"></div>
-
     <script src="js/include.js?v=<?= filemtime($_SERVER['DOCUMENT_ROOT'].'/js/include.js')?>"></script>
-    <script type="module" src="js/main.js?v=<?= filemtime($_SERVER['DOCUMENT_ROOT'].'/js/main.js')?>"></script>
 
     <script type="module">
         let families = [];

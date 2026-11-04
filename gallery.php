@@ -88,9 +88,7 @@
     </div>
 
     <div data-include="components/footer.php"></div>
-
     <script src="js/include.js?v=<?= @filemtime(__DIR__.'/js/include.js') ?: time()?>"></script>
-    <script src="js/main.js?v=<?= @filemtime(__DIR__.'/js/main.js') ?: time()?>"></script>
     
 <script>
 // ============================================

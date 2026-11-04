@@ -138,6 +138,5 @@
 
     <!-- Scripts -->
     <script src="js/include.js?v=<?= filemtime($_SERVER['DOCUMENT_ROOT'].'/js/include.js')?>"></script>
-    <script src="js/main.js?v=<?= filemtime($_SERVER['DOCUMENT_ROOT'].'/js/main.js')?>"></script>
 </body>
 </html>

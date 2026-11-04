@@ -514,6 +514,6 @@
 
     <script src="js/include.js?v=<?= filemtime($_SERVER['DOCUMENT_ROOT'].'/js/include.js')?>"></script>
     <script src="js/hindi-transliteration.js?v=<?= @filemtime(__DIR__.'/js/hindi-transliteration.js') ?: time()?>"></script>
-    <script type="module" src="js/family-add.js?v=<?= filemtime($_SERVER['DOCUMENT_ROOT'].'/js/main.js')?>"></script>
+    <script type="module" src="js/family-add.js?v=<?= @filemtime(__DIR__.'/js/family-add.js') ?: time()?>"></script>
 </body>
 </html>

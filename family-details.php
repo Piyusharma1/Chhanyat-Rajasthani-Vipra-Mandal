@@ -430,9 +430,8 @@
 
     <!-- ⚠️ NOTE: If your file is named "Home.js" (capital H), change import in family-details.js
          to "./Home.js" OR rename the file to "home.js" to avoid case-sensitivity issues on Linux servers -->
-<!-- ✅ नया -->
-<script src="js/include.js?v=<?=filemtime($_SERVER['DOCUMENT_ROOT'].'/js/include.js')?>" defer></script>
-<script type="module" src="js/family-details.js?v=<?=filemtime($_SERVER['DOCUMENT_ROOT'].'/js/family-detail.js')?>"></script>
+<script src="js/include.js?v=<?= @filemtime(__DIR__ . '/js/include.js') ?: time()?>" defer></script>
+<script type="module" src="js/family-details.js?v=<?= @filemtime(__DIR__ . '/js/family-details.js') ?: time()?>"></script>
 
     <!-- UI enhancement: upgrade members-tbody rows with avatar initials + gender badges -->
 

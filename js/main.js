@@ -1,50 +1,6 @@
-// 🔥 Firebase Imports
-import { 
-    collection, 
-    getDocs, 
-    query, 
-    limit, 
-    orderBy,
-    startAfter,
-    where,
-    getCountFromServer
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-import { db } from "./firebase-config.js";
-
 // ============================================
-// ✅ LOCAL CACHE (localStorage with TTL)
+// ✅ PERFORMANCE MONITORING & UTILITIES
 // ============================================
-
-const CACHE_VERSION = 'v1'; // bump this to invalidate all caches after a data schema change
-const CACHE_TTL_MS = 15 * 60 * 1000; // 15 minutes
-
-function cacheKey(name) {
-    return `fsCache_${CACHE_VERSION}_${name}`;
-}
-
-function saveCache(name, data) {
-    try {
-        localStorage.setItem(cacheKey(name), JSON.stringify({
-            ts: Date.now(),
-            data
-        }));
-    } catch (e) {
-        // localStorage may be full or unavailable — silently ignore
-    }
-}
-
-function loadCache(name) {
-    try {
-        const raw = localStorage.getItem(cacheKey(name));
-        if (!raw) return null;
-        const { ts, data } = JSON.parse(raw);
-        if (Date.now() - ts > CACHE_TTL_MS) return null; // expired
-        return data;
-    } catch (e) {
-        return null;
-    }
-}
 
 // ============================================
 // ✅ PERFORMANCE MONITORING
