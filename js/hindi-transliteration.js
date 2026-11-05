@@ -183,9 +183,12 @@
         return box;
     }
 
+    let activeWordInfo = null;
+
     function populateSuggestions(box, items, wordInfo, el) {
         suggestions = items;
         selectedIdx = 0;
+        activeWordInfo = wordInfo;
         box.innerHTML = '';
 
         items.forEach((item, idx) => {
@@ -230,14 +233,19 @@
             li.appendChild(badge);
             li.appendChild(text);
 
+            const handleSelection = (ev) => {
+                ev.preventDefault();
+                ev.stopPropagation();
+                applySuggestion(el, wordInfo, item);
+            };
+
             li.addEventListener('mouseenter', () => {
                 highlightSuggestion(box, idx);
             });
 
-            li.addEventListener('mousedown', (ev) => {
-                ev.preventDefault(); // prevent blur
-                applySuggestion(el, wordInfo, item);
-            });
+            li.addEventListener('pointerdown', handleSelection);
+            li.addEventListener('touchstart', handleSelection, { passive: false });
+            li.addEventListener('mousedown', handleSelection);
 
             box.appendChild(li);
         });
@@ -327,8 +335,8 @@
          * Still re-reads current word range to avoid stale position bugs.
          */
         function confirmWithChoice(e, chosenText) {
-            e.preventDefault();
-            const currentWord = getLastWordBeforeCursor(input);
+            if (e && typeof e.preventDefault === 'function') e.preventDefault();
+            const currentWord = getLastWordBeforeCursor(input) || activeWordInfo;
             if (currentWord && /^[a-zA-Z][a-zA-Z0-9]*$/.test(currentWord.word)) {
                 replaceTextRange(input, currentWord.start, currentWord.end, chosenText + ' ');
             }
@@ -403,42 +411,53 @@
                 }
 
                 // Enter / Tab → confirm highlighted suggestion
-                if (e.key === 'Enter' || e.key === 'Tab') {
-                    if (suggestions.length > 0 && selectedIdx >= 0) {
-                        confirmWithChoice(e, suggestions[selectedIdx]);
+                const isEnter = e.key === 'Enter' || e.keyCode === 13 || e.which === 13;
+                const isTab = e.key === 'Tab' || e.keyCode === 9 || e.which === 9;
+                if (isEnter || isTab) {
+                    if (suggestions.length > 0) {
+                        const pickIdx = selectedIdx >= 0 && selectedIdx < suggestions.length ? selectedIdx : 0;
+                        confirmWithChoice(e, suggestions[pickIdx]);
                         return;
                     }
                 }
 
                 // Escape → dismiss dropdown, keep English text
-                if (e.key === 'Escape') {
+                if (e.key === 'Escape' || e.keyCode === 27) {
                     e.preventDefault();
                     removeSuggestionBox();
                     return;
                 }
 
                 // Space → fetch the FULL current word fresh and convert it
-                if (e.key === ' ' || e.key === 'Spacebar') {
+                const isSpace = e.key === ' ' || e.key === 'Spacebar' || e.keyCode === 32 || e.which === 32;
+                if (isSpace) {
                     confirmTransliteration(e);
                     return;
                 }
             }
 
-            // ── No suggestion box open, but Space pressed on English word ──
-            if ((e.key === ' ' || e.key === 'Spacebar') && !activeSuggestionBox) {
+            // ── No suggestion box open, but Space/Enter pressed on English word ──
+            const isSpaceKey = e.key === ' ' || e.key === 'Spacebar' || e.keyCode === 32 || e.which === 32;
+            if (isSpaceKey && !activeSuggestionBox) {
                 const wordInfo = getLastWordBeforeCursor(input);
                 if (wordInfo && /^[a-zA-Z][a-zA-Z0-9]*$/.test(wordInfo.word)) {
                     confirmTransliteration(e);
                     return;
                 }
             }
-
-            // ── Enter in <textarea> without suggestion box → normal newline ──
-            // (no interference needed, just let default happen)
         });
 
-        // ── Close suggestions on blur (delay lets click events fire first) ──
+        // ── Close suggestions on blur; if suggestion was visible, auto-apply top choice! ──
         input.addEventListener('blur', () => {
+            // If suggestion dropdown is open when user tabs/leaves/clicks next field on mobile
+            if (activeSuggestionBox && activeSuggestionInput === input && suggestions.length > 0) {
+                const pickIdx = selectedIdx >= 0 && selectedIdx < suggestions.length ? selectedIdx : 0;
+                const topChoice = suggestions[pickIdx];
+                const currentWord = getLastWordBeforeCursor(input) || activeWordInfo;
+                if (currentWord && /^[a-zA-Z][a-zA-Z0-9]*$/.test(currentWord.word)) {
+                    replaceTextRange(input, currentWord.start, currentWord.end, topChoice + ' ');
+                }
+            }
             setTimeout(() => {
                 if (activeSuggestionInput === input) {
                     removeSuggestionBox();
