@@ -5,13 +5,18 @@
 let allAds = [];
 let deleteTargetId = null;
 
-// 🔐 1. Auth Check
+// 🔐 1. Auth Check (Super Admin Only)
 async function checkPageAuth() {
     try {
         const response = await fetch('api/check_auth.php?_t=' + Date.now(), { cache: 'no-store' });
         const result = await response.json();
         if (!result.isAdmin) {
             window.location.href = 'admin-login.php';
+            return false;
+        }
+        if (!result.isSuperAdmin) {
+            alert('⚠️ केवल सुपर एडमिन ही विज्ञापन प्रबंधित कर सकते हैं।');
+            window.location.href = 'admin-dashboard.php';
             return false;
         }
         return true;

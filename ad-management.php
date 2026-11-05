@@ -1,5 +1,16 @@
 <?php
 session_start();
+if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
+    header('Location: admin-login.php');
+    exit;
+}
+
+$adminBranch = $_SESSION['admin_branch'] ?? 'ALL';
+$isSuperAdmin = ($adminBranch === 'ALL' || empty($adminBranch));
+if (!$isSuperAdmin) {
+    header('Location: admin-dashboard.php');
+    exit;
+}
 ?>
 <!DOCTYPE html>
 <html lang="hi">

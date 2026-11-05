@@ -27,6 +27,9 @@ async function checkAuthState() {
 
                 const calendarCard = document.querySelector('.admin-card[onclick*="calendar-management.php"]');
                 if (calendarCard) calendarCard.style.display = 'none';
+
+                const adCard = document.querySelector('.admin-card[onclick*="ad-management.php"]');
+                if (adCard) adCard.style.display = 'none';
             }
 
             if (typeof initDashboardModals === 'function') initDashboardModals();
