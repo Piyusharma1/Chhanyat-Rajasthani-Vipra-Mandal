@@ -309,16 +309,14 @@
 
         @media (max-width: 480px) {
             .top-nav-bar {
-                flex-direction: column;
-                align-items: stretch;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
                 gap: 8px;
             }
-            .btn-secondary {
-                justify-content: center;
-                width: 100%;
-            }
             .system-badge {
-                justify-content: center;
+                font-size: 0.78rem;
+                text-align: right;
             }
             .edit-section {
                 padding: 0.9rem 0.65rem;
