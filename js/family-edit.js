@@ -139,6 +139,8 @@ function setupEnterKeyNavigation() {
             fields[index + 1].focus();
         }
     });
+}
+
 // Real-time restriction: mobile inputs only accept up to 10 digits
 document.addEventListener('input', function(e) {
     if (e.target && (
