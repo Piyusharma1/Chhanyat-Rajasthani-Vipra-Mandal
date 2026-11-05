@@ -143,7 +143,7 @@ $cssVersion = file_exists($cssPath) ? filemtime($cssPath) : time();
                 <div class="stats-grid" role="list">
                     <div class="stat-card" role="listitem">
                         <h3 id="total-families" aria-live="polite">—</h3>
-                        <p>कुल घर</p>
+                        <p>कुल परिवार</p>
                         <div class="stat-sublabel">Total Families</div>
                     </div>
                     <div class="stat-card" role="listitem">
