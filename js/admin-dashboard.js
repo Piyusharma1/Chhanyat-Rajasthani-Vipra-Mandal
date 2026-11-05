@@ -20,10 +20,13 @@ async function checkAuthState() {
             const branchText = result.isSuperAdmin ? ' (Super Admin)' : ` (शाखा: ${result.branch})`;
             if (uidDisplay) uidDisplay.textContent = (result.full_name || result.username || 'admin') + branchText;
             
-            // Hide "Add Admin" card if user is not Super Admin
-            const addAdminCard = document.querySelector('.admin-card[onclick*="add-admin.php"]');
-            if (addAdminCard && !result.isSuperAdmin) {
-                addAdminCard.style.display = 'none';
+            // Hide Super Admin only cards if user is not Super Admin
+            if (!result.isSuperAdmin) {
+                const addAdminCard = document.querySelector('.admin-card[onclick*="add-admin.php"]');
+                if (addAdminCard) addAdminCard.style.display = 'none';
+
+                const calendarCard = document.querySelector('.admin-card[onclick*="calendar-management.php"]');
+                if (calendarCard) calendarCard.style.display = 'none';
             }
 
             if (typeof initDashboardModals === 'function') initDashboardModals();

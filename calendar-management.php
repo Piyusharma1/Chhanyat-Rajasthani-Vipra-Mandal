@@ -5,6 +5,13 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
     exit;
 }
 
+$adminBranch = $_SESSION['admin_branch'] ?? 'ALL';
+$isSuperAdmin = ($adminBranch === 'ALL' || empty($adminBranch));
+if (!$isSuperAdmin) {
+    header('Location: admin-dashboard.php');
+    exit;
+}
+
 $calendarPdfPath = 'uploads/calendar/calendar.pdf';
 $hasPdf = file_exists(__DIR__ . '/' . $calendarPdfPath);
 $pdfSize = $hasPdf ? round(filesize(__DIR__ . '/' . $calendarPdfPath) / (1024 * 1024), 2) . ' MB' : 'अनुपलब्ध';

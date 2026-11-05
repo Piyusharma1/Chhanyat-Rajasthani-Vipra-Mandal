@@ -236,7 +236,20 @@
     // ================================================================
     // 🚀 INITIALIZATION & EVENT LISTENERS
     // ================================================================
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
+        // 🔐 Client-side Super Admin check
+        try {
+            const authRes = await fetch('api/check_auth.php?_t=' + Date.now(), { cache: 'no-store' });
+            const authData = await authRes.json();
+            if (!authData.isAdmin || !authData.isSuperAdmin) {
+                alert('⚠️ केवल सुपर एडमिन ही दिनदर्शिका प्रबंधित कर सकते हैं।');
+                window.location.href = 'admin-dashboard.php';
+                return;
+            }
+        } catch (e) {
+            console.error('Calendar auth check error:', e);
+        }
+
         // Replace modal listeners
         document.getElementById('btn-close-replace-modal')?.addEventListener('click', closeReplaceModal);
         document.getElementById('btn-cancel-replace-modal')?.addEventListener('click', closeReplaceModal);
