@@ -470,47 +470,27 @@
     function attachToggleBadge(container) {
         if (document.getElementById('hindi-translit-toggle-pill')) return;
 
+        const wrapper = document.createElement('div');
+        wrapper.className = 'hindi-translit-wrapper';
+
         const pill = document.createElement('div');
         pill.id = 'hindi-translit-toggle-pill';
         pill.setAttribute('role', 'switch');
         pill.setAttribute('tabindex', '0');
         pill.setAttribute('aria-checked', String(isHindiEnabled));
         pill.setAttribute('aria-label', 'Toggle Hindi transliteration');
-
-        pill.style.cssText = `
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: linear-gradient(135deg, var(--maroon, #7B1A1A), var(--maroon-deep, #550F0F));
-            color: var(--gold-light, #F0C060);
-            padding: 8px 18px;
-            border-radius: 25px;
-            font-size: 0.88rem;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: 0 4px 14px rgba(123, 26, 26, 0.15);
-            user-select: none;
-            transition: all 0.3s ease;
-            margin-bottom: 18px;
-            border: 1px solid var(--gold-light, #F0C060);
-        `;
+        pill.title = 'हिंदी टाइपिंग टॉगल करें (Ctrl+Shift+H)';
 
         function updateUI() {
             pill.setAttribute('aria-checked', String(isHindiEnabled));
+            pill.className = isHindiEnabled ? 'active' : 'inactive';
             pill.innerHTML = `
-                <i class="fas fa-keyboard" style="color: ${isHindiEnabled ? 'var(--gold-light, #F0C060)' : '#999'}; font-size: 1.05rem;"></i>
-                <span>अंग्रेजी → हिंदी टाइपिंग: <strong>${isHindiEnabled ? 'चालू (ON)' : 'बंद (OFF)'}</strong></span>
-                <span style="
-                    display: inline-block;
-                    width: 10px; height: 10px;
-                    border-radius: 50%;
-                    background: ${isHindiEnabled ? '#2e7d32' : '#c62828'};
-                    box-shadow: 0 0 6px ${isHindiEnabled ? '#4caf50' : '#e53935'};
-                    transition: all 0.3s;
-                "></span>
+                <i class="fas fa-language translit-icon"></i>
+                <span>हिंदी टाइपिंग: <strong>${isHindiEnabled ? 'चालू' : 'बंद'}</strong></span>
+                <span class="status-dot"></span>
             `;
             const hint = document.getElementById('hindi-translit-hint');
-            if (hint) hint.style.display = isHindiEnabled ? '' : 'none';
+            if (hint) hint.style.display = isHindiEnabled ? 'inline-flex' : 'none';
         }
 
         pill.addEventListener('click', () => {
@@ -529,27 +509,19 @@
 
         updateUI();
 
-        // Help text
+        // Compact micro-hint
         const hint = document.createElement('div');
         hint.id = 'hindi-translit-hint';
-        hint.style.cssText = `
-            font-size: 0.78rem;
-            color: var(--maroon, #7B1A1A);
-            opacity: 0.7;
-            margin-top: -12px;
-            margin-bottom: 14px;
-            padding-left: 4px;
-        `;
         hint.innerHTML = `
             <i class="fas fa-info-circle"></i>
-            अंग्रेजी में टाइप करते ही हिंदी सुझाव दिखेंगे → <strong>Space/Enter</strong> से चुनें, <strong>↑↓</strong> से बदलें, <strong>1-5</strong> नंबर से सीधे चुनें
-            &nbsp;|&nbsp;
-            <kbd style="padding:1px 5px;border:1px solid #ccc;border-radius:3px;font-size:0.75rem;">Ctrl+Shift+H</kbd> से टॉगल करें
+            <span>Space से बदलें <span class="hint-extra">| Ctrl+Shift+H</span></span>
         `;
 
+        wrapper.appendChild(pill);
+        wrapper.appendChild(hint);
+
         if (container) {
-            container.insertBefore(hint, container.firstChild);
-            container.insertBefore(pill, container.firstChild);
+            container.insertBefore(wrapper, container.firstChild);
         }
     }
 

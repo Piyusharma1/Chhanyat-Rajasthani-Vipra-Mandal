@@ -472,8 +472,8 @@
     <main class="page-container">
         <!-- Top Navigation -->
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
-            <a href="admin-dashboard.php" class="btn btn-secondary">
-                <i class="fas fa-arrow-left"></i> डैशबोर्ड पर वापस जाएं
+            <a href="admin-dashboard.php" class="btn-back-dashboard">
+                <i class="fas fa-arrow-left"></i> <span>डैशबोर्ड पर वापस जाएं</span>
             </a>
             <div style="font-size: 0.9rem; color: var(--maroon);">
                 <i class="fas fa-shield-alt"></i> कार्यकारिणी प्रबंधन प्रणाली

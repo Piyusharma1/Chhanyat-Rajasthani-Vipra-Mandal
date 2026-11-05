@@ -5364,5 +5364,147 @@ body.dark-mode .obj-content p {
 }
 
 /* ────────────────────────────────────────────────────────────────
-   32️⃣  END OF FILE
+   32️⃣  UNIFIED ADMIN DASHBOARD BACK BUTTON & TRANSLITERATION TOGGLE
+   ──────────────────────────────────────────────────────────────── */
+.btn-back-dashboard {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    background: rgba(123, 26, 26, 0.08) !important;
+    color: var(--maroon, #7B1A1A) !important;
+    border: 1.5px solid rgba(123, 26, 26, 0.22) !important;
+    padding: 8px 18px !important;
+    border-radius: 25px !important;
+    font-size: 0.88rem !important;
+    font-weight: 600 !important;
+    text-decoration: none !important;
+    transition: all 0.25s ease !important;
+    box-shadow: 0 2px 5px rgba(123, 26, 26, 0.06) !important;
+    cursor: pointer !important;
+    white-space: nowrap !important;
+    line-height: 1.4 !important;
+    width: auto !important;
+}
+
+.btn-back-dashboard:hover {
+    background: var(--maroon, #7B1A1A) !important;
+    color: #ffffff !important;
+    border-color: var(--maroon, #7B1A1A) !important;
+    transform: translateX(-3px);
+    box-shadow: 0 4px 12px rgba(123, 26, 26, 0.2) !important;
+}
+
+.btn-back-dashboard i {
+    font-size: 0.85rem !important;
+    transition: transform 0.25s ease !important;
+    color: inherit !important;
+}
+
+.btn-back-dashboard:hover i {
+    transform: translateX(-3px);
+}
+
+@media (max-width: 480px) {
+    .btn-back-dashboard {
+        padding: 6px 14px !important;
+        font-size: 0.82rem !important;
+        gap: 6px !important;
+    }
+}
+
+/* ⌨️ Compact Transliteration Toggle & Hint (Responsive) */
+.hindi-translit-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 14px;
+    margin-bottom: 12px;
+}
+
+#hindi-translit-toggle-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.25s ease;
+    border: 1px solid rgba(255, 107, 0, 0.4);
+    background: #FFF8F2;
+    color: var(--maroon, #7B1A1A);
+    box-shadow: 0 1px 4px rgba(123, 26, 26, 0.06);
+    line-height: 1.3;
+}
+
+#hindi-translit-toggle-pill:hover {
+    border-color: var(--saffron-deep, #D94F00);
+    box-shadow: 0 2px 8px rgba(255, 107, 0, 0.15);
+}
+
+#hindi-translit-toggle-pill.active {
+    background: linear-gradient(135deg, #FFF4E8, #FFE8D6);
+    border-color: var(--saffron, #FF6B00);
+    color: var(--maroon-deep, #550F0F);
+}
+
+#hindi-translit-toggle-pill.inactive {
+    background: #F5F5F5;
+    border-color: #D6D6D6;
+    color: #777777;
+    box-shadow: none;
+}
+
+#hindi-translit-toggle-pill .translit-icon {
+    font-size: 0.88rem;
+    color: var(--saffron, #FF6B00);
+}
+
+#hindi-translit-toggle-pill.inactive .translit-icon {
+    color: #999999;
+}
+
+#hindi-translit-toggle-pill .status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #2e7d32;
+    box-shadow: 0 0 5px #4caf50;
+    flex-shrink: 0;
+    transition: all 0.25s ease;
+}
+
+#hindi-translit-toggle-pill.inactive .status-dot {
+    background: #9e9e9e;
+    box-shadow: none;
+}
+
+#hindi-translit-hint {
+    font-size: 0.74rem;
+    color: var(--text-secondary, #666666);
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    opacity: 0.85;
+    margin: 0;
+}
+
+@media (max-width: 600px) {
+    #hindi-translit-toggle-pill {
+        padding: 4px 10px;
+        font-size: 0.74rem;
+        gap: 6px;
+    }
+    #hindi-translit-hint {
+        font-size: 0.68rem;
+    }
+    .hint-extra {
+        display: none;
+    }
+}
+
+/* ────────────────────────────────────────────────────────────────
+   33️⃣  END OF FILE
    ──────────────────────────────────────────────────────────────── */

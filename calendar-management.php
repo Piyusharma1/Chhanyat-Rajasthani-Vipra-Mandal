@@ -593,8 +593,8 @@ $months = [
         <!-- Top Navigation -->
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
             <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                <a href="admin-dashboard.php" class="btn btn-secondary" style="width: auto;">
-                    <i class="fas fa-arrow-left"></i> डैशबोर्ड पर वापस जाएं
+                <a href="admin-dashboard.php" class="btn-back-dashboard">
+                    <i class="fas fa-arrow-left"></i> <span>डैशबोर्ड पर वापस जाएं</span>
                 </a>
             </div>
             <div style="font-size: 0.9rem; color: var(--maroon);">

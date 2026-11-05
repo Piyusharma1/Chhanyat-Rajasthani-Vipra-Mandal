@@ -554,8 +554,8 @@
     <div id="main-content" style="display: none; padding-top: 25px;">
         <!-- Top Navigation -->
         <div class="top-nav-bar">
-            <a href="admin-dashboard.php" class="btn-secondary">
-                <i class="fas fa-arrow-left"></i> डैशबोर्ड पर वापस जाएं
+            <a href="admin-dashboard.php" class="btn-back-dashboard">
+                <i class="fas fa-arrow-left"></i> <span>डैशबोर्ड पर वापस जाएं</span>
             </a>
             <div class="system-badge">
                 <i class="fas fa-shield-alt"></i> परिवार डेटा प्रबंधन प्रणाली
