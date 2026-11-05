@@ -646,7 +646,7 @@
                         </div>
                         <div class="form-group">
                             <label>मोबाईल *</label>
-                            <input type="tel" id="edit-mobile" required pattern="[0-9]{10}">
+                            <input type="tel" id="edit-mobile" required pattern="[0-9]{10}" maxlength="10" minlength="10" inputmode="numeric" placeholder="10 अंकों का मोबाइल नंबर" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);">
                         </div>
                         <div class="form-group">
                             <label>ईमेल</label>
@@ -711,7 +711,7 @@
                         </div>
                         <div class="form-group">
                             <label>व्यवसाय मोबाइल</label>
-                            <input type="tel" id="edit-biz-mobile" pattern="[0-9]{10}">
+                            <input type="tel" id="edit-biz-mobile" pattern="[0-9]{10}" maxlength="10" minlength="10" inputmode="numeric" placeholder="10 अंकों का मोबाइल नंबर" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);">
                         </div>
                         <div class="form-group">
                             <label>व्यवसाय प्रकार</label>

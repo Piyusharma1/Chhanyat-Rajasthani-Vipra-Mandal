@@ -139,7 +139,16 @@ function setupEnterKeyNavigation() {
             fields[index + 1].focus();
         }
     });
-}
+// Real-time restriction: mobile inputs only accept up to 10 digits
+document.addEventListener('input', function(e) {
+    if (e.target && (
+        e.target.id === 'edit-mobile' ||
+        e.target.id === 'edit-biz-mobile' ||
+        e.target.classList.contains('m-mobile')
+    )) {
+        e.target.value = e.target.value.replace(/[^0-9]/g, '').slice(0, 10);
+    }
+});
 
 // =========================================
 // 🔔 TOAST NOTIFICATION
@@ -408,6 +417,38 @@ if (editModal) {
             const getEditVal = (id) => document.getElementById(id)?.value.trim() || '';
             const headName = getEditVal('edit-head');
 
+            const mainMobile = (getEditVal('edit-mobile') || '').replace(/[^0-9]/g, '');
+            if (!mainMobile || mainMobile.length !== 10) {
+                showToast('मुख्य मोबाइल नंबर 10 अंकों का होना चाहिए।', 'error');
+                document.getElementById('edit-mobile')?.focus();
+                saveBtn.disabled = false;
+                saveBtn.innerHTML = '<i class="fas fa-save"></i> बदलाव सेव करें';
+                return;
+            }
+
+            const bizMobile = (getEditVal('edit-biz-mobile') || '').replace(/[^0-9]/g, '');
+            if (bizMobile && bizMobile.length !== 10) {
+                showToast('व्यवसाय मोबाइल नंबर 10 अंकों का होना चाहिए।', 'error');
+                document.getElementById('edit-biz-mobile')?.focus();
+                saveBtn.disabled = false;
+                saveBtn.innerHTML = '<i class="fas fa-save"></i> बदलाव सेव करें';
+                return;
+            }
+
+            for (let i = 0; i < members.length; i++) {
+                const m = members[i];
+                if (m.mobile) {
+                    const cleanM = m.mobile.replace(/[^0-9]/g, '');
+                    if (cleanM.length !== 10) {
+                        showToast(`सदस्य "${m.name}" का मोबाइल नंबर 10 अंकों का होना चाहिए।`, 'error');
+                        saveBtn.disabled = false;
+                        saveBtn.innerHTML = '<i class="fas fa-save"></i> बदलाव सेव करें';
+                        return;
+                    }
+                    m.mobile = cleanM;
+                }
+            }
+
             const editPhotoInput = document.getElementById('edit-family-photo');
             let newPhotoUrl = null;
             if (editPhotoInput && editPhotoInput.files && editPhotoInput.files[0]) {
@@ -430,7 +471,7 @@ if (editModal) {
                 village: getEditVal('edit-village'),
                 district: getEditVal('edit-district'),
                 pincode: getEditVal('edit-pincode'),
-                mobile: getEditVal('edit-mobile'),
+                mobile: mainMobile,
                 email: getEditVal('edit-email'),
                 stdCode: getEditVal('edit-std-code'),
                 phone: getEditVal('edit-phone'),
@@ -569,7 +610,7 @@ function addEditMemberRow(memberData = null) {
             </div>
             <div class="form-group"><label>शिक्षा</label><input type="text" class="m-education" data-hindi-input="true" value="${esc(memberData?.education)}"></div>
             <div class="form-group"><label>व्यवसाय</label><input type="text" class="m-occupation" data-hindi-input="true" value="${esc(memberData?.occupation)}"></div>
-            <div class="form-group"><label>मोबाइल</label><input type="tel" class="m-mobile" pattern="[0-9]{10}" value="${esc(memberData?.mobile)}"></div>
+            <div class="form-group"><label>मोबाइल</label><input type="tel" class="m-mobile" pattern="[0-9]{10}" maxlength="10" minlength="10" inputmode="numeric" placeholder="10 अंकों का मोबाइल" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);" value="${esc(memberData?.mobile)}"></div>
         </div>
     `;
 

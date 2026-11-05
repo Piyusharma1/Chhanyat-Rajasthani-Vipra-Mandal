@@ -119,6 +119,17 @@ async function uploadImageToHostinger(file, customName = '') {
     return result.url;
 }
 
+// Real-time restriction: mobile inputs only accept up to 10 digits
+document.addEventListener('input', function(e) {
+    if (e.target && (
+        e.target.id === 'family-mobile' ||
+        e.target.id === 'biz-mobile' ||
+        e.target.classList.contains('m-mobile')
+    )) {
+        e.target.value = e.target.value.replace(/[^0-9]/g, '').slice(0, 10);
+    }
+});
+
 // =========================================
 // 🔔 TOAST NOTIFICATION
 // =========================================
@@ -293,7 +304,7 @@ function addMemberRow() {
             </div>
             <div class="form-group"><label>शिक्षा</label><input type="text" class="m-education" data-hindi-input="true"></div>
             <div class="form-group"><label>व्यवसाय</label><input type="text" class="m-occupation" data-hindi-input="true"></div>
-            <div class="form-group"><label>मोबाइल</label><input type="tel" class="m-mobile" pattern="[0-9]{10}"></div>
+            <div class="form-group"><label>मोबाइल</label><input type="tel" class="m-mobile" pattern="[0-9]{10}" maxlength="10" minlength="10" inputmode="numeric" placeholder="10 अंकों का मोबाइल" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);"></div>
         </div>
     `;
     
@@ -364,6 +375,33 @@ async function handleAddFamily(e) {
         showToast('कम से कम एक सदस्य जोड़ें।', 'warning');
         return;
     }
+
+    const mainMobile = (getVal('family-mobile') || '').replace(/[^0-9]/g, '');
+    if (!mainMobile || mainMobile.length !== 10) {
+        showToast('मुख्य मोबाइल नंबर 10 अंकों का होना चाहिए।', 'error');
+        document.getElementById('family-mobile')?.focus();
+        return;
+    }
+
+    const hasBiz = document.getElementById('has-business')?.checked;
+    const bizMobile = hasBiz ? (getVal('biz-mobile') || '').replace(/[^0-9]/g, '') : '';
+    if (bizMobile && bizMobile.length !== 10) {
+        showToast('व्यवसाय मोबाइल नंबर 10 अंकों का होना चाहिए।', 'error');
+        document.getElementById('biz-mobile')?.focus();
+        return;
+    }
+
+    for (let i = 0; i < members.length; i++) {
+        const m = members[i];
+        if (m.mobile) {
+            const cleanM = m.mobile.replace(/[^0-9]/g, '');
+            if (cleanM.length !== 10) {
+                showToast(`सदस्य "${m.name}" का मोबाइल नंबर 10 अंकों का होना चाहिए।`, 'error');
+                return;
+            }
+            m.mobile = cleanM;
+        }
+    }
     
     const familyData = {
         id: getVal('family-id'),
@@ -373,7 +411,7 @@ async function handleAddFamily(e) {
         village: getVal('family-village') || null,
         district: getVal('family-district'),
         pincode: getVal('family-pincode') || null,
-        mobile: getVal('family-mobile'),
+        mobile: mainMobile,
         email: getVal('family-email') || null,
         stdCode: getVal('family-std-code') || null,
         phone: getVal('family-phone') || null,
