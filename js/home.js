@@ -621,18 +621,19 @@ function setupHomeCalendarWidget() {
 
 async function loadBackgroundData(branchCount) {
     try {
-        const [familyData, committee] = await Promise.all([
-            getFamilies(),
+        // Fetch committee, ads, events, and lightweight stats in parallel
+        const [statsRes, committee] = await Promise.all([
+            fetch('api/get_stats.php').then(r => r.json()).catch(() => null),
             loadAllFromAPI('committee'),
             loadHomeAds(),
             loadUpcomingEvents()
         ]);
 
-        const familyCount = familyData.length;
-        const memberCount = familyData.reduce((acc, f) => acc + (f.members?.length || 0), 0);
+        if (statsRes && statsRes.success) {
+            updateStatistics(statsRes.branches || branchCount, statsRes.families || 0, statsRes.members || 0);
+        }
 
-        updateStatistics(branchCount, familyCount, memberCount);
-        renderHomeCommittee(committee, familyData);
+        renderHomeCommittee(committee, []);
     } catch (error) {
         console.error('❌ Background load error:', error);
     }
