@@ -55,6 +55,12 @@ try {
         ':members' => isset($data['members']) ? json_encode($data['members'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) : '[]'
     ]);
     
+    log_activity('CREATE', 'family', $data['id'], $data['head'] ?? '', [
+        'branch' => $data['branch'] ?? '',
+        'village' => $data['village'] ?? '',
+        'members_count' => isset($data['members']) && is_array($data['members']) ? count($data['members']) : 0
+    ]);
+
     echo json_encode(['success' => true, 'id' => $data['id']]);
 } catch (Exception $e) {
     http_response_code(500);

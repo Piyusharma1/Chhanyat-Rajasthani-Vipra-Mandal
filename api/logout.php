@@ -3,7 +3,14 @@
 // Properly invalidates session and removes PHPSESSID cookie from browser
 
 require_once __DIR__ . '/session_helper.php';
+require_once __DIR__ . '/audit_helper.php';
 header('Content-Type: application/json; charset=utf-8');
+
+if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true) {
+    try {
+        log_activity('LOGOUT', 'auth', (string)($_SESSION['admin_id'] ?? ''), $_SESSION['admin_full_name'] ?? '');
+    } catch (Exception $e) {}
+}
 
 // Unset all session variables
 $_SESSION = [];

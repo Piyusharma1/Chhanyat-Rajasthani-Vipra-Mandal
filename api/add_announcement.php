@@ -48,9 +48,16 @@ try {
         ':branch' => $branch
     ]);
 
+    $newAnnId = (string)$pdo->lastInsertId();
+
+    log_activity('CREATE', 'announcement', $newAnnId, $title, [
+        'branch' => $branch,
+        'priority' => $priority
+    ]);
+
     echo json_encode([
         'success' => true,
-        'id' => $pdo->lastInsertId(),
+        'id' => $newAnnId,
         'message' => 'Announcement added successfully'
     ]);
 } catch (Exception $e) {

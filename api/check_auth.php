@@ -1,6 +1,8 @@
 <?php
 // api/check_auth.php
 require_once __DIR__ . '/session_helper.php';
+require_once __DIR__ . '/csrf_helper.php';
+require_once __DIR__ . '/audit_helper.php';
 
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
@@ -18,7 +20,7 @@ if (!empty($origin)) {
     }
 }
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type');
+header('Access-Control-Allow-Headers: Content-Type, X-CSRF-Token');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
@@ -59,12 +61,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         // चेक करें कि सेशन एक्सपायर तो नहीं हुआ (24 घंटे)
         if (isset($_SESSION['login_time']) && (time() - $_SESSION['login_time'] < 86400)) {
             $branch = $_SESSION['admin_branch'] ?? 'ALL';
+            $csrfToken = get_csrf_token();
             echo json_encode([
                 'isAdmin' => true,
                 'username' => $_SESSION['admin_username'] ?? '',
                 'full_name' => $_SESSION['admin_full_name'] ?? '',
                 'branch' => $branch,
-                'isSuperAdmin' => ($branch === 'ALL' || empty($branch))
+                'isSuperAdmin' => ($branch === 'ALL' || empty($branch)),
+                'csrf_token' => $csrfToken
             ]);
             exit;
         } else {
@@ -147,6 +151,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['admin_branch'] = $adminBranch;
             $_SESSION['login_time'] = time();
             
+            $csrfToken = get_csrf_token();
+            
             // लास्ट लॉगिन टाइम व लॉग रिकॉर्ड करें
             try {
                 $stmt = $pdo->prepare("UPDATE admins SET last_login = NOW() WHERE id = :id");
@@ -157,6 +163,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     VALUES (:ip, :user, NOW(), 1)
                 ");
                 $logStmt->execute([':ip' => $clientIp, ':user' => $username]);
+
+                log_activity('LOGIN', 'auth', (string)$admin['id'], $admin['full_name'], [
+                    'username' => $admin['username'],
+                    'branch' => $adminBranch
+                ]);
             } catch (Exception $ex) {}
 
             session_write_close();
@@ -167,6 +178,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'full_name' => $admin['full_name'],
                 'branch' => $adminBranch,
                 'isSuperAdmin' => ($adminBranch === 'ALL'),
+                'csrf_token' => $csrfToken,
                 'message' => 'Login successful'
             ]);
             exit;

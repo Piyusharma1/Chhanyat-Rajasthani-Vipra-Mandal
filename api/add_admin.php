@@ -88,10 +88,17 @@ try {
         ':branch'    => $branch
     ]);
 
+    $newId = (string)$pdo->lastInsertId();
+    log_activity('CREATE', 'admin', $newId, $fullName, [
+        'username' => $username,
+        'branch' => $branch,
+        'is_active' => $isActive
+    ]);
+
     echo json_encode([
         'success' => true,
         'message' => '✅ नया एडमिन सफलतापूर्वक जोड़ दिया गया!',
-        'id'      => $pdo->lastInsertId()
+        'id'      => $newId
     ]);
 } catch (PDOException $e) {
     http_response_code(500);

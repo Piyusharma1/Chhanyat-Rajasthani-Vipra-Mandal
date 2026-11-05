@@ -131,6 +131,12 @@ if (convertToWebp($file['tmp_name'], $uploadPath)) {
     }
     
     $finalSize = filesize($uploadPath);
+    
+    log_activity('UPLOAD_IMAGE', $type, $uniqueFilename, $rawName ?: $uniqueFilename, [
+        'folder' => $folderName,
+        'size' => $finalSize
+    ]);
+
     echo json_encode([
         'success' => true,
         'message' => 'छवि सफलतापूर्वक अपलोड हुई और WebP में परिवर्तित की गई।',

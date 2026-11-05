@@ -16,12 +16,20 @@ if (!$data || !isset($data['id'])) {
 }
 
 try {
+    $infoStmt = $pdo->prepare("SELECT name, designation FROM committee WHERE id = :id");
+    $infoStmt->execute([':id' => $data['id']]);
+    $existing = $infoStmt->fetch();
+
     $stmt = $pdo->prepare("DELETE FROM committee WHERE id = :id");
     $stmt->execute([':id' => $data['id']]);
     
     if ($stmt->rowCount() === 0) {
         die(json_encode(['success' => false, 'error' => 'Member not found']));
     }
+
+    log_activity('DELETE', 'committee', (string)$data['id'], $existing['name'] ?? '', [
+        'designation' => $existing['designation'] ?? ''
+    ]);
     
     echo json_encode(['success' => true]);
 } catch (Exception $e) {

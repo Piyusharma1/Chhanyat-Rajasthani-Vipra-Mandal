@@ -30,6 +30,9 @@ async function checkAuthState() {
 
                 const adCard = document.querySelector('.admin-card[onclick*="ad-management.php"]');
                 if (adCard) adCard.style.display = 'none';
+
+                const auditCard = document.querySelector('.admin-card[onclick*="audit-logs.php"]');
+                if (auditCard) auditCard.style.display = 'none';
             }
 
             if (typeof initDashboardModals === 'function') initDashboardModals();

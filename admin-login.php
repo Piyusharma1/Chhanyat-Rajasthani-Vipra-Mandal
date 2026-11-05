@@ -479,6 +479,9 @@
                 const result = await response.json();
                 
                 if (result.isAdmin) {
+                    if (result.csrf_token) {
+                        try { sessionStorage.setItem('csrf_token', result.csrf_token); } catch(e) {}
+                    }
                     successMsg.textContent = '✅ लॉगिन सफल! रिडायरेक्ट हो रहा है...';
                     successMsg.style.display = 'block';
                     

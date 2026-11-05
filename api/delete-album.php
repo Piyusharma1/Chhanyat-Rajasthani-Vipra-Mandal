@@ -47,11 +47,16 @@ try {
         $stmtDel = $pdo->prepare("DELETE FROM gallery_albums WHERE folder = :folder");
         $stmtDel->execute([':folder' => $albumFolder]);
 
+        log_activity('DELETE', 'gallery', $albumFolder, $albumFolder);
+
         echo json_encode(['success' => true, 'message' => 'Album deleted successfully']);
     } else {
         // Even if directory is missing, clean up DB record if permission allowed
         $stmtDel = $pdo->prepare("DELETE FROM gallery_albums WHERE folder = :folder");
         $stmtDel->execute([':folder' => $albumFolder]);
+
+        log_activity('DELETE', 'gallery', $albumFolder, $albumFolder);
+
         echo json_encode(['success' => true, 'message' => 'Album record removed']);
     }
 } catch (Exception $e) {

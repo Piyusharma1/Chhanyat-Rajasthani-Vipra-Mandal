@@ -111,9 +111,17 @@ try {
         ':end_date' => $endDate
     ]);
 
+    $newAdId = (string)$pdo->lastInsertId();
+
+    log_activity('CREATE', 'ad', $newAdId, $title, [
+        'business' => $businessName,
+        'position' => $position,
+        'status' => $status
+    ]);
+
     echo json_encode([
         'success' => true,
-        'id' => $pdo->lastInsertId(),
+        'id' => $newAdId,
         'message' => 'Advertisement added successfully'
     ]);
 } catch (Exception $e) {

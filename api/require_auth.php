@@ -3,6 +3,8 @@
 // Enforces admin authentication and handles 24-hour expiration across all admin endpoints
 
 require_once __DIR__ . '/session_helper.php';
+require_once __DIR__ . '/csrf_helper.php';
+require_once __DIR__ . '/audit_helper.php';
 
 header('Content-Type: application/json; charset=utf-8');
 
@@ -30,4 +32,7 @@ if (isset($_SESSION['login_time']) && (time() - $_SESSION['login_time'] > 86400)
     http_response_code(401);
     die(json_encode(['success' => false, 'error' => 'Session expired. Please log in again.']));
 }
+
+// 🛡️ Enforce CSRF token on all state-changing requests (POST, PUT, DELETE, PATCH)
+enforce_csrf();
 ?>

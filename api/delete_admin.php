@@ -32,8 +32,17 @@ try {
         die(json_encode(['success' => false, 'error' => '❌ सिस्टम में कम से कम एक एडमिन होना अनिवार्य है।']));
     }
 
+    $adminStmt = $pdo->prepare("SELECT username, full_name, branch FROM admins WHERE id = :id");
+    $adminStmt->execute([':id' => $targetId]);
+    $targetAdmin = $adminStmt->fetch();
+
     $stmt = $pdo->prepare("DELETE FROM admins WHERE id = :id");
     $stmt->execute([':id' => $targetId]);
+
+    log_activity('DELETE', 'admin', (string)$targetId, $targetAdmin['full_name'] ?? ($targetAdmin['username'] ?? ''), [
+        'username' => $targetAdmin['username'] ?? '',
+        'branch'   => $targetAdmin['branch'] ?? ''
+    ]);
 
     echo json_encode([
         'success' => true,

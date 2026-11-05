@@ -11,15 +11,15 @@ if (!$data || !isset($data['id'])) {
 $adminBranch = $_SESSION['admin_branch'] ?? 'ALL';
 
 try {
+    $checkStmt = $pdo->prepare("SELECT title, branch FROM announcements WHERE id = :id");
+    $checkStmt->execute([':id' => $data['id']]);
+    $row = $checkStmt->fetch(PDO::FETCH_ASSOC);
+    
+    if (!$row) {
+        die(json_encode(['success' => false, 'error' => 'Announcement not found']));
+    }
+    
     if ($adminBranch !== 'ALL' && !empty($adminBranch)) {
-        $checkStmt = $pdo->prepare("SELECT branch FROM announcements WHERE id = :id");
-        $checkStmt->execute([':id' => $data['id']]);
-        $row = $checkStmt->fetch(PDO::FETCH_ASSOC);
-        
-        if (!$row) {
-            die(json_encode(['success' => false, 'error' => 'Announcement not found']));
-        }
-        
         if ($row['branch'] !== $adminBranch) {
             http_response_code(403);
             die(json_encode(['success' => false, 'error' => '❌ आप केवल अपनी ही शाखा की घोषणा हटा सकते हैं।']));
@@ -29,10 +29,10 @@ try {
     $stmt = $pdo->prepare("DELETE FROM announcements WHERE id = :id");
     $stmt->execute([':id' => $data['id']]);
     
-    if ($stmt->rowCount() === 0) {
-        die(json_encode(['success' => false, 'error' => 'Announcement not found']));
-    }
-    
+    log_activity('DELETE', 'announcement', (string)$data['id'], $row['title'] ?? '', [
+        'branch' => $row['branch'] ?? ''
+    ]);
+
     echo json_encode(['success' => true]);
 } catch (Exception $e) {
     http_response_code(500);

@@ -11,7 +11,7 @@ if (!$data || !isset($data['id'])) {
 $adminBranch = $_SESSION['admin_branch'] ?? 'ALL';
 
 try {
-    $checkStmt = $pdo->prepare("SELECT branch, photo FROM families WHERE id = :id");
+    $checkStmt = $pdo->prepare("SELECT head, branch, photo FROM families WHERE id = :id");
     $checkStmt->execute([':id' => $data['id']]);
     $existing = $checkStmt->fetch();
 
@@ -45,6 +45,10 @@ try {
     $stmt = $pdo->prepare("DELETE FROM families WHERE id = :id");
     $stmt->execute([':id' => $data['id']]);
     
+    log_activity('DELETE', 'family', $data['id'], $existing['head'] ?? '', [
+        'branch' => $existing['branch'] ?? ''
+    ]);
+
     echo json_encode(['success' => true]);
 } catch (Exception $e) {
     http_response_code(500);

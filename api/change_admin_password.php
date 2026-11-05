@@ -47,6 +47,10 @@ try {
         ':id'       => $targetId
     ]);
 
+    log_activity('PASSWORD_CHANGE', 'admin', (string)$targetId, $admin['full_name'], [
+        'username' => $admin['username']
+    ]);
+
     echo json_encode([
         'success' => true,
         'message' => "✅ '{$admin['full_name']}' (code: {$admin['username']}) का पासवर्ड सफलतापूर्वक बदल दिया गया है!"

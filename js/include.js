@@ -12,6 +12,66 @@ const SLIDING_NAME_CONFIG = {
   duration: 30, // Animation duration in seconds
 };
 
+// 🛡️ Global CSRF Token Management & Automatic Fetch Interceptor
+window.getCSRFToken = function() {
+  try {
+    return sessionStorage.getItem('csrf_token') || '';
+  } catch(e) {
+    return '';
+  }
+};
+
+window.setCSRFToken = function(token) {
+  if (token) {
+    try { sessionStorage.setItem('csrf_token', token); } catch(e) {}
+  }
+};
+
+// Automatically inject X-CSRF-Token into all state-changing same-origin API fetch calls
+if (typeof window.fetch === 'function' && !window.__csrfFetchPatched) {
+  const originalFetch = window.fetch;
+  window.fetch = async function(resource, init = {}) {
+    const method = String(init.method || 'GET').toUpperCase();
+    if (['POST', 'PUT', 'DELETE', 'PATCH'].includes(method)) {
+      const token = window.getCSRFToken();
+      if (token) {
+        if (!init.headers) {
+          init.headers = {};
+        }
+        if (init.headers instanceof Headers) {
+          if (!init.headers.has('X-CSRF-Token')) init.headers.set('X-CSRF-Token', token);
+        } else if (Array.isArray(init.headers)) {
+          if (!init.headers.some(h => h[0].toLowerCase() === 'x-csrf-token')) {
+            init.headers.push(['X-CSRF-Token', token]);
+          }
+        } else {
+          if (!init.headers['X-CSRF-Token'] && !init.headers['x-csrf-token']) {
+            init.headers['X-CSRF-Token'] = token;
+          }
+        }
+      }
+    }
+
+    const response = await originalFetch(resource, init);
+
+    // If check_auth returns a fresh csrf_token, capture it
+    try {
+      const urlStr = typeof resource === 'string' ? resource : (resource && resource.url ? resource.url : '');
+      if (urlStr.includes('check_auth.php')) {
+        const clone = response.clone();
+        clone.json().then(data => {
+          if (data && data.csrf_token) {
+            window.setCSRFToken(data.csrf_token);
+          }
+        }).catch(() => {});
+      }
+    } catch(e) {}
+
+    return response;
+  };
+  window.__csrfFetchPatched = true;
+}
+
 /**
  * Load and inject HTML components
  */

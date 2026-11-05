@@ -38,8 +38,15 @@ try {
         ':display_order' => $nextOrder,
         ':family_id' => !empty($data['family_id']) ? $data['family_id'] : null
     ]);
-    
-    echo json_encode(['success' => true, 'id' => $pdo->lastInsertId()]);
+
+    $newId = (string)$pdo->lastInsertId();
+
+    log_activity('CREATE', 'committee', $newId, $data['name'], [
+        'designation' => $data['designation'],
+        'display_order' => $nextOrder
+    ]);
+
+    echo json_encode(['success' => true, 'id' => $newId]);
 } catch (Exception $e) {
     http_response_code(500);
     echo json_encode(['success' => false, 'error' => $e->getMessage()]);

@@ -33,6 +33,11 @@ try {
 
     $statusLabel = $isActive ? 'सक्रिय (Active)' : 'निष्क्रिय (Inactive)';
 
+    log_activity('STATUS_CHANGE', 'admin', (string)$targetId, "Admin #$targetId", [
+        'is_active' => $isActive,
+        'status_label' => $statusLabel
+    ]);
+
     echo json_encode([
         'success' => true,
         'message' => "✅ एडमिन स्टेटस बदल कर '{$statusLabel}' कर दिया गया है!"

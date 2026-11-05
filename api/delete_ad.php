@@ -12,7 +12,7 @@ if ($id <= 0) {
 
 try {
     // 1. Fetch ad details to remove physical image file if local
-    $stmt = $pdo->prepare("SELECT image_url FROM local_ads WHERE id = :id");
+    $stmt = $pdo->prepare("SELECT title, image_url FROM local_ads WHERE id = :id");
     $stmt->execute([':id' => $id]);
     $ad = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -32,6 +32,8 @@ try {
             @unlink($filePath);
         }
     }
+
+    log_activity('DELETE', 'ad', (string)$id, $ad['title'] ?? '');
 
     echo json_encode([
         'success' => true,

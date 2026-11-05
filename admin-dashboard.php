@@ -815,6 +815,17 @@ body {
                         <span class="card-arrow">प्रबंधित करें <i class="fas fa-arrow-right"></i></span>
                     </div>
                 </div>
+
+                <!-- 📜 Audit Trail / Activity Log -->
+                <div class="admin-card" onclick="location.href='audit-logs.php'">
+                    <div class="card-top-bar" style="background: linear-gradient(90deg, #0288D1, #26C6DA);"></div>
+                    <span class="card-badge" style="background: #e1f5fe; color: #0277bd; border: 1px solid #b3e5fc;">LOGS</span>
+                    <div class="card-body">
+                        <h3>गतिविधि लॉग (Audit Trail)</h3>
+                        <p>एडमिन लॉगिन, परिवार व डेटा बदलावों का सम्पूर्ण टाइमलाइन रिकॉर्ड देखें।</p>
+                        <span class="card-arrow">लॉग देखें <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </div>
             </div>
         </section>
     </div>

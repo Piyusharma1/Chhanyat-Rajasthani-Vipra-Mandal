@@ -103,6 +103,11 @@ if ($extracted) {
     $msg = "कैलेंडर PDF अपलोड हो गई! (यदि पृष्ठ स्वतः अपडेट न हों, तो कृपया 'पुनः निकालें' बटन दबाएं या 'फ़ोटो बदलें' से सीधे WebP अपलोड करें।)";
 }
 
+log_activity('UPLOAD', 'calendar', 'calendar.pdf', 'वार्षिक सनातन कैलेंडर PDF', [
+    'size' => $file['size'],
+    'extracted_pages' => $generatedCount
+]);
+
 echo json_encode([
     'success'         => true,
     'message'         => $msg,

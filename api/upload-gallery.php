@@ -211,6 +211,12 @@ if (!empty($errors)) {
 if ($uploadedCount === 0) {
     $response['error'] = 'No files were uploaded successfully. ' . implode(', ', $errors);
     http_response_code(400);
+} else {
+    log_activity('UPLOAD', 'gallery', $albumFolder, $albumName, [
+        'uploaded_count' => $uploadedCount,
+        'branch' => $branch,
+        'announcement_created' => $announcementCreated
+    ]);
 }
 
 echo json_encode($response, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);

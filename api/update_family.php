@@ -44,6 +44,10 @@ try {
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
     
+    log_activity('UPDATE', 'family', $data['id'], $data['head'] ?? ($existing['head'] ?? null), [
+        'updated_fields' => array_keys($data)
+    ]);
+
     echo json_encode(['success' => true]);
 } catch (Exception $e) {
     http_response_code(500);
