@@ -38,6 +38,16 @@ if (!function_exists('verify_csrf_token')) {
             ?? $_SERVER['HTTP_CSRF_TOKEN'] 
             ?? null;
 
+        if (empty($headerToken) && function_exists('getallheaders')) {
+            $headers = getallheaders();
+            foreach ($headers as $k => $v) {
+                if (in_array(strtolower($k), ['x-csrf-token', 'x-xsrf-token', 'csrf-token'])) {
+                    $headerToken = $v;
+                    break;
+                }
+            }
+        }
+
         if (!empty($headerToken) && hash_equals($validToken, $headerToken)) {
             return true;
         }

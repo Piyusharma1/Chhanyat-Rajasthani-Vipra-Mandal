@@ -11,13 +11,19 @@ if (!$data || !isset($data['id'])) {
 $adminBranch = $_SESSION['admin_branch'] ?? 'ALL';
 
 try {
+    // Always fetch existing record for verification and audit trail
+    $checkStmt = $pdo->prepare("SELECT head, branch FROM families WHERE id = :id");
+    $checkStmt->execute([':id' => $data['id']]);
+    $existing = $checkStmt->fetch();
+
+    if (!$existing) {
+        http_response_code(404);
+        die(json_encode(['success' => false, 'error' => '❌ परिवार नहीं मिला (Family not found)']));
+    }
+
     // If admin is restricted to a branch, verify target family belongs to that branch
     if ($adminBranch !== 'ALL' && !empty($adminBranch)) {
-        $checkStmt = $pdo->prepare("SELECT branch FROM families WHERE id = :id");
-        $checkStmt->execute([':id' => $data['id']]);
-        $existing = $checkStmt->fetch();
-
-        if (!$existing || $existing['branch'] !== $adminBranch) {
+        if ($existing['branch'] !== $adminBranch) {
             http_response_code(403);
             die(json_encode(['success' => false, 'error' => '❌ आप केवल अपनी ही शाखा के परिवार का डेटा अपडेट कर सकते हैं।']));
         }

@@ -12,24 +12,24 @@ if (!function_exists('ensure_audit_logs_table')) {
         if ($ensured) return;
 
         try {
-            $pdo->exec("CREATE TABLE IF NOT EXISTS audit_logs (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                admin_id INT NULL,
-                admin_username VARCHAR(100) NOT NULL,
-                admin_name VARCHAR(150) NULL,
-                action VARCHAR(50) NOT NULL,
-                category VARCHAR(50) NOT NULL,
-                target_id VARCHAR(100) NULL,
-                target_name VARCHAR(255) NULL,
-                details TEXT NULL,
-                ip_address VARCHAR(45) NOT NULL,
-                user_agent VARCHAR(255) NULL,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                INDEX idx_category (category),
-                INDEX idx_action (action),
-                INDEX idx_admin (admin_username),
-                INDEX idx_created (created_at)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;");
+            $pdo->exec("CREATE TABLE IF NOT EXISTS `audit_logs` (
+                `id` INT AUTO_INCREMENT PRIMARY KEY,
+                `admin_id` INT NULL,
+                `admin_username` VARCHAR(100) NOT NULL,
+                `admin_name` VARCHAR(150) NULL,
+                `action` VARCHAR(50) NOT NULL,
+                `category` VARCHAR(50) NOT NULL,
+                `target_id` VARCHAR(100) NULL,
+                `target_name` VARCHAR(255) NULL,
+                `details` TEXT NULL,
+                `ip_address` VARCHAR(45) NOT NULL,
+                `user_agent` VARCHAR(255) NULL,
+                `created_at` DATETIME NOT NULL,
+                INDEX `idx_category` (`category`),
+                INDEX `idx_action` (`action`),
+                INDEX `idx_admin` (`admin_username`),
+                INDEX `idx_created` (`created_at`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
             $ensured = true;
         } catch (Exception $e) {
             error_log('Audit table check error: ' . $e->getMessage());
@@ -61,9 +61,13 @@ if (!function_exists('log_activity')) {
         try {
             ensure_audit_logs_table($pdo);
 
+            if (session_status() === PHP_SESSION_NONE) {
+                @session_start();
+            }
+
             $adminId       = $_SESSION['admin_id'] ?? null;
-            $adminUsername = $_SESSION['admin_username'] ?? 'system';
-            $adminName     = $_SESSION['admin_full_name'] ?? $adminUsername;
+            $adminUsername = !empty($_SESSION['admin_username']) ? $_SESSION['admin_username'] : 'admin';
+            $adminName     = !empty($_SESSION['admin_full_name']) ? $_SESSION['admin_full_name'] : $adminUsername;
 
             $clientIp = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
             if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
