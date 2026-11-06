@@ -133,7 +133,7 @@ body.dark-mode {
 
 @media (max-width: 768px) {
     .samaj-description {
-        margin: 14px 16px 12px;
+
         font-size: 13px;
         padding: 10px 14px;
     }
@@ -339,6 +339,7 @@ img {
     aspect-ratio: 16 / 9;
     max-height: 85vh;
     overflow: hidden;
+    padding: 10px;
     background: var(--maroon-deep, #1a0505);
     font-family: 'Tiro Devanagari Hindi', serif;
 }
@@ -593,47 +594,167 @@ img {
 }
 
 /* --- RESPONSIVE ADJUSTMENTS --- */
+/* ── MOBILE HERO SLIDER ── */
+/* ════════════════════════════════════════
+   MOBILE HERO SLIDER: PEEK CAROUSEL
+   Paste at the very END of style.css
+   (remove the old mobile slider blocks first)
+   ════════════════════════════════════════ */
 @media (max-width: 768px) {
+
     .hero-slider {
-        aspect-ratio: 4 / 3;
+        aspect-ratio: 16 / 9;
+        max-height: none;
+        padding: 10px 0 0px;
+        background:
+            radial-gradient(circle at 15% 0%, rgba(255, 107, 0, 0.2), transparent 55%),
+            linear-gradient(180deg, var(--maroon-deep), var(--maroon));
     }
 
-    .slide {
-        flex: 0 0 100%;
-        margin: 0;
-        border-radius: 0;
-        opacity: 1;
-        transform: scale(1);
-        filter: brightness(1);
-        box-shadow: none;
+    .slider-wrapper {
         height: 100%;
     }
 
-    .slide-caption {
-        bottom: 50px;
-        left: 15px;
-        right: 15px;
+    /* Slides: one big in the middle, neighbours peeking */
+    .slide {
+        transform: scale(0.82);
+        /* side slides: was 0.94 */
+        margin: 0 -2px;
+        opacity: 0.5;
+        filter: brightness(0.6);
+        transform-origin: center;
     }
 
+    .slide.active {
+        transform: scale(1);
+        opacity: 1;
+        filter: none;
+        z-index: 2;
+    }
+
+    .slide {
+        flex: 0 0 84%;
+        /* center width (was 78%) */
+        margin: 0 -14px;
+        /* pulls the smaller side slides back in */
+        transform: scale(0.8);
+        /* side slides smaller (was 0.82) */
+        opacity: 0.5;
+        filter: brightness(0.6);
+    }
+
+    .slide.active {
+        transform: scale(1);
+        opacity: 1;
+        filter: none;
+        z-index: 2;
+    }
+
+    .slide img {
+        object-position: center 22%;
+    }
+
+    .slide.active img {
+        transform: scale(1.04);
+    }
+
+    /* Caption only inside the active slide, at the bottom */
+    .slide-gradient {
+        background: linear-gradient(to top,
+                rgba(30, 4, 4, 0.85) 0%,
+                rgba(30, 4, 4, 0.25) 35%,
+                transparent 60%);
+    }
+
+    .slide-caption {
+        bottom: 14px;
+        left: 10px;
+        right: 10px;
+        padding: 0;
+        text-align: center;
+    }
+
+    .slide-caption h3 {
+        margin: 0;
+        font-size: 1.1rem;
+        line-height: 1.3;
+
+    }
+
+    .slide-caption p {
+        display: none;
+    }
+
+    /* Glass arrows, half hidden on the screen edges */
     .slider-nav {
         width: 40px;
         height: 40px;
-        opacity: 0.8;
+        opacity: 1;
+        background: linear-gradient(135deg,
+                rgba(255, 255, 255, 0.28) 0%,
+                rgba(255, 255, 255, 0.10) 100%);
+        -webkit-backdrop-filter: blur(12px) saturate(150%);
+        backdrop-filter: blur(12px) saturate(150%);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        color: #fff;
+        box-shadow:
+            0 6px 18px rgba(0, 0, 0, 0.35),
+            inset 0 1px 0 rgba(255, 255, 255, 0.45);
+        /* top shine */
+    }
+
+    .slider-nav svg {
+        width: 18px;
+        height: 18px;
+        filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
+    }
+
+    .slider-nav:hover {
+        background: linear-gradient(135deg,
+                rgba(255, 255, 255, 0.28) 0%,
+                rgba(255, 255, 255, 0.10) 100%);
+        border-color: rgba(255, 255, 255, 0.4);
+        box-shadow:
+            0 6px 18px rgba(0, 0, 0, 0.35),
+            inset 0 1px 0 rgba(255, 255, 255, 0.45);
+        transform: translateY(-50%);
+    }
+
+    .slider-nav:active {
+        background: linear-gradient(135deg,
+                rgba(240, 192, 96, 0.75),
+                rgba(240, 192, 96, 0.45));
+        border-color: rgba(240, 192, 96, 0.9);
+        color: var(--maroon-deep);
+        transform: translateY(-50%) scale(0.92);
     }
 
     .slider-nav-prev {
-        left: 10px;
+        left: -14px;
+        justify-content: flex-end;
+        padding-right: 7px;
     }
 
     .slider-nav-next {
-        right: 10px;
+        right: -14px;
+        justify-content: flex-start;
+        padding-left: 7px;
     }
 
+    /* Slim progress line below the cards */
     .slider-progress-bar {
-        bottom: 8px;
-        left: 10%;
-        right: 10%;
-        width: 80%;
+        top: auto;
+        bottom: -14px;
+        left: 32%;
+        right: 32%;
+        width: auto;
+        height: 3px;
+        background: rgba(255, 255, 255, 0.2);
+    }
+
+    .slider-progress {
+        background: var(--gold-light);
+        box-shadow: 0 0 8px rgba(240, 192, 96, 0.8);
     }
 }
 
@@ -1296,10 +1417,12 @@ body.dark-mode .branch-stats {
 .committee-card.committee-card-clickable {
     cursor: pointer;
 }
+
 .committee-card.committee-card-clickable:hover {
     border-color: var(--saffron, #FF6B00);
     box-shadow: 0 10px 28px rgba(255, 107, 0, 0.18);
 }
+
 .committee-card.committee-card-clickable:hover .committee-family-link {
     background: var(--maroon, #7B1A1A) !important;
     color: var(--gold-light, #F0C060) !important;
@@ -5539,9 +5662,11 @@ body.dark-mode .obj-content p {
         font-size: 0.74rem;
         gap: 6px;
     }
+
     #hindi-translit-hint {
         font-size: 0.68rem;
     }
+
     .hint-extra {
         display: none;
     }
