@@ -14,32 +14,6 @@ if (is_dir($galleryDir)) {
 }
 $cssPath = __DIR__ . '/css/style.css';
 $cssVersion = file_exists($cssPath) ? filemtime($cssPath) : time();
-
-// Fast pre-render stats from DB to avoid client fetching all families just for counter
-$initialFamilies = '—';
-$initialMembers = '—';
-try {
-    require_once __DIR__ . '/api/db.php';
-    if (isset($pdo)) {
-        $fCount = $pdo->query("SELECT COUNT(*) FROM families")->fetchColumn();
-        $initialFamilies = $fCount ? number_format((int)$fCount) : '—';
-        
-        // Approximate or compute members count quickly
-        $mStmt = $pdo->query("SELECT members FROM families");
-        $totalM = 0;
-        while ($row = $mStmt->fetch(PDO::FETCH_ASSOC)) {
-            if (!empty($row['members'])) {
-                $decoded = json_decode($row['members'], true);
-                if (is_array($decoded)) {
-                    $totalM += count($decoded);
-                }
-            }
-        }
-        $initialMembers = $totalM ? number_format($totalM) : '—';
-    }
-} catch (Exception $e) {
-    // Graceful fallback
-}
 ?>
 <!DOCTYPE html>
 <html lang="hi" dir="ltr">
@@ -51,7 +25,7 @@ try {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preload" as="image" href="<?= $firstHeroImage ?>" type="image/webp" fetchpriority="high">
-    <!-- Google Fonts loaded asynchronously with display=swap to eliminate render blocking and FOIT -->
+    <!-- Google Fonts loaded asynchronously to eliminate render blocking -->
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Tiro+Devanagari+Hindi:ital@0;1&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Tiro+Devanagari+Hindi:ital@0;1&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     <noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Tiro+Devanagari+Hindi:ital@0;1&display=swap" rel="stylesheet"></noscript>
@@ -66,29 +40,16 @@ try {
     }
     </script>
     
-    <link rel="canonical" href="https://chhanyatvipralatur.com/" />
-    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DE5KD051LL"></script>
     <script>
-      // Load non-critical analytics after page load so it never impacts FCP / LCP / FID
-      window.addEventListener('load', function() {
-        setTimeout(function() {
-          var ga = document.createElement('script');
-          ga.async = true;
-          ga.src = 'https://www.googletagmanager.com/gtag/js?id=G-DE5KD051LL';
-          document.head.appendChild(ga);
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-DE5KD051LL');
-
-          var cd = document.createElement('script');
-          cd.src = 'https://cdn.counter.dev/script.js';
-          cd.setAttribute('data-id', '1f92108b-8857-410e-b5a8-c1ab33e859f8');
-          cd.setAttribute('data-utcoffset', '6');
-          document.head.appendChild(cd);
-        }, 1500);
-      });
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-DE5KD051LL');
     </script>
+    
+    <script src="https://cdn.counter.dev/script.js" data-id="1f92108b-8857-410e-b5a8-c1ab33e859f8" data-utcoffset="6" defer></script>
+    <link rel="canonical" href="https://chhanyatvipralatur.com/" />
     
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -181,12 +142,12 @@ try {
             <div class="container">
                 <div class="stats-grid" role="list">
                     <div class="stat-card" role="listitem">
-                        <h3 id="total-families" aria-live="polite"><?= htmlspecialchars($initialFamilies) ?></h3>
+                        <h3 id="total-families" aria-live="polite">—</h3>
                         <p>कुल परिवार</p>
                         <div class="stat-sublabel">Total Families</div>
                     </div>
                     <div class="stat-card" role="listitem">
-                        <h3 id="total-members" aria-live="polite"><?= htmlspecialchars($initialMembers) ?></h3>
+                        <h3 id="total-members" aria-live="polite">—</h3>
                         <p>कुल सदस्य</p>
                         <div class="stat-sublabel">Total Members</div>
                     </div>

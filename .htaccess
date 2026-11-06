@@ -61,77 +61,33 @@ RewriteRule ^(.*)$ $1.php [L]
 RewriteRule ^uploads/ - [L]
 
 # ============================================
-# EXPIRES CACHING (Max cache lifetimes for speed audit)
-# ============================================
-<IfModule mod_expires.c>
-    ExpiresActive On
-    ExpiresDefault "access plus 1 month"
-
-    # Images
-    ExpiresByType image/jpg "access plus 1 year"
-    ExpiresByType image/jpeg "access plus 1 year"
-    ExpiresByType image/png "access plus 1 year"
-    ExpiresByType image/gif "access plus 1 year"
-    ExpiresByType image/webp "access plus 1 year"
-    ExpiresByType image/svg+xml "access plus 1 year"
-    ExpiresByType image/x-icon "access plus 1 year"
-
-    # Fonts
-    ExpiresByType font/ttf "access plus 1 year"
-    ExpiresByType font/woff "access plus 1 year"
-    ExpiresByType font/woff2 "access plus 1 year"
-    ExpiresByType application/font-woff "access plus 1 year"
-    ExpiresByType application/font-woff2 "access plus 1 year"
-
-    # CSS / JS
-    ExpiresByType text/css "access plus 1 year"
-    ExpiresByType application/javascript "access plus 1 year"
-    ExpiresByType text/javascript "access plus 1 year"
-
-    # HTML / JSON
-    ExpiresByType text/html "access plus 10 minutes"
-    ExpiresByType application/json "access plus 5 minutes"
-</IfModule>
-
-# ============================================
-# CORS AND CACHING HEADERS
+# CORS AND CACHING FOR IMAGES
 # ============================================
 <IfModule mod_headers.c>
-    <FilesMatch "\.(jpg|jpeg|png|webp|gif|svg|ico)$">
+    <FilesMatch "\.(jpg|jpeg|png|webp|gif|svg)$">
         Header set Access-Control-Allow-Origin "*"
-        Header set Cache-Control "public, max-age=31536000, immutable"
-    </FilesMatch>
-
-    <FilesMatch "\.(woff|woff2|ttf|eot|otf)$">
-        Header set Access-Control-Allow-Origin "*"
-        Header set Cache-Control "public, max-age=31536000, immutable"
-    </FilesMatch>
-
-    <FilesMatch "\.(css|js)$">
-        Header set Cache-Control "public, max-age=31536000, immutable"
+        Header set Cache-Control "public, max-age=31536000"
     </FilesMatch>
 </IfModule>
 
 # ============================================
-# ENABLE COMPRESSION (GZIP / DEFLATE)
+# CSS AND JS CACHING (Versioned with ?v= in templates)
+# ============================================
+<IfModule mod_headers.c>
+    <FilesMatch "\.(css|js)$">
+        Header set Cache-Control "public, max-age=2592000"
+    </FilesMatch>
+</IfModule>
+
+# ============================================
+# ENABLE COMPRESSION (GZIP)
 # ============================================
 <IfModule mod_deflate.c>
-    AddOutputFilterByType DEFLATE text/plain
-    AddOutputFilterByType DEFLATE text/html
-    AddOutputFilterByType DEFLATE text/xml
     AddOutputFilterByType DEFLATE text/css
-    AddOutputFilterByType DEFLATE application/xml
-    AddOutputFilterByType DEFLATE application/xhtml+xml
-    AddOutputFilterByType DEFLATE application/rss+xml
     AddOutputFilterByType DEFLATE application/javascript
-    AddOutputFilterByType DEFLATE application/x-javascript
-    AddOutputFilterByType DEFLATE text/javascript
+    AddOutputFilterByType DEFLATE text/html
     AddOutputFilterByType DEFLATE application/json
     AddOutputFilterByType DEFLATE image/svg+xml
-    AddOutputFilterByType DEFLATE font/ttf
-    AddOutputFilterByType DEFLATE font/otf
-    AddOutputFilterByType DEFLATE application/font-woff
-    AddOutputFilterByType DEFLATE application/font-woff2
 </IfModule>
 
 # ============================================
