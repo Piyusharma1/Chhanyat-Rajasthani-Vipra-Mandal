@@ -498,7 +498,12 @@ async function loadGallery() {
 
     } catch (err) {
         console.error('❌ Gallery error:', err);
-        container.innerHTML = `<div class="no-albums"><h3>त्रुटि हुई</h3></div>`;
+        container.innerHTML = `
+            <div class="no-albums">
+                <i class="fas fa-exclamation-triangle" style="color:var(--red, #dc3545);"></i>
+                <h3>त्रुटि हुई</h3>
+                <p>गैलरी लोड करने में समस्या आई। कृपया पुनः प्रयास करें।</p>
+            </div>`;
     }
 }
 
