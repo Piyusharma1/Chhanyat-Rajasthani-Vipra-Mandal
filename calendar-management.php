@@ -17,8 +17,6 @@ $hasPdf = file_exists(__DIR__ . '/' . $calendarPdfPath);
 $pdfSize = $hasPdf ? round(filesize(__DIR__ . '/' . $calendarPdfPath) / (1024 * 1024), 2) . ' MB' : 'अनुपलब्ध';
 
 $months = [
-    11 => ['hi' => 'नोव्हेंबर', 'en' => 'November 2026', 'year' => '२०२६', 'hi_num' => '११'],
-    12 => ['hi' => 'डिसेंबर', 'en' => 'December 2026', 'year' => '२०२६', 'hi_num' => '१२'],
     1  => ['hi' => 'जानेवारी', 'en' => 'January 2027', 'year' => '२०२७', 'hi_num' => '१'],
     2  => ['hi' => 'फेब्रुवारी', 'en' => 'February 2027', 'year' => '२०२७', 'hi_num' => '२'],
     3  => ['hi' => 'मार्च', 'en' => 'March 2027', 'year' => '२०२७', 'hi_num' => '३'],
@@ -29,6 +27,8 @@ $months = [
     8  => ['hi' => 'ऑगस्ट', 'en' => 'August 2027', 'year' => '२०२७', 'hi_num' => '८'],
     9  => ['hi' => 'सप्टेंबर', 'en' => 'September 2027', 'year' => '२०२७', 'hi_num' => '९'],
     10 => ['hi' => 'ऑक्टोबर', 'en' => 'October 2027', 'year' => '२०२७', 'hi_num' => '१०'],
+    11 => ['hi' => 'नोव्हेंबर', 'en' => 'November 2026', 'year' => '२०२६', 'hi_num' => '११'],
+    12 => ['hi' => 'डिसेंबर', 'en' => 'December 2026', 'year' => '२०२६', 'hi_num' => '१२'],
 ];
 ?>
 <!DOCTYPE html>

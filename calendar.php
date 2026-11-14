@@ -2,11 +2,10 @@
 session_start();
 $calendarPdfPath = 'uploads/calendar/calendar.pdf';
 $hasPdf = file_exists(__DIR__ . '/' . $calendarPdfPath);
-$targetMonth = isset($_GET['month']) ? trim((string)$_GET['month']) : '';
+$targetMonth = isset($_GET['month']) ? trim((string)$_GET['month']) : '1';
+if ($targetMonth === '') $targetMonth = '1';
 
 $months = [
-    11 => ['hi' => 'नोव्हेंबर', 'en' => 'November 2026', 'year' => '२०२६', 'hi_num' => '११', 'panchang' => 'कार्तिक शके १९४८ • मारवाडी संवत : २०८३'],
-    12 => ['hi' => 'डिसेंबर', 'en' => 'December 2026', 'year' => '२०२६', 'hi_num' => '१२', 'panchang' => 'कार्तिक / मार्गशीर्ष शके १९४८ • मारवाडी संवत : २०८३'],
     1  => ['hi' => 'जानेवारी', 'en' => 'January 2027', 'year' => '२०२७', 'hi_num' => '१', 'panchang' => 'पौष / माघ शके १९४८ • मारवाडी संवत : २०८३'],
     2  => ['hi' => 'फेब्रुवारी', 'en' => 'February 2027', 'year' => '२०२७', 'hi_num' => '२', 'panchang' => 'माघ / फाल्गुन शके १९४८ • मारवाडी संवत : २०८३'],
     3  => ['hi' => 'मार्च', 'en' => 'March 2027', 'year' => '२०२७', 'hi_num' => '३', 'panchang' => 'फाल्गुन / चैत्र शके १९४८ • मारवाडी संवत : २०८३'],
@@ -17,9 +16,11 @@ $months = [
     8  => ['hi' => 'ऑगस्ट', 'en' => 'August 2027', 'year' => '२०२७', 'hi_num' => '८', 'panchang' => 'श्रावण / भाद्रपद शके १९४९ • मारवाडी संवत : २०८४'],
     9  => ['hi' => 'सप्टेंबर', 'en' => 'September 2027', 'year' => '२०२७', 'hi_num' => '९', 'panchang' => 'भाद्रपद / आश्विन शके १९४९ • मारवाडी संवत : २०८४'],
     10 => ['hi' => 'ऑक्टोबर', 'en' => 'October 2027', 'year' => '२०२७', 'hi_num' => '१०', 'panchang' => 'आश्विन / कार्तिक शके १९४९ • मारवाडी संवत : २०८४'],
+    11 => ['hi' => 'नोव्हेंबर', 'en' => 'November 2026', 'year' => '२०२६', 'hi_num' => '११', 'panchang' => 'कार्तिक शके १९४८ • मारवाडी संवत : २०८३'],
+    12 => ['hi' => 'डिसेंबर', 'en' => 'December 2026', 'year' => '२०२६', 'hi_num' => '१२', 'panchang' => 'कार्तिक / मार्गशीर्ष शके १९४८ • मारवाडी संवत : २०८३'],
 ];
 
-// Pre-build all 13 calendar pages for grid & interactive lightbox viewer
+// Pre-build all calendar pages (Months 1..12 first, followed by Cover)
 $coverSrc = 'uploads/calendar/cover.webp';
 if (!file_exists(__DIR__ . '/' . $coverSrc)) $coverSrc = 'uploads/calendar/cover.jpg';
 if (!file_exists(__DIR__ . '/' . $coverSrc)) $coverSrc = 'uploads/calendar/cover.png';
@@ -27,18 +28,10 @@ if (!file_exists(__DIR__ . '/' . $coverSrc)) $coverSrc = 'uploads/calendar/cover
 $coverThumb = 'uploads/calendar/thumbs/cover.webp';
 if (!file_exists(__DIR__ . '/' . $coverThumb)) $coverThumb = $coverSrc;
 
-$calendarPages = [
-    [
-        'key'      => 'cover',
-        'title'    => 'सनातन दिनदर्शिका (मुखपृष्ठ)',
-        'sub'      => 'छःन्यात राजस्थानी विप्र मंडल, लातूर',
-        'short'    => 'मुखपृष्ठ',
-        'src'      => $coverSrc,
-        'thumb'    => $coverThumb,
-        'download' => 'सनातन_दिनदर्शिका_मुखपृष्ठ.webp',
-    ]
-];
+$calendarPages = [];
+$monthToPageIndex = [];
 
+$idx = 0;
 foreach ($months as $num => $m) {
     $pSrc = "uploads/calendar/pages/{$num}.webp";
     if (!file_exists(__DIR__ . '/' . $pSrc)) $pSrc = "uploads/calendar/pages/{$num}.jpg";
@@ -56,7 +49,22 @@ foreach ($months as $num => $m) {
         'thumb'    => $pThumb,
         'download' => "सनातन_दिनदर्शिका_{$m['hi']}_{$m['year']}.webp",
     ];
+    $monthToPageIndex[$num] = $idx;
+    $idx++;
 }
+
+// Cover Page at the end
+$coverIndex = $idx;
+$calendarPages[] = [
+    'key'      => 'cover',
+    'title'    => 'सनातन दिनदर्शिका (मुखपृष्ठ)',
+    'sub'      => 'छःन्यात राजस्थानी विप्र मंडल, लातूर',
+    'short'    => 'मुखपृष्ठ',
+    'src'      => $coverSrc,
+    'thumb'    => $coverThumb,
+    'download' => 'सनातन_दिनदर्शिका_मुखपृष्ठ.webp',
+];
+$coverPage = $calendarPages[$coverIndex];
 ?>
 <!DOCTYPE html>
 <html lang="hi" dir="ltr">
@@ -272,24 +280,65 @@ foreach ($months as $num => $m) {
         }
 
         .month-card-header {
-            background: var(--cal-maroon);
+            background: linear-gradient(135deg, var(--cal-maroon, #7B1A1A) 0%, #580B0B 100%);
             color: #fff;
-            padding: 10px 14px;
+            padding: 11px 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            border-bottom: 2px solid var(--cal-gold, #C9941A);
+        }
+
+        .month-card-header-top {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            width: 100%;
         }
 
         .month-card-header h3 {
             margin: 0;
-            font-size: 1.05rem;
-            font-family: 'Tiro Devanagari Hindi', serif;
+            font-size: 1.12rem;
+            font-family: 'Tiro Devanagari Hindi', 'Noto Sans Devanagari', serif;
+            font-weight: 700;
             color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            letter-spacing: 0.3px;
         }
 
-        .month-card-header span {
+        .month-card-header h3 i {
+            color: var(--cal-saffron, #FF6B00);
+            font-size: 0.9em;
+        }
+
+        .month-card-badge {
+            background: rgba(240, 192, 96, 0.18);
+            border: 1px solid var(--cal-gold-light, #F0C060);
+            color: var(--cal-gold-light, #F0C060);
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .month-card-header .panchang-sub {
             font-size: 0.8rem;
-            opacity: 0.85;
+            color: var(--cal-gold-light, #F0C060);
+            opacity: 0.94;
+            font-family: 'Noto Sans Devanagari', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            line-height: 1.35;
+        }
+
+        .month-card-header .panchang-sub i {
+            color: var(--cal-saffron, #FF6B00);
+            font-size: 0.85em;
+            flex-shrink: 0;
         }
 
         .month-card-img-wrap {
@@ -430,8 +479,25 @@ foreach ($months as $num => $m) {
                 margin: 8px 12px 24px;
             }
 
+            .month-card-header {
+                padding: 10px 12px;
+                gap: 5px;
+            }
+
             .month-card-header h3 {
-                font-size: 1rem;
+                font-size: 1.05rem;
+                line-height: 1.3;
+            }
+
+            .month-card-header .panchang-sub {
+                font-size: 0.75rem;
+                line-height: 1.35;
+                word-break: break-word;
+            }
+
+            .month-card-badge {
+                font-size: 0.72rem;
+                padding: 2px 7px;
             }
 
             .month-card-img-wrap {
@@ -656,66 +722,47 @@ foreach ($months as $num => $m) {
         <!-- Sticky Month Bar: Desktop (All 12 in 1 Row) & Mobile (Swipeable Pills) -->
         <div class="month-bar-sticky-wrap" id="month-bar-sticky-wrap">
             <div class="month-bar-row" id="month-bar-row">
-                <a href="?month=cover" class="month-btn" data-month="cover" id="tab-month-cover">
-                    मुखपृष्ठ
-                </a>
                 <?php foreach ($months as $num => $m): ?>
-                    <a href="?month=<?= $num ?>" class="month-btn" data-month="<?= $num ?>" id="tab-month-<?= $num ?>">
+                    <a href="?month=<?= $num ?>" class="month-btn <?= ($targetMonth === (string)$num) ? 'active' : '' ?>" data-month="<?= $num ?>" id="tab-month-<?= $num ?>">
                         <?= $m['hi_num'] ?>. <?= $m['hi'] ?>
                     </a>
                 <?php endforeach; ?>
+                <a href="?month=cover" class="month-btn <?= ($targetMonth === 'cover') ? 'active' : '' ?>" data-month="cover" id="tab-month-cover">
+                    <i class="fas fa-book-open"></i> मुखपृष्ठ
+                </a>
             </div>
         </div>
 
-        <!-- All 12 Months In Rows -->
+        <!-- All 12 Months In Rows (Starts directly from Month 1: जानेवारी / 1.webp) -->
         <div class="all-months-grid" id="all-months-grid">
-            <!-- Official Cover Page Card -->
-            <?php $coverPage = $calendarPages[0]; ?>
-            <div class="month-row-card" id="month-card-cover">
-                <div class="month-card-header">
-                    <h3>मुखपृष्ठ (Cover Page)</h3>
-                    <span>सनातन दिनदर्शिका</span>
-                </div>
-                <div class="month-card-img-wrap">
-                    <a href="<?= $coverPage['src'] ?>" class="cal-lb-trigger" data-lb-index="0" title="क्लिक कर पूरा देखें">
-                        <img src="<?= $coverPage['thumb'] ?>" 
-                             alt="सनातन दिनदर्शिका मुखपृष्ठ"
-                             width="600" height="900"
-                             decoding="async"
-                             <?= ($targetMonth === 'cover' || $targetMonth === '') ? 'fetchpriority="high"' : 'loading="lazy"' ?>>
-                    </a>
-                </div>
-                <div class="month-card-actions">
-                    <a href="<?= $coverPage['src'] ?>" class="card-action-btn cal-lb-trigger" data-lb-index="0">
-                        <i class="fas fa-expand"></i> पूरा देखें
-                    </a>
-                    <a href="<?= $coverPage['src'] ?>" download="<?= $coverPage['download'] ?>" class="card-action-btn btn-dl">
-                        <i class="fas fa-download"></i> डाउनलोड
-                    </a>
-                </div>
-            </div>
-
-            <?php 
-            $pageIndex = 1;
-            foreach ($months as $num => $m): 
-                $page = $calendarPages[$pageIndex];
+            <?php foreach ($months as $num => $m): 
+                $pageIdx = $monthToPageIndex[$num];
+                $page = $calendarPages[$pageIdx];
+                $isFirst = ($num === 1);
             ?>
                 <div class="month-row-card" id="month-card-<?= $num ?>">
                     <div class="month-card-header">
-                        <h3><?= $page['title'] ?></h3>
-                        <?php if (!empty($m['panchang'])): ?><span><?= htmlspecialchars($m['panchang']) ?></span><?php endif; ?>
+                        <div class="month-card-header-top">
+                            <h3><i class="fas fa-calendar-alt"></i> <?= $m['hi_num'] ?>. <?= $m['hi'] ?> <?= $m['year'] ?></h3>
+                            <span class="month-card-badge"><?= $m['en'] ?></span>
+                        </div>
+                        <?php if (!empty($m['panchang'])): ?>
+                            <div class="panchang-sub">
+                                <i class="fas fa-om"></i> <?= htmlspecialchars($m['panchang']) ?>
+                            </div>
+                        <?php endif; ?>
                     </div>
                     <div class="month-card-img-wrap">
-                        <a href="<?= $page['src'] ?>" class="cal-lb-trigger" data-lb-index="<?= $pageIndex ?>" title="क्लिक कर पूरा देखें">
+                        <a href="<?= $page['src'] ?>" class="cal-lb-trigger" data-lb-index="<?= $pageIdx ?>" title="क्लिक कर पूरा देखें">
                             <img src="<?= $page['thumb'] ?>" 
                                  alt="सनातन दिनदर्शिका - <?= $m['hi'] ?> <?= $m['year'] ?>"
                                  width="600" height="750"
                                  decoding="async"
-                                 loading="lazy">
+                                 <?= ($isFirst && ($targetMonth === '1' || $targetMonth === '')) ? 'fetchpriority="high"' : 'loading="lazy"' ?>>
                         </a>
                     </div>
                     <div class="month-card-actions">
-                        <a href="<?= $page['src'] ?>" class="card-action-btn cal-lb-trigger" data-lb-index="<?= $pageIndex ?>">
+                        <a href="<?= $page['src'] ?>" class="card-action-btn cal-lb-trigger" data-lb-index="<?= $pageIdx ?>">
                             <i class="fas fa-expand"></i> पूरा देखें
                         </a>
                         <a href="<?= $page['src'] ?>" download="<?= $page['download'] ?>" class="card-action-btn btn-dl">
@@ -723,10 +770,37 @@ foreach ($months as $num => $m) {
                         </a>
                     </div>
                 </div>
-            <?php 
-                $pageIndex++;
-            endforeach; 
-            ?>
+            <?php endforeach; ?>
+
+            <!-- Official Cover Page Card (After the 12 Monthly Sheets) -->
+            <div class="month-row-card" id="month-card-cover">
+                <div class="month-card-header">
+                    <div class="month-card-header-top">
+                        <h3><i class="fas fa-book-open"></i> मुखपृष्ठ (Cover Page)</h3>
+                        <span class="month-card-badge">२०२६-२७</span>
+                    </div>
+                    <div class="panchang-sub">
+                        <i class="fas fa-om"></i> सनातन दिनदर्शिका • छःन्यात राजस्थानी विप्र मंडल, लातूर
+                    </div>
+                </div>
+                <div class="month-card-img-wrap">
+                    <a href="<?= $coverPage['src'] ?>" class="cal-lb-trigger" data-lb-index="<?= $coverIndex ?>" title="क्लिक कर पूरा देखें">
+                        <img src="<?= $coverPage['thumb'] ?>" 
+                             alt="सनातन दिनदर्शिका मुखपृष्ठ"
+                             width="600" height="900"
+                             decoding="async"
+                             loading="lazy">
+                    </a>
+                </div>
+                <div class="month-card-actions">
+                    <a href="<?= $coverPage['src'] ?>" class="card-action-btn cal-lb-trigger" data-lb-index="<?= $coverIndex ?>">
+                        <i class="fas fa-expand"></i> पूरा देखें
+                    </a>
+                    <a href="<?= $coverPage['src'] ?>" download="<?= $coverPage['download'] ?>" class="card-action-btn btn-dl">
+                        <i class="fas fa-download"></i> डाउनलोड
+                    </a>
+                </div>
+            </div>
         </div>
 
         <!-- Floating Scroll to Top Button -->
