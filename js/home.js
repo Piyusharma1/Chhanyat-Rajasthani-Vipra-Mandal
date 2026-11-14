@@ -619,7 +619,16 @@ function setupHomeCalendarWidget() {
     function previewFrom(e) {
         const pill = e.target.closest('.home-month-pill');
         if (!pill) return;
-        const m = Number(pill.dataset.month);
+        const target = pill.dataset.month;
+        if (target === 'cover') {
+            show('uploads/calendar/thumbs/cover.webp', 'सनातन दिनदर्शिका - मुखपृष्ठ', 'सनातन दिनदर्शिका (मुखपृष्ठ)', 'calendar.php?month=cover');
+            return;
+        }
+        if (target === 'samiti') {
+            show('uploads/calendar/thumbs/samiti.webp', 'कार्यकारिणी व सल्लागार मंडळ', 'कार्यकारिणी व सल्लागार मंडळ (समिति पृष्ठ)', 'calendar.php?month=samiti');
+            return;
+        }
+        const m = Number(target);
         if (!(m >= 1 && m <= 12)) return;
         const monthTitle = hindiMonthTitles[m] || hindiMonths[m];
         const label = `सनातन दिनदर्शिका: ${monthTitle}`;

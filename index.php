@@ -185,8 +185,8 @@ $cssVersion = file_exists($cssPath) ? filemtime($cssPath) : time();
             <div class="home-cal-showcase">
                 <div class="home-cal-preview-card">
                     <div class="home-cal-img-wrap">
-                        <a href="calendar.php?month=11" title="सनातन दिनदर्शिका देखें" class="home-cal-img-link">
-                            <img id="home-cal-preview-img" src="uploads/calendar/thumbs/11.webp" alt="सनातन दिनदर्शिका - नोव्हेंबर २०२६" width="340" height="511" loading="lazy">
+                        <a href="calendar.php?month=cover" title="सनातन दिनदर्शिका मुखपृष्ठ देखें" class="home-cal-img-link">
+                            <img id="home-cal-preview-img" src="uploads/calendar/thumbs/cover.webp" alt="सनातन दिनदर्शिका - मुखपृष्ठ" width="340" height="511" loading="lazy">
                             <span class="home-cal-img-zoom-hint">
                                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h6v6"></path><path d="M10 14L21 3"></path><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg>
                                 बड़ा देखें
@@ -196,9 +196,9 @@ $cssVersion = file_exists($cssPath) ? filemtime($cssPath) : time();
                     <div class="home-cal-info">
                         <div class="home-cal-badge">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                            <span>सनातन दिनदर्शिका (समस्त १२ माह)</span>
+                            <span>सनातन दिनदर्शिका २०२६-२७</span>
                         </div>
-                        <h3 class="home-cal-title" id="home-cal-month-title">११. नोव्हेंबर २०२६</h3>
+                        <h3 class="home-cal-title" id="home-cal-month-title">सनातन दिनदर्शिका (मुखपृष्ठ)</h3>
                         <p class="home-cal-text">
                             छःन्यात राजस्थानी विप्र मंडल, लातूर की आधिकारिक वार्षिक सनातन दिनदर्शिका। समस्त १२ माह के पृष्ठ, पावन पर्व, व्रत, एकादशी एवं कुलप्रवर्तक जयंतियां अब डिजिटल रूप में उपलब्ध हैं।
                         </p>
@@ -208,6 +208,8 @@ $cssVersion = file_exists($cssPath) ? filemtime($cssPath) : time();
                             <span>माहवार पृष्ठ (सीधे देखें)</span>
                         </div>
                         <div class="home-cal-months-strip" id="home-cal-months-strip">
+                            <a href="calendar.php?month=cover" class="home-month-pill" data-month="cover">मुखपृष्ठ</a>
+                            <a href="calendar.php?month=samiti" class="home-month-pill" data-month="samiti">समिति</a>
                             <a href="calendar.php?month=11" class="home-month-pill" data-month="11">११. नोव्हेंबर</a>
                             <a href="calendar.php?month=12" class="home-month-pill" data-month="12">१२. डिसेंबर</a>
                             <a href="calendar.php?month=1" class="home-month-pill" data-month="1">१. जानेवारी</a>
