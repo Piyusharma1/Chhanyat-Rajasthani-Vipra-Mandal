@@ -769,11 +769,23 @@ $months = [
                     </button>
                 </form>
 
+                <!-- PDF Extraction Live Progress Bar -->
+                <div id="pdf-extract-progress" style="display:none; margin-top:16px; padding:14px; background:rgba(255,107,0,0.06); border:1.5px solid var(--gold); border-radius:8px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.9rem; font-weight:600; color:var(--maroon); margin-bottom:8px;">
+                        <span id="pdf-progress-text"><i class="fas fa-spinner fa-spin"></i> पृष्ठ तैयार हो रहे हैं...</span>
+                        <span id="pdf-progress-percent" style="background:var(--maroon); color:#fff; padding:2px 8px; border-radius:12px; font-size:0.8rem;">0%</span>
+                    </div>
+                    <div style="width:100%; height:8px; background:#e0e0e0; border-radius:4px; overflow:hidden;">
+                        <div id="pdf-progress-bar" style="width:0%; height:100%; background:linear-gradient(90deg, var(--saffron), var(--gold)); transition:width 0.25s ease;"></div>
+                    </div>
+                    <small id="pdf-progress-detail" style="display:block; margin-top:6px; color:var(--text-mid); font-size:0.8rem;">ब्राउज़र द्वारा PDF का विश्लेषण किया जा रहा है...</small>
+                </div>
+
                 <hr style="border:none; border-top:1px solid var(--border); margin:20px 0;">
 
                 <div style="display:flex; gap:10px; flex-wrap:wrap;">
                     <button type="button" class="btn-cancel" id="btn-reextract-pdf" style="flex:1; min-width:200px; border-color:var(--maroon); color:var(--maroon);">
-                        <i class="fas fa-sync-alt"></i> वर्तमान PDF से १२ माह पुनः निकालें
+                        <i class="fas fa-sync-alt"></i> वर्तमान PDF से १२ माह निकालें (Auto-Extract)
                     </button>
                     <?php if ($hasPdf): ?>
                     <a href="<?= $calendarPdfPath ?>" download="सनातन_दिनदर्शिका.pdf" class="btn-cancel" style="flex:1; min-width:140px; text-align:center; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; gap:6px;">
@@ -805,6 +817,12 @@ $months = [
 
     <!-- Scripts -->
     <script src="js/include.js?v=<?= @filemtime(__DIR__.'/js/include.js') ?: time()?>"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+        if (window.pdfjsLib) {
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        }
+    </script>
     <script src="js/calendar-management.js?v=<?= @filemtime(__DIR__.'/js/calendar-management.js') ?: time()?>"></script>
 </body>
 </html>
