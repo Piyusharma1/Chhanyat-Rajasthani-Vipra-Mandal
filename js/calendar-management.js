@@ -247,33 +247,82 @@
             const numPages = pdfDoc.numPages;
             console.log(`[Browser PDF Extractor] Total pages: ${numPages}`);
 
-            // Page mapping (1-based for PDF.js getPage)
-            let coverPage = null;
-            let monthPages = [];
+            // Check user-selected layout format or auto-detect
+            const formatSelect = document.getElementById('pdf-format-select');
+            const formatMode = formatSelect ? formatSelect.value : 'sanatan-14';
 
-            if (numPages >= 25) {
+            let coverPage = null;
+            let monthPageMap = {}; // Maps monthNumber 1..12 -> PDF pageNumber (1-based)
+
+            if (formatMode === 'sanatan-14' || (formatMode === 'auto' && numPages === 14)) {
+                // 🕉️ Sanatan Panchang 14-page layout:
+                // Page 1: Cover (सनातन दिनदर्शिका)
+                // Page 2: Committee & Choughadiya table
+                // Page 3: November 2026 (Month 11)
+                // Page 4: December 2026 (Month 12)
+                // Page 5: January 2027 (Month 1)
+                // Page 6: February 2027 (Month 2)
+                // Page 7: March 2027 (Month 3)
+                // Page 8: April 2027 (Month 4)
+                // Page 9: May 2027 (Month 5)
+                // Page 10: June 2027 (Month 6)
+                // Page 11: July 2027 (Month 7)
+                // Page 12: August 2027 (Month 8)
+                // Page 13: September 2027 (Month 9)
+                // Page 14: October 2027 (Month 10)
                 coverPage = 1;
-                monthPages = Array.from({ length: 12 }, (_, i) => 2 + i * 2);
+                monthPageMap = {
+                    1: 5,   // Jan -> Page 5
+                    2: 6,   // Feb -> Page 6
+                    3: 7,   // Mar -> Page 7
+                    4: 8,   // Apr -> Page 8
+                    5: 9,   // May -> Page 9
+                    6: 10,  // Jun -> Page 10
+                    7: 11,  // Jul -> Page 11
+                    8: 12,  // Aug -> Page 12
+                    9: 13,  // Sep -> Page 13
+                    10: 14, // Oct -> Page 14
+                    11: 3,  // Nov -> Page 3
+                    12: 4   // Dec -> Page 4
+                };
+            } else if (formatMode === 'sanatan-28' || (formatMode === 'auto' && numPages === 28)) {
+                // 🕉️ 28-page Double-Sided Sanatan Panchang layout
+                coverPage = 1;
+                monthPageMap = {
+                    1: 9,   // Jan -> Page 9
+                    2: 11,  // Feb -> Page 11
+                    3: 13,  // Mar -> Page 13
+                    4: 15,  // Apr -> Page 15
+                    5: 17,  // May -> Page 17
+                    6: 19,  // Jun -> Page 19
+                    7: 21,  // Jul -> Page 21
+                    8: 23,  // Aug -> Page 23
+                    9: 25,  // Sep -> Page 25
+                    10: 27, // Oct -> Page 27
+                    11: 5,  // Nov -> Page 5
+                    12: 7   // Dec -> Page 7
+                };
+            } else if (formatMode === 'cover-13' || (formatMode === 'auto' && numPages === 13)) {
+                coverPage = 1;
+                for (let m = 1; m <= 12; m++) monthPageMap[m] = m + 1;
+            } else if (formatMode === 'standard-12' || (formatMode === 'auto' && numPages === 12)) {
+                for (let m = 1; m <= 12; m++) monthPageMap[m] = m;
             } else if (numPages >= 24) {
-                monthPages = Array.from({ length: 12 }, (_, i) => 1 + i * 2);
-            } else if (numPages === 13) {
-                coverPage = 1;
-                monthPages = Array.from({ length: 12 }, (_, i) => 2 + i);
-            } else if (numPages >= 12) {
-                monthPages = Array.from({ length: 12 }, (_, i) => 1 + i);
+                // Alternate pages (1, 3, 5...)
+                for (let m = 1; m <= 12; m++) monthPageMap[m] = 1 + (m - 1) * 2;
             } else {
-                monthPages = Array.from({ length: numPages }, (_, i) => 1 + i);
+                for (let m = 1; m <= Math.min(12, numPages); m++) monthPageMap[m] = m;
             }
 
-            const totalTasks = (coverPage ? 1 : 0) + monthPages.length;
+            const totalTasks = (coverPage ? 1 : 0) + Object.keys(monthPageMap).length;
             let completedTasks = 0;
 
-            // Extract Cover if applicable
+            // 1. Extract Cover if applicable
             if (coverPage && coverPage <= numPages) {
                 updateProgress(
                     (completedTasks / totalTasks) * 90 + 5,
                     'मुखपृष्ठ तैयार हो रहा है...',
-                    `पृष्ठ ${coverPage} को WebP में बदला जा रहा है...`
+                    `PDF पृष्ठ ${coverPage} (सनातन दिनदर्शिका मुखपृष्ठ) को WebP में बदला जा रहा है...`
                 );
                 const { blob, ext } = await renderPdfPageToBlob(pdfDoc, coverPage);
                 await uploadCalendarPageBlob('cover', blob, ext);
@@ -284,19 +333,21 @@
             }
 
             const monthNames = [
-                'जनवरी', 'फ़रवरी', 'मार्च', 'अप्रैल', 'मई', 'जून',
-                'जुलाई', 'अगस्त', 'सितंबर', 'अक्टूबर', 'नवंबर', 'दिसंबर'
+                '', 'जानेवारी', 'फेब्रुवारी', 'मार्च', 'एप्रिल', 'मे', 'जून',
+                'जुलै', 'ऑगस्ट', 'सप्टेंबर', 'ऑक्टोबर', 'नोव्हेंबर', 'डिसेंबर'
             ];
 
-            // Extract & upload all 12 month pages
-            for (let m = 1; m <= monthPages.length; m++) {
-                const pageNum = monthPages[m - 1];
-                const monthName = monthNames[m - 1] || `माह ${m}`;
+            // 2. Extract & upload all 12 month pages according to monthPageMap
+            for (let m = 1; m <= 12; m++) {
+                const pageNum = monthPageMap[m];
+                if (!pageNum || pageNum > numPages) continue;
+
+                const monthName = monthNames[m] || `माह ${m}`;
 
                 updateProgress(
                     (completedTasks / totalTasks) * 90 + 5,
                     `माह ${m}/12 (${monthName}) तैयार हो रहा है...`,
-                    `PDF पृष्ठ ${pageNum} को HD WebP में बदला जा रहा है...`
+                    `PDF पृष्ठ ${pageNum} (${monthName}) को HD WebP में रेंडर किया जा रहा है...`
                 );
 
                 const { blob, ext } = await renderPdfPageToBlob(pdfDoc, pageNum);
@@ -401,9 +452,21 @@
             console.log('Server has no Python/PyMuPDF, falling back to browser extraction...');
             showToast('सर्वर पर Python नहीं है — ब्राउज़र द्वारा 12 माह पृष्ठ निकाले जा रहे हैं...', 'info');
 
+            const progressContainer = document.getElementById('pdf-extract-progress');
+            const progressText = document.getElementById('pdf-progress-text');
+            const progressPercent = document.getElementById('pdf-progress-percent');
+            const progressBar = document.getElementById('pdf-progress-bar');
+            const progressDetail = document.getElementById('pdf-progress-detail');
+
+            if (progressContainer) progressContainer.style.display = 'block';
+            if (progressText) progressText.innerHTML = '<i class="fas fa-spinner fa-spin"></i> PDF डाउनलोड हो रही है...';
+            if (progressPercent) progressPercent.textContent = '3%';
+            if (progressBar) progressBar.style.width = '3%';
+            if (progressDetail) progressDetail.textContent = 'सर्वर से PDF फ़ाइल मेमोरी में लोड की जा रही है, कृपया प्रतीक्षा करें...';
+
             const pdfFetch = await fetch(`uploads/calendar/calendar.pdf?v=${Date.now()}`);
             if (!pdfFetch.ok) {
-                throw new Error('uploads/calendar/calendar.pdf फ़ाइल नहीं मिली। कृपया पहले PDF अपलोड करें।');
+                throw new Error('uploads/calendar/calendar.pdf फ़ाइल नहीं मिली। कृपया पहले नई PDF अपलोड करें।');
             }
             const arrayBuffer = await pdfFetch.arrayBuffer();
             await runBrowserPdfExtraction(arrayBuffer);

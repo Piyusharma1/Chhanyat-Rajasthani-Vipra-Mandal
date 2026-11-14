@@ -758,6 +758,23 @@ $months = [
                     </div>
                 </div>
 
+                <!-- PDF Layout Format Selector -->
+                <div style="margin-bottom:14px; padding:10px 12px; background:#fff; border:1.5px solid var(--border); border-radius:8px;">
+                    <label style="display:block; font-size:0.88rem; font-weight:600; color:var(--maroon); margin-bottom:5px;">
+                        <i class="fas fa-layer-group" style="color:var(--saffron);"></i> कैलेंडर प्रारूप (PDF Layout):
+                    </label>
+                    <select id="pdf-format-select" style="width:100%; padding:8px 10px; border:1px solid #ccc; border-radius:6px; background:#fafafa; font-size:0.85rem; color:#333;">
+                        <option value="sanatan-14" selected>सनातन पंचांग 14 पृष्ठ (कवर + समिति + 11.नोव्हेंबर से 10.ऑक्टोबर)</option>
+                        <option value="auto">स्वतः पहचान (Auto-Detect based on page count)</option>
+                        <option value="standard-12">मानक 12 पृष्ठ (1.जानेवारी से 12.डिसेंबर)</option>
+                        <option value="cover-13">कवर + 12 पृष्ठ (13 पृष्ठ: कवर + 1.जानेवारी से 12.डिसेंबर)</option>
+                        <option value="sanatan-28">सनातन पंचांग 28 पृष्ठ (दोनों तरफ मुद्रित / Double-Sided)</option>
+                    </select>
+                    <small style="display:block; color:var(--text-mid); font-size:0.78rem; margin-top:4px;">
+                        <i class="fas fa-info-circle"></i> पृष्ठ 1 = मुखपृष्ठ, पृष्ठ 3-4 = नोव्हेंबर-डिसेंबर २०२६, पृष्ठ 5-14 = जानेवारी-ऑक्टोबर २०२७
+                    </small>
+                </div>
+
                 <!-- PDF Upload Form -->
                 <form id="pdf-upload-form" enctype="multipart/form-data">
                     <label style="display:block; font-size:0.9rem; font-weight:600; color:var(--maroon); margin-bottom:6px;">
