@@ -252,12 +252,13 @@
             const formatMode = formatSelect ? formatSelect.value : 'sanatan-14';
 
             let coverPage = null;
+            let samitiPage = null;
             let monthPageMap = {}; // Maps monthNumber 1..12 -> PDF pageNumber (1-based)
 
             if (formatMode === 'sanatan-14' || (formatMode === 'auto' && numPages === 14)) {
                 // 🕉️ Sanatan Panchang 14-page layout:
                 // Page 1: Cover (सनातन दिनदर्शिका)
-                // Page 2: Committee & Choughadiya table
+                // Page 2: Committee & Choughadiya table (समिति पृष्ठ)
                 // Page 3: November 2026 (Month 11)
                 // Page 4: December 2026 (Month 12)
                 // Page 5: January 2027 (Month 1)
@@ -271,6 +272,7 @@
                 // Page 13: September 2027 (Month 9)
                 // Page 14: October 2027 (Month 10)
                 coverPage = 1;
+                samitiPage = 2;
                 monthPageMap = {
                     1: 5,   // Jan -> Page 5
                     2: 6,   // Feb -> Page 6
@@ -314,7 +316,7 @@
                 for (let m = 1; m <= Math.min(12, numPages); m++) monthPageMap[m] = m;
             }
 
-            const totalTasks = (coverPage ? 1 : 0) + Object.keys(monthPageMap).length;
+            const totalTasks = (coverPage ? 1 : 0) + (samitiPage ? 1 : 0) + Object.keys(monthPageMap).length;
             let completedTasks = 0;
 
             // 1. Extract Cover if applicable
@@ -330,6 +332,21 @@
 
                 const coverEl = document.getElementById('img-preview-cover');
                 if (coverEl) coverEl.src = `uploads/calendar/cover.webp?v=${Date.now()}`;
+            }
+
+            // 2. Extract Samiti page if applicable
+            if (samitiPage && samitiPage <= numPages) {
+                updateProgress(
+                    (completedTasks / totalTasks) * 90 + 5,
+                    'समिति पृष्ठ तैयार हो रहा है...',
+                    `PDF पृष्ठ ${samitiPage} (कार्यकारिणी व सल्लागार मंडळ) को WebP में बदला जा रहा है...`
+                );
+                const { blob, ext } = await renderPdfPageToBlob(pdfDoc, samitiPage);
+                await uploadCalendarPageBlob('samiti', blob, ext);
+                completedTasks++;
+
+                const samitiEl = document.getElementById('img-preview-samiti');
+                if (samitiEl) samitiEl.src = `uploads/calendar/samiti.webp?v=${Date.now()}`;
             }
 
             const monthNames = [

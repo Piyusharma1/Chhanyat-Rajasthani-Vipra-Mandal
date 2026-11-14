@@ -35,12 +35,13 @@ try:
 
     # Determine cover and month page indices (0-based)
     cover_idx = None
+    samiti_idx = None
     month_page_map = {}
 
     if num_pages == 14:
         # 🕉️ Sanatan Panchang 14-page format:
         # Page 1 (idx 0): Cover (सनातन दिनदर्शिका)
-        # Page 2 (idx 1): Committee & Advisory
+        # Page 2 (idx 1): Committee & Advisory (समिति)
         # Page 3 (idx 2): November (11)
         # Page 4 (idx 3): December (12)
         # Page 5 (idx 4): January (1)
@@ -54,6 +55,7 @@ try:
         # Page 13 (idx 12): September (9)
         # Page 14 (idx 13): October (10)
         cover_idx = 0
+        samiti_idx = 1
         month_page_map = {
             1: 4, 2: 5, 3: 6, 4: 7, 5: 8, 6: 9,
             7: 10, 8: 11, 9: 12, 10: 13, 11: 2, 12: 3
@@ -90,6 +92,18 @@ try:
         else:
             c_pix.save(c_file)
         print(f"Saved cover -> {c_file}")
+
+    # Extract Samiti/Committee page if applicable
+    if samiti_idx is not None and samiti_idx < num_pages:
+        s_page = doc[samiti_idx]
+        s_pix = s_page.get_pixmap(matrix=fitz.Matrix(2.0, 2.0))
+        s_file = os.path.join(base_dir, 'uploads', 'calendar', 'samiti.webp')
+        if has_pil:
+            s_img = Image.frombytes("RGB", [s_pix.width, s_pix.height], s_pix.samples)
+            s_img.save(s_file, "WEBP", quality=88, method=6)
+        else:
+            s_pix.save(s_file)
+        print(f"Saved samiti -> {s_file}")
 
     # Extract each of the 12 month pages
     for m in range(1, 13):

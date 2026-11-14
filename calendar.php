@@ -2,8 +2,8 @@
 session_start();
 $calendarPdfPath = 'uploads/calendar/calendar.pdf';
 $hasPdf = file_exists(__DIR__ . '/' . $calendarPdfPath);
-$targetMonth = isset($_GET['month']) ? trim((string)$_GET['month']) : '11';
-if ($targetMonth === '') $targetMonth = '11';
+$targetMonth = isset($_GET['month']) ? trim((string)$_GET['month']) : 'cover';
+if ($targetMonth === '') $targetMonth = 'cover';
 
 $months = [
     11 => ['hi' => 'नोव्हेंबर', 'en' => 'November 2026', 'year' => '२०२६', 'hi_num' => '११'],
@@ -20,7 +20,11 @@ $months = [
     10 => ['hi' => 'ऑक्टोबर',  'en' => 'October 2027',   'year' => '२०२७', 'hi_num' => '१०'],
 ];
 
-// Pre-build all calendar pages (Months 1..12 first, followed by Cover)
+// Pre-build all calendar pages in EXACT PDF order:
+// Page 1: Cover (मुखपृष्ठ)
+// Page 2: Samiti (कार्यकारिणी व सल्लागार मंडळ / चौघड़िया)
+// Pages 3..14: Months 11, 12, 1..10
+
 $coverSrc = 'uploads/calendar/cover.webp';
 if (!file_exists(__DIR__ . '/' . $coverSrc)) $coverSrc = 'uploads/calendar/cover.jpg';
 if (!file_exists(__DIR__ . '/' . $coverSrc)) $coverSrc = 'uploads/calendar/cover.png';
@@ -28,10 +32,44 @@ if (!file_exists(__DIR__ . '/' . $coverSrc)) $coverSrc = 'uploads/calendar/cover
 $coverThumb = 'uploads/calendar/thumbs/cover.webp';
 if (!file_exists(__DIR__ . '/' . $coverThumb)) $coverThumb = $coverSrc;
 
+$samitiSrc = 'uploads/calendar/samiti.webp';
+if (!file_exists(__DIR__ . '/' . $samitiSrc)) $samitiSrc = 'uploads/calendar/samiti.jpg';
+if (!file_exists(__DIR__ . '/' . $samitiSrc)) $samitiSrc = 'uploads/calendar/samiti.png';
+
+$samitiThumb = 'uploads/calendar/thumbs/samiti.webp';
+if (!file_exists(__DIR__ . '/' . $samitiThumb)) $samitiThumb = $samitiSrc;
+
 $calendarPages = [];
 $monthToPageIndex = [];
 
-$idx = 0;
+// Page 1: Cover
+$coverIndex = 0;
+$calendarPages[] = [
+    'key'      => 'cover',
+    'title'    => 'सनातन दिनदर्शिका (मुखपृष्ठ)',
+    'sub'      => 'छःन्यात राजस्थानी विप्र मंडल, लातूर',
+    'short'    => 'मुखपृष्ठ',
+    'src'      => $coverSrc,
+    'thumb'    => $coverThumb,
+    'download' => 'सनातन_दिनदर्शिका_मुखपृष्ठ.webp',
+];
+$coverPage = $calendarPages[$coverIndex];
+
+// Page 2: Samiti (कार्यकारिणी व सल्लागार मंडळ / चौघड़िया)
+$samitiIndex = 1;
+$calendarPages[] = [
+    'key'      => 'samiti',
+    'title'    => 'कार्यकारिणी व सल्लागार मंडळ (समिति पृष्ठ)',
+    'sub'      => 'छःन्यात राजस्थानी विप्र मंडल, लातूर',
+    'short'    => 'समिति',
+    'src'      => $samitiSrc,
+    'thumb'    => $samitiThumb,
+    'download' => 'सनातन_दिनदर्शिका_कार्यकारिणी_समिति.webp',
+];
+$samitiPage = $calendarPages[$samitiIndex];
+
+// Pages 3 to 14: Months
+$idx = 2;
 foreach ($months as $num => $m) {
     $pSrc = "uploads/calendar/pages/{$num}.webp";
     if (!file_exists(__DIR__ . '/' . $pSrc)) $pSrc = "uploads/calendar/pages/{$num}.jpg";
@@ -52,19 +90,6 @@ foreach ($months as $num => $m) {
     $monthToPageIndex[$num] = $idx;
     $idx++;
 }
-
-// Cover Page at the end
-$coverIndex = $idx;
-$calendarPages[] = [
-    'key'      => 'cover',
-    'title'    => 'सनातन दिनदर्शिका (मुखपृष्ठ)',
-    'sub'      => 'छःन्यात राजस्थानी विप्र मंडल, लातूर',
-    'short'    => 'मुखपृष्ठ',
-    'src'      => $coverSrc,
-    'thumb'    => $coverThumb,
-    'download' => 'सनातन_दिनदर्शिका_मुखपृष्ठ.webp',
-];
-$coverPage = $calendarPages[$coverIndex];
 ?>
 <!DOCTYPE html>
 <html lang="hi" dir="ltr">
@@ -696,26 +721,85 @@ $coverPage = $calendarPages[$coverIndex];
             <?php endif; ?>
         </div>
 
-        <!-- Sticky Month Bar: Desktop (All 12 in 1 Row) & Mobile (Swipeable Pills) -->
+        <!-- Sticky Month Bar: Desktop (All 14 in 1 Row) & Mobile (Swipeable Pills) -->
         <div class="month-bar-sticky-wrap" id="month-bar-sticky-wrap">
             <div class="month-bar-row" id="month-bar-row">
+                <a href="?month=cover" class="month-btn <?= ($targetMonth === 'cover') ? 'active' : '' ?>" data-month="cover" id="tab-month-cover">
+                    <i class="fas fa-book-open"></i> मुखपृष्ठ
+                </a>
+                <a href="?month=samiti" class="month-btn <?= ($targetMonth === 'samiti') ? 'active' : '' ?>" data-month="samiti" id="tab-month-samiti">
+                    <i class="fas fa-users"></i> समिति
+                </a>
                 <?php foreach ($months as $num => $m): ?>
                     <a href="?month=<?= $num ?>" class="month-btn <?= ($targetMonth === (string)$num) ? 'active' : '' ?>" data-month="<?= $num ?>" id="tab-month-<?= $num ?>">
                         <?= $m['hi_num'] ?>. <?= $m['hi'] ?>
                     </a>
                 <?php endforeach; ?>
-                <a href="?month=cover" class="month-btn <?= ($targetMonth === 'cover') ? 'active' : '' ?>" data-month="cover" id="tab-month-cover">
-                    <i class="fas fa-book-open"></i> मुखपृष्ठ
-                </a>
             </div>
         </div>
 
-        <!-- All 12 Months In Rows (Starts directly from Month 1: जानेवारी / 1.webp) -->
+        <!-- All Calendar Pages In PDF Order (Cover -> Samiti -> 11. Nov -> 12. Dec -> 1. Jan ... 10. Oct) -->
         <div class="all-months-grid" id="all-months-grid">
+
+            <!-- 1. Official Cover Page Card (Page 1 of PDF) -->
+            <div class="month-row-card" id="month-card-cover">
+                <div class="month-card-header">
+                    <div class="month-card-header-top">
+                        <h3><i class="fas fa-book-open"></i> मुखपृष्ठ (Cover Page)</h3>
+                        <span class="month-card-badge">२०२६-२७</span>
+                    </div>
+                </div>
+                <div class="month-card-img-wrap">
+                    <a href="<?= $coverPage['src'] ?>" class="cal-lb-trigger" data-lb-index="<?= $coverIndex ?>" title="क्लिक कर पूरा देखें">
+                        <img src="<?= $coverPage['thumb'] ?>" 
+                             alt="सनातन दिनदर्शिका मुखपृष्ठ"
+                             width="600" height="900"
+                             decoding="async"
+                             <?= ($targetMonth === 'cover' || $targetMonth === '') ? 'fetchpriority="high"' : 'loading="lazy"' ?>>
+                    </a>
+                </div>
+                <div class="month-card-actions">
+                    <a href="<?= $coverPage['src'] ?>" class="card-action-btn cal-lb-trigger" data-lb-index="<?= $coverIndex ?>">
+                        <i class="fas fa-expand"></i> पूरा देखें
+                    </a>
+                    <a href="<?= $coverPage['src'] ?>" download="<?= $coverPage['download'] ?>" class="card-action-btn btn-dl">
+                        <i class="fas fa-download"></i> डाउनलोड
+                    </a>
+                </div>
+            </div>
+
+            <!-- 2. Committee / Samiti Page Card (Page 2 of PDF - कार्यकारिणी व सल्लागार मंडळ / चौघड़िया) -->
+            <div class="month-row-card" id="month-card-samiti">
+                <div class="month-card-header">
+                    <div class="month-card-header-top">
+                        <h3><i class="fas fa-users"></i> कार्यकारिणी व सल्लागार मंडळ (समिति पृष्ठ)</h3>
+                        <span class="month-card-badge">सल्लागार व कार्यकारिणी</span>
+                    </div>
+                </div>
+                <div class="month-card-img-wrap">
+                    <a href="<?= $samitiPage['src'] ?>" class="cal-lb-trigger" data-lb-index="<?= $samitiIndex ?>" title="क्लिक कर पूरा देखें">
+                        <img src="<?= $samitiPage['thumb'] ?>" 
+                             alt="सनातन दिनदर्शिका - कार्यकारिणी व सल्लागार मंडळ"
+                             width="600" height="900"
+                             decoding="async"
+                             <?= ($targetMonth === 'samiti') ? 'fetchpriority="high"' : 'loading="lazy"' ?>>
+                    </a>
+                </div>
+                <div class="month-card-actions">
+                    <a href="<?= $samitiPage['src'] ?>" class="card-action-btn cal-lb-trigger" data-lb-index="<?= $samitiIndex ?>">
+                        <i class="fas fa-expand"></i> पूरा देखें
+                    </a>
+                    <a href="<?= $samitiPage['src'] ?>" download="<?= $samitiPage['download'] ?>" class="card-action-btn btn-dl">
+                        <i class="fas fa-download"></i> डाउनलोड
+                    </a>
+                </div>
+            </div>
+
+            <!-- 3..14 Monthly Sheets (Pages 3 to 14 of PDF: Nov 2026 to Oct 2027) -->
             <?php foreach ($months as $num => $m): 
                 $pageIdx = $monthToPageIndex[$num];
                 $page = $calendarPages[$pageIdx];
-                $isFirst = ($num === 11);
+                $isTarget = ($targetMonth === (string)$num);
             ?>
                 <div class="month-row-card" id="month-card-<?= $num ?>">
                     <div class="month-card-header">
@@ -730,7 +814,7 @@ $coverPage = $calendarPages[$coverIndex];
                                  alt="सनातन दिनदर्शिका - <?= $m['hi'] ?> <?= $m['year'] ?>"
                                  width="600" height="750"
                                  decoding="async"
-                                 <?= ($isFirst && ($targetMonth === '11' || $targetMonth === '')) ? 'fetchpriority="high"' : 'loading="lazy"' ?>>
+                                 <?= ($isTarget) ? 'fetchpriority="high"' : 'loading="lazy"' ?>>
                         </a>
                     </div>
                     <div class="month-card-actions">
@@ -743,33 +827,6 @@ $coverPage = $calendarPages[$coverIndex];
                     </div>
                 </div>
             <?php endforeach; ?>
-
-            <!-- Official Cover Page Card (After the 12 Monthly Sheets) -->
-            <div class="month-row-card" id="month-card-cover">
-                <div class="month-card-header">
-                    <div class="month-card-header-top">
-                        <h3><i class="fas fa-book-open"></i> मुखपृष्ठ (Cover Page)</h3>
-                        <span class="month-card-badge">२०२६-२७</span>
-                    </div>
-                </div>
-                <div class="month-card-img-wrap">
-                    <a href="<?= $coverPage['src'] ?>" class="cal-lb-trigger" data-lb-index="<?= $coverIndex ?>" title="क्लिक कर पूरा देखें">
-                        <img src="<?= $coverPage['thumb'] ?>" 
-                             alt="सनातन दिनदर्शिका मुखपृष्ठ"
-                             width="600" height="900"
-                             decoding="async"
-                             loading="lazy">
-                    </a>
-                </div>
-                <div class="month-card-actions">
-                    <a href="<?= $coverPage['src'] ?>" class="card-action-btn cal-lb-trigger" data-lb-index="<?= $coverIndex ?>">
-                        <i class="fas fa-expand"></i> पूरा देखें
-                    </a>
-                    <a href="<?= $coverPage['src'] ?>" download="<?= $coverPage['download'] ?>" class="card-action-btn btn-dl">
-                        <i class="fas fa-download"></i> डाउनलोड
-                    </a>
-                </div>
-            </div>
         </div>
 
         <!-- Floating Scroll to Top Button -->

@@ -630,6 +630,7 @@ $months = [
             <div class="month-bar-sticky-wrap">
                 <div class="month-bar-row">
                     <a href="#admin-month-card-cover" class="month-btn">मुखपृष्ठ</a>
+                    <a href="#admin-month-card-samiti" class="month-btn">समिति</a>
                     <?php foreach ($months as $num => $m): ?>
                         <a href="#admin-month-card-<?= $num ?>" class="month-btn">
                             <?= $num ?>. <?= $m['hi'] ?>
@@ -638,7 +639,7 @@ $months = [
                 </div>
             </div>
 
-            <!-- All 12 Months & Cover Grid -->
+            <!-- All 12 Months & Cover & Samiti Grid -->
             <div class="all-months-grid">
 
                 <!-- 1. COVER PAGE CARD -->
@@ -660,6 +661,30 @@ $months = [
                             <i class="fas fa-camera"></i> फ़ोटो बदलें
                         </button>
                         <button type="button" class="card-action-btn" onclick="openLightbox('<?= $coverSrc ?>', 'सनातन दिनदर्शिका मुखपृष्ठ')">
+                            <i class="fas fa-expand"></i> पूरा देखें
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 2. SAMITI PAGE CARD -->
+                <?php 
+                    $samitiWebp = 'uploads/calendar/samiti.webp';
+                    $samitiSrc = file_exists(__DIR__ . '/' . $samitiWebp) ? $samitiWebp : 'uploads/calendar/samiti.png';
+                ?>
+                <div class="month-row-card" id="admin-month-card-samiti">
+                    <div class="month-card-header">
+                        <h3>कार्यकारिणी व सल्लागार मंडळ (समिति पृष्ठ)</h3>
+                        <span>समिति व चौघड़िया</span>
+                    </div>
+                    <div class="month-card-img-wrap" onclick="openLightbox('<?= $samitiSrc ?>', 'कार्यकारिणी व सल्लागार मंडळ')">
+                        <img src="<?= $samitiSrc ?>?v=<?= time() ?>" id="img-preview-samiti" alt="कार्यकारिणी व सल्लागार मंडळ">
+                        <span class="zoom-badge"><i class="fas fa-search-plus"></i> बड़ा देखें</span>
+                    </div>
+                    <div class="month-card-actions">
+                        <button type="button" class="card-action-btn btn-replace" onclick="openReplaceModal('samiti', 'कार्यकारिणी व सल्लागार मंडळ (समिति पृष्ठ)', '<?= $samitiSrc ?>')">
+                            <i class="fas fa-camera"></i> फ़ोटो बदलें
+                        </button>
+                        <button type="button" class="card-action-btn" onclick="openLightbox('<?= $samitiSrc ?>', 'कार्यकारिणी व सल्लागार मंडळ')">
                             <i class="fas fa-expand"></i> पूरा देखें
                         </button>
                     </div>

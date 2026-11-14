@@ -64,14 +64,14 @@ document.addEventListener('DOMContentLoaded', function () {
     function scrollToCard(m, smooth, doPulse) {
         var target = document.getElementById('month-card-' + m);
         if (!target) return false;
-        var top = (m === '11') ? 0 : cardTop(target);
+        var top = (m === 'cover') ? 0 : cardTop(target);
         window.scrollTo({ top: top, behavior: smooth ? 'smooth' : 'auto' });
         if (doPulse) pulse(target);
         return true;
     }
 
     function isValidMonth(v) {
-        if (v === 'cover') return true;
+        if (v === 'cover' || v === 'samiti') return true;
         var n = parseInt(v, 10);
         return String(n) === String(v) && n >= 1 && n <= 12;
     }
@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
 
-        highlightTab(best ? best.id.replace('month-card-', '') : '11');
+        highlightTab(best ? best.id.replace('month-card-', '') : 'cover');
     }
 
     var spyQueued = false;
@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Safety net: fonts/header can shift layout slightly. Re-align once after load.
         window.addEventListener('load', function () {
-            if (userInteracted || incoming === '11') return;
+            if (userInteracted || incoming === 'cover') return;
             var t = document.getElementById('month-card-' + incoming);
             if (t && Math.abs(t.getBoundingClientRect().top - SCROLL_OFFSET) > 40) {
                 lockAutoScroll(600);
@@ -147,7 +147,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }, { once: true });
     } else {
-        highlightTab('11');
+        highlightTab('cover');
     }
 
     // ── 6. Scroll-to-top button ──────────────────────────────────────────────

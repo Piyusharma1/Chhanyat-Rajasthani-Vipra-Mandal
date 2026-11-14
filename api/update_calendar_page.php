@@ -136,6 +136,22 @@ if ($pageTarget === 'cover') {
         ]);
         exit;
     }
+} elseif ($pageTarget === 'samiti') {
+    $targetWebp = $baseDir . 'samiti.webp';
+    $targetPng = $baseDir . 'samiti.png';
+    $targetThumb = $thumbDir . 'samiti.webp';
+
+    if (convertToWebp($file['tmp_name'], $targetWebp, $mime)) {
+        @copy($file['tmp_name'], $targetPng);
+        createCalendarThumbnail($targetWebp, $targetThumb, 600, 900);
+
+        echo json_encode([
+            'success' => true,
+            'message' => 'कार्यकारिणी व सल्लागार मंडळ (समिति पृष्ठ) WebP प्रारूप में सफलतापूर्वक अपडेट हो गया!',
+            'url' => 'uploads/calendar/samiti.webp?v=' . time()
+        ]);
+        exit;
+    }
 } else {
     $monthNum = (int)$pageTarget;
     if ($monthNum < 1 || $monthNum > 12) {
