@@ -2,22 +2,22 @@
 session_start();
 $calendarPdfPath = 'uploads/calendar/calendar.pdf';
 $hasPdf = file_exists(__DIR__ . '/' . $calendarPdfPath);
-$targetMonth = isset($_GET['month']) ? trim((string)$_GET['month']) : '1';
-if ($targetMonth === '') $targetMonth = '1';
+$targetMonth = isset($_GET['month']) ? trim((string)$_GET['month']) : '11';
+if ($targetMonth === '') $targetMonth = '11';
 
 $months = [
-    1  => ['hi' => 'जानेवारी', 'en' => 'January 2027', 'year' => '२०२७', 'hi_num' => '१', 'panchang' => 'पौष / माघ शके १९४८ • मारवाडी संवत : २०८३'],
-    2  => ['hi' => 'फेब्रुवारी', 'en' => 'February 2027', 'year' => '२०२७', 'hi_num' => '२', 'panchang' => 'माघ / फाल्गुन शके १९४८ • मारवाडी संवत : २०८३'],
-    3  => ['hi' => 'मार्च', 'en' => 'March 2027', 'year' => '२०२७', 'hi_num' => '३', 'panchang' => 'फाल्गुन / चैत्र शके १९४८ • मारवाडी संवत : २०८३'],
-    4  => ['hi' => 'एप्रिल', 'en' => 'April 2027', 'year' => '२०२७', 'hi_num' => '४', 'panchang' => 'चैत्र / वैशाख शके १९४८/१९४९ • मारवाडी संवत : २०८३-२०८४'],
-    5  => ['hi' => 'मे', 'en' => 'May 2027', 'year' => '२०२७', 'hi_num' => '५', 'panchang' => 'वैशाख / ज्येष्ठ शके १९४९ • मारवाडी संवत : २०८४'],
-    6  => ['hi' => 'जून', 'en' => 'June 2027', 'year' => '२०२७', 'hi_num' => '६', 'panchang' => 'ज्येष्ठ / आषाढ शके १९४९ • मारवाडी संवत : २०८४'],
-    7  => ['hi' => 'जुलै', 'en' => 'July 2027', 'year' => '२०२७', 'hi_num' => '७', 'panchang' => 'आषाढ / श्रावण शके १९४९ • मारवाडी संवत : २०८४'],
-    8  => ['hi' => 'ऑगस्ट', 'en' => 'August 2027', 'year' => '२०२७', 'hi_num' => '८', 'panchang' => 'श्रावण / भाद्रपद शके १९४९ • मारवाडी संवत : २०८४'],
-    9  => ['hi' => 'सप्टेंबर', 'en' => 'September 2027', 'year' => '२०२७', 'hi_num' => '९', 'panchang' => 'भाद्रपद / आश्विन शके १९४९ • मारवाडी संवत : २०८४'],
-    10 => ['hi' => 'ऑक्टोबर', 'en' => 'October 2027', 'year' => '२०२७', 'hi_num' => '१०', 'panchang' => 'आश्विन / कार्तिक शके १९४९ • मारवाडी संवत : २०८४'],
-    11 => ['hi' => 'नोव्हेंबर', 'en' => 'November 2026', 'year' => '२०२६', 'hi_num' => '११', 'panchang' => 'कार्तिक शके १९४८ • मारवाडी संवत : २०८३'],
-    12 => ['hi' => 'डिसेंबर', 'en' => 'December 2026', 'year' => '२०२६', 'hi_num' => '१२', 'panchang' => 'कार्तिक / मार्गशीर्ष शके १९४८ • मारवाडी संवत : २०८३'],
+    11 => ['hi' => 'नोव्हेंबर', 'en' => 'November 2026', 'year' => '२०२६', 'hi_num' => '११'],
+    12 => ['hi' => 'डिसेंबर',   'en' => 'December 2026',  'year' => '२०२६', 'hi_num' => '१२'],
+    1  => ['hi' => 'जानेवारी',  'en' => 'January 2027',   'year' => '२०२७', 'hi_num' => '१'],
+    2  => ['hi' => 'फेब्रुवारी','en' => 'February 2027',  'year' => '२०२७', 'hi_num' => '२'],
+    3  => ['hi' => 'मार्च',     'en' => 'March 2027',     'year' => '२०२७', 'hi_num' => '३'],
+    4  => ['hi' => 'एप्रिल',    'en' => 'April 2027',     'year' => '२०२७', 'hi_num' => '४'],
+    5  => ['hi' => 'मे',        'en' => 'May 2027',       'year' => '२०२७', 'hi_num' => '५'],
+    6  => ['hi' => 'जून',       'en' => 'June 2027',      'year' => '२०२७', 'hi_num' => '६'],
+    7  => ['hi' => 'जुलै',      'en' => 'July 2027',      'year' => '२०२७', 'hi_num' => '७'],
+    8  => ['hi' => 'ऑगस्ट',    'en' => 'August 2027',    'year' => '२०२७', 'hi_num' => '८'],
+    9  => ['hi' => 'सप्टेंबर',  'en' => 'September 2027', 'year' => '२०२७', 'hi_num' => '९'],
+    10 => ['hi' => 'ऑक्टोबर',  'en' => 'October 2027',   'year' => '२०२७', 'hi_num' => '१०'],
 ];
 
 // Pre-build all calendar pages (Months 1..12 first, followed by Cover)
@@ -43,7 +43,7 @@ foreach ($months as $num => $m) {
     $calendarPages[] = [
         'key'      => (string)$num,
         'title'    => "{$m['hi_num']}. {$m['hi']} {$m['year']}",
-        'sub'      => "{$m['panchang']}",
+        'sub'      => '',
         'short'    => "{$m['hi_num']}. {$m['hi']}",
         'src'      => $pSrc,
         'thumb'    => $pThumb,
@@ -324,23 +324,6 @@ $coverPage = $calendarPages[$coverIndex];
             white-space: nowrap;
         }
 
-        .month-card-header .panchang-sub {
-            font-size: 0.8rem;
-            color: var(--cal-gold-light, #F0C060);
-            opacity: 0.94;
-            font-family: 'Noto Sans Devanagari', sans-serif;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            line-height: 1.35;
-        }
-
-        .month-card-header .panchang-sub i {
-            color: var(--cal-saffron, #FF6B00);
-            font-size: 0.85em;
-            flex-shrink: 0;
-        }
-
         .month-card-img-wrap {
             padding: 6px;
             background: #fafafa;
@@ -487,12 +470,6 @@ $coverPage = $calendarPages[$coverIndex];
             .month-card-header h3 {
                 font-size: 1.05rem;
                 line-height: 1.3;
-            }
-
-            .month-card-header .panchang-sub {
-                font-size: 0.75rem;
-                line-height: 1.35;
-                word-break: break-word;
             }
 
             .month-card-badge {
@@ -738,7 +715,7 @@ $coverPage = $calendarPages[$coverIndex];
             <?php foreach ($months as $num => $m): 
                 $pageIdx = $monthToPageIndex[$num];
                 $page = $calendarPages[$pageIdx];
-                $isFirst = ($num === 1);
+                $isFirst = ($num === 11);
             ?>
                 <div class="month-row-card" id="month-card-<?= $num ?>">
                     <div class="month-card-header">
@@ -746,11 +723,6 @@ $coverPage = $calendarPages[$coverIndex];
                             <h3><i class="fas fa-calendar-alt"></i> <?= $m['hi_num'] ?>. <?= $m['hi'] ?> <?= $m['year'] ?></h3>
                             <span class="month-card-badge"><?= $m['en'] ?></span>
                         </div>
-                        <?php if (!empty($m['panchang'])): ?>
-                            <div class="panchang-sub">
-                                <i class="fas fa-om"></i> <?= htmlspecialchars($m['panchang']) ?>
-                            </div>
-                        <?php endif; ?>
                     </div>
                     <div class="month-card-img-wrap">
                         <a href="<?= $page['src'] ?>" class="cal-lb-trigger" data-lb-index="<?= $pageIdx ?>" title="क्लिक कर पूरा देखें">
@@ -758,7 +730,7 @@ $coverPage = $calendarPages[$coverIndex];
                                  alt="सनातन दिनदर्शिका - <?= $m['hi'] ?> <?= $m['year'] ?>"
                                  width="600" height="750"
                                  decoding="async"
-                                 <?= ($isFirst && ($targetMonth === '1' || $targetMonth === '')) ? 'fetchpriority="high"' : 'loading="lazy"' ?>>
+                                 <?= ($isFirst && ($targetMonth === '11' || $targetMonth === '')) ? 'fetchpriority="high"' : 'loading="lazy"' ?>>
                         </a>
                     </div>
                     <div class="month-card-actions">
@@ -778,9 +750,6 @@ $coverPage = $calendarPages[$coverIndex];
                     <div class="month-card-header-top">
                         <h3><i class="fas fa-book-open"></i> मुखपृष्ठ (Cover Page)</h3>
                         <span class="month-card-badge">२०२६-२७</span>
-                    </div>
-                    <div class="panchang-sub">
-                        <i class="fas fa-om"></i> सनातन दिनदर्शिका • छःन्यात राजस्थानी विप्र मंडल, लातूर
                     </div>
                 </div>
                 <div class="month-card-img-wrap">
