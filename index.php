@@ -208,6 +208,8 @@ $cssVersion = file_exists($cssPath) ? filemtime($cssPath) : time();
                             <span>माहवार पृष्ठ (सीधे देखें)</span>
                         </div>
                         <div class="home-cal-months-strip" id="home-cal-months-strip">
+                            <a href="calendar.php?month=11" class="home-month-pill" data-month="11">११. नोव्हेंबर</a>
+                            <a href="calendar.php?month=12" class="home-month-pill" data-month="12">१२. डिसेंबर</a>
                             <a href="calendar.php?month=1" class="home-month-pill" data-month="1">१. जानेवारी</a>
                             <a href="calendar.php?month=2" class="home-month-pill" data-month="2">२. फेब्रुवारी</a>
                             <a href="calendar.php?month=3" class="home-month-pill" data-month="3">३. मार्च</a>
@@ -218,8 +220,6 @@ $cssVersion = file_exists($cssPath) ? filemtime($cssPath) : time();
                             <a href="calendar.php?month=8" class="home-month-pill" data-month="8">८. ऑगस्ट</a>
                             <a href="calendar.php?month=9" class="home-month-pill" data-month="9">९. सप्टेंबर</a>
                             <a href="calendar.php?month=10" class="home-month-pill" data-month="10">१०. ऑक्टोबर</a>
-                            <a href="calendar.php?month=11" class="home-month-pill" data-month="11">११. नोव्हेंबर</a>
-                            <a href="calendar.php?month=12" class="home-month-pill" data-month="12">१२. डिसेंबर</a>
                         </div>
 
                         <div class="home-cal-action-btns">

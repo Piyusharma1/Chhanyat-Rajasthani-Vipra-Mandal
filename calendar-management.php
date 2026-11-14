@@ -17,18 +17,18 @@ $hasPdf = file_exists(__DIR__ . '/' . $calendarPdfPath);
 $pdfSize = $hasPdf ? round(filesize(__DIR__ . '/' . $calendarPdfPath) / (1024 * 1024), 2) . ' MB' : 'अनुपलब्ध';
 
 $months = [
-    1  => ['hi' => 'जानेवारी', 'en' => 'January'],
-    2  => ['hi' => 'फेब्रुवारी', 'en' => 'February'],
-    3  => ['hi' => 'मार्च', 'en' => 'March'],
-    4  => ['hi' => 'एप्रिल', 'en' => 'April'],
-    5  => ['hi' => 'मे', 'en' => 'May'],
-    6  => ['hi' => 'जून', 'en' => 'June'],
-    7  => ['hi' => 'जुलै', 'en' => 'July'],
-    8  => ['hi' => 'ऑगस्ट', 'en' => 'August'],
-    9  => ['hi' => 'सप्टेंबर', 'en' => 'September'],
-    10 => ['hi' => 'ऑक्टोबर', 'en' => 'October'],
-    11 => ['hi' => 'नोव्हेंबर', 'en' => 'November'],
-    12 => ['hi' => 'डिसेंबर', 'en' => 'December'],
+    11 => ['hi' => 'नोव्हेंबर', 'en' => 'November 2026', 'year' => '२०२६', 'hi_num' => '११'],
+    12 => ['hi' => 'डिसेंबर', 'en' => 'December 2026', 'year' => '२०२६', 'hi_num' => '१२'],
+    1  => ['hi' => 'जानेवारी', 'en' => 'January 2027', 'year' => '२०२७', 'hi_num' => '१'],
+    2  => ['hi' => 'फेब्रुवारी', 'en' => 'February 2027', 'year' => '२०२७', 'hi_num' => '२'],
+    3  => ['hi' => 'मार्च', 'en' => 'March 2027', 'year' => '२०२७', 'hi_num' => '३'],
+    4  => ['hi' => 'एप्रिल', 'en' => 'April 2027', 'year' => '२०२७', 'hi_num' => '४'],
+    5  => ['hi' => 'मे', 'en' => 'May 2027', 'year' => '२०२७', 'hi_num' => '५'],
+    6  => ['hi' => 'जून', 'en' => 'June 2027', 'year' => '२०२७', 'hi_num' => '६'],
+    7  => ['hi' => 'जुलै', 'en' => 'July 2027', 'year' => '२०२७', 'hi_num' => '७'],
+    8  => ['hi' => 'ऑगस्ट', 'en' => 'August 2027', 'year' => '२०२७', 'hi_num' => '८'],
+    9  => ['hi' => 'सप्टेंबर', 'en' => 'September 2027', 'year' => '२०२७', 'hi_num' => '९'],
+    10 => ['hi' => 'ऑक्टोबर', 'en' => 'October 2027', 'year' => '२०२७', 'hi_num' => '१०'],
 ];
 ?>
 <!DOCTYPE html>
@@ -672,18 +672,18 @@ $months = [
                 ?>
                     <div class="month-row-card" id="admin-month-card-<?= $num ?>">
                         <div class="month-card-header">
-                            <h3><?= $num ?>. <?= $m['hi'] ?></h3>
+                            <h3><?= $m['hi_num'] ?>. <?= $m['hi'] ?> <?= $m['year'] ?></h3>
                             <span><?= $m['en'] ?></span>
                         </div>
-                        <div class="month-card-img-wrap" onclick="openLightbox('<?= $pageSrc ?>', '<?= $m['hi'] ?> - सनातन दिनदर्शिका')">
-                            <img src="<?= $pageSrc ?>?v=<?= time() ?>" id="img-preview-<?= $num ?>" alt="सनातन दिनदर्शिका - <?= $m['hi'] ?>">
+                        <div class="month-card-img-wrap" onclick="openLightbox('<?= $pageSrc ?>', '<?= $m['hi_num'] ?>. <?= $m['hi'] ?> <?= $m['year'] ?> - सनातन दिनदर्शिका')">
+                            <img src="<?= $pageSrc ?>?v=<?= time() ?>" id="img-preview-<?= $num ?>" alt="सनातन दिनदर्शिका - <?= $m['hi'] ?> <?= $m['year'] ?>">
                             <span class="zoom-badge"><i class="fas fa-search-plus"></i> बड़ा देखें</span>
                         </div>
                         <div class="month-card-actions">
-                            <button type="button" class="card-action-btn btn-replace" onclick="openReplaceModal('<?= $num ?>', '<?= $num ?>. <?= $m['hi'] ?>', '<?= $pageSrc ?>')">
+                            <button type="button" class="card-action-btn btn-replace" onclick="openReplaceModal('<?= $num ?>', '<?= $m['hi_num'] ?>. <?= $m['hi'] ?> <?= $m['year'] ?>', '<?= $pageSrc ?>')">
                                 <i class="fas fa-camera"></i> फ़ोटो बदलें
                             </button>
-                            <button type="button" class="card-action-btn" onclick="openLightbox('<?= $pageSrc ?>', '<?= $m['hi'] ?> - सनातन दिनदर्शिका')">
+                            <button type="button" class="card-action-btn" onclick="openLightbox('<?= $pageSrc ?>', '<?= $m['hi_num'] ?>. <?= $m['hi'] ?> <?= $m['year'] ?> - सनातन दिनदर्शिका')">
                                 <i class="fas fa-expand"></i> पूरा देखें
                             </button>
                         </div>

@@ -5,18 +5,18 @@ $hasPdf = file_exists(__DIR__ . '/' . $calendarPdfPath);
 $targetMonth = isset($_GET['month']) ? trim((string)$_GET['month']) : '';
 
 $months = [
-    1  => ['hi' => 'जानेवारी', 'en' => '', 'hi_num' => '१'],
-    2  => ['hi' => 'फेब्रुवारी', 'en' => '', 'hi_num' => '२'],
-    3  => ['hi' => 'मार्च', 'en' => '', 'hi_num' => '३'],
-    4  => ['hi' => 'एप्रिल', 'en' => '', 'hi_num' => '४'],
-    5  => ['hi' => 'मे', 'en' => '', 'hi_num' => '५'],
-    6  => ['hi' => 'जून', 'en' => '', 'hi_num' => '६'],
-    7  => ['hi' => 'जुलै', 'en' => '', 'hi_num' => '७'],
-    8  => ['hi' => 'ऑगस्ट', 'en' => '', 'hi_num' => '८'],
-    9  => ['hi' => 'सप्टेंबर', 'en' => '', 'hi_num' => '९'],
-    10 => ['hi' => 'ऑक्टोबर', 'en' => '', 'hi_num' => '१०'],
-    11 => ['hi' => 'नोव्हेंबर', 'en' => '', 'hi_num' => '११'],
-    12 => ['hi' => 'डिसेंबर', 'en' => '', 'hi_num' => '१२'],
+    11 => ['hi' => 'नोव्हेंबर', 'en' => 'November 2026', 'year' => '२०२६', 'hi_num' => '११', 'panchang' => 'कार्तिक शके १९४८ • मारवाडी संवत : २०८३'],
+    12 => ['hi' => 'डिसेंबर', 'en' => 'December 2026', 'year' => '२०२६', 'hi_num' => '१२', 'panchang' => 'कार्तिक / मार्गशीर्ष शके १९४८ • मारवाडी संवत : २०८३'],
+    1  => ['hi' => 'जानेवारी', 'en' => 'January 2027', 'year' => '२०२७', 'hi_num' => '१', 'panchang' => 'पौष / माघ शके १९४८ • मारवाडी संवत : २०८३'],
+    2  => ['hi' => 'फेब्रुवारी', 'en' => 'February 2027', 'year' => '२०२७', 'hi_num' => '२', 'panchang' => 'माघ / फाल्गुन शके १९४८ • मारवाडी संवत : २०८३'],
+    3  => ['hi' => 'मार्च', 'en' => 'March 2027', 'year' => '२०२७', 'hi_num' => '३', 'panchang' => 'फाल्गुन / चैत्र शके १९४८ • मारवाडी संवत : २०८३'],
+    4  => ['hi' => 'एप्रिल', 'en' => 'April 2027', 'year' => '२०२७', 'hi_num' => '४', 'panchang' => 'चैत्र / वैशाख शके १९४८/१९४९ • मारवाडी संवत : २०८३-२०८४'],
+    5  => ['hi' => 'मे', 'en' => 'May 2027', 'year' => '२०२७', 'hi_num' => '५', 'panchang' => 'वैशाख / ज्येष्ठ शके १९४९ • मारवाडी संवत : २०८४'],
+    6  => ['hi' => 'जून', 'en' => 'June 2027', 'year' => '२०२७', 'hi_num' => '६', 'panchang' => 'ज्येष्ठ / आषाढ शके १९४९ • मारवाडी संवत : २०८४'],
+    7  => ['hi' => 'जुलै', 'en' => 'July 2027', 'year' => '२०२७', 'hi_num' => '७', 'panchang' => 'आषाढ / श्रावण शके १९४९ • मारवाडी संवत : २०८४'],
+    8  => ['hi' => 'ऑगस्ट', 'en' => 'August 2027', 'year' => '२०२७', 'hi_num' => '८', 'panchang' => 'श्रावण / भाद्रपद शके १९४९ • मारवाडी संवत : २०८४'],
+    9  => ['hi' => 'सप्टेंबर', 'en' => 'September 2027', 'year' => '२०२७', 'hi_num' => '९', 'panchang' => 'भाद्रपद / आश्विन शके १९४९ • मारवाडी संवत : २०८४'],
+    10 => ['hi' => 'ऑक्टोबर', 'en' => 'October 2027', 'year' => '२०२७', 'hi_num' => '१०', 'panchang' => 'आश्विन / कार्तिक शके १९४९ • मारवाडी संवत : २०८४'],
 ];
 
 // Pre-build all 13 calendar pages for grid & interactive lightbox viewer
@@ -49,12 +49,12 @@ foreach ($months as $num => $m) {
 
     $calendarPages[] = [
         'key'      => (string)$num,
-        'title'    => "{$num}. {$m['hi']}",
-        'sub'      => "{$m['en']}",
-        'short'    => "{$num}. {$m['hi']}",
+        'title'    => "{$m['hi_num']}. {$m['hi']} {$m['year']}",
+        'sub'      => "{$m['panchang']}",
+        'short'    => "{$m['hi_num']}. {$m['hi']}",
         'src'      => $pSrc,
         'thumb'    => $pThumb,
-        'download' => "सनातन_दिनदर्शिका_{$m['hi']}.webp",
+        'download' => "सनातन_दिनदर्शिका_{$m['hi']}_{$m['year']}.webp",
     ];
 }
 ?>
@@ -635,8 +635,8 @@ foreach ($months as $num => $m) {
     <main class="cal-container">
         <div class="gallery-hero" style="margin-bottom: 15px;">
             <div class="gallery-hero-content">
-                <h2>सनातन दिनदर्शिका</h2>
-                <p class="gallery-hero-subtitle" id="gallery-total-info">छःन्यात राजस्थानी विप्र मंडल, लातूर</p>
+                <h2>सनातन दिनदर्शिका २०२६-२७</h2>
+                <p class="gallery-hero-subtitle" id="gallery-total-info">छःन्यात राजस्थानी विप्र मंडल, लातूर • मारवाडी संवत २०८३-२०८४</p>
             </div>
         </div>
 
@@ -695,25 +695,27 @@ foreach ($months as $num => $m) {
                 </div>
             </div>
 
-            <?php foreach ($months as $num => $m): 
-                $page = $calendarPages[$num];
+            <?php 
+            $pageIndex = 1;
+            foreach ($months as $num => $m): 
+                $page = $calendarPages[$pageIndex];
             ?>
                 <div class="month-row-card" id="month-card-<?= $num ?>">
                     <div class="month-card-header">
                         <h3><?= $page['title'] ?></h3>
-                        <?php if (!empty($m['en'])): ?><span><?= htmlspecialchars($m['en']) ?></span><?php endif; ?>
+                        <?php if (!empty($m['panchang'])): ?><span><?= htmlspecialchars($m['panchang']) ?></span><?php endif; ?>
                     </div>
                     <div class="month-card-img-wrap">
-                        <a href="<?= $page['src'] ?>" class="cal-lb-trigger" data-lb-index="<?= $num ?>" title="क्लिक कर पूरा देखें">
+                        <a href="<?= $page['src'] ?>" class="cal-lb-trigger" data-lb-index="<?= $pageIndex ?>" title="क्लिक कर पूरा देखें">
                             <img src="<?= $page['thumb'] ?>" 
-                                 alt="सनातन दिनदर्शिका - <?= $m['hi'] ?> 2026"
+                                 alt="सनातन दिनदर्शिका - <?= $m['hi'] ?> <?= $m['year'] ?>"
                                  width="600" height="750"
                                  decoding="async"
                                  loading="lazy">
                         </a>
                     </div>
                     <div class="month-card-actions">
-                        <a href="<?= $page['src'] ?>" class="card-action-btn cal-lb-trigger" data-lb-index="<?= $num ?>">
+                        <a href="<?= $page['src'] ?>" class="card-action-btn cal-lb-trigger" data-lb-index="<?= $pageIndex ?>">
                             <i class="fas fa-expand"></i> पूरा देखें
                         </a>
                         <a href="<?= $page['src'] ?>" download="<?= $page['download'] ?>" class="card-action-btn btn-dl">
@@ -721,7 +723,10 @@ foreach ($months as $num => $m) {
                         </a>
                     </div>
                 </div>
-            <?php endforeach; ?>
+            <?php 
+                $pageIndex++;
+            endforeach; 
+            ?>
         </div>
 
         <!-- Floating Scroll to Top Button -->

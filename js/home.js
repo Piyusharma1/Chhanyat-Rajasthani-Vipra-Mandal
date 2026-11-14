@@ -565,6 +565,20 @@ function renderAdsHtml(ads) {
 // 📅 UPCOMING EVENTS / CALENDAR LOADER
 // ============================================
 const hindiMonths = ['', 'जानेवारी', 'फेब्रुवारी', 'मार्च', 'एप्रिल', 'मे', 'जून', 'जुलै', 'ऑगस्ट', 'सप्टेंबर', 'ऑक्टोबर', 'नोव्हेंबर', 'डिसेंबर'];
+const hindiMonthTitles = {
+    11: '११. नोव्हेंबर २०२६',
+    12: '१२. डिसेंबर २०२६',
+    1: '१. जानेवारी २०२७',
+    2: '२. फेब्रुवारी २०२७',
+    3: '३. मार्च २०२७',
+    4: '४. एप्रिल २०२७',
+    5: '५. मे २०२७',
+    6: '६. जून २०२७',
+    7: '७. जुलै २०२७',
+    8: '८. ऑगस्ट २०२७',
+    9: '९. सप्टेंबर २०२७',
+    10: '१०. ऑक्टोबर २०२७'
+};
 
 function loadUpcomingEvents() {
     setupHomeCalendarWidget();
@@ -607,7 +621,8 @@ function setupHomeCalendarWidget() {
         if (!pill) return;
         const m = Number(pill.dataset.month);
         if (!(m >= 1 && m <= 12)) return;
-        const label = `सनातन दिनदर्शिका: ${hindiMonths[m]}`;
+        const monthTitle = hindiMonthTitles[m] || hindiMonths[m];
+        const label = `सनातन दिनदर्शिका: ${monthTitle}`;
         show(`uploads/calendar/pages/${m}.webp`, label, label, `calendar.php?month=${m}`);
     }
     const restore = () => show(cover.src, cover.alt, baseTitle, cover.href);
