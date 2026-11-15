@@ -90,7 +90,7 @@ function convertToWebp($sourcePath, $destWebpPath, $mime) {
 }
 
 // Helper to create resized WebP thumbnail
-function createCalendarThumbnail($sourceWebpPath, $destThumbPath, $maxW = 600, $maxH = 800) {
+function createCalendarThumbnail($sourceWebpPath, $destThumbPath, $maxW = 900, $maxH = 1200) {
     $dir = dirname($destThumbPath);
     if (!file_exists($dir)) {
         @mkdir($dir, 0755, true);
@@ -105,7 +105,7 @@ function createCalendarThumbnail($sourceWebpPath, $destThumbPath, $maxW = 600, $
             $newH = (int)round($h * $ratio);
             $thumb = imagecreatetruecolor($newW, $newH);
             imagecopyresampled($thumb, $src, 0, 0, 0, 0, $newW, $newH, $w, $h);
-            imagewebp($thumb, $destThumbPath, 82);
+            imagewebp($thumb, $destThumbPath, 88);
             imagedestroy($thumb);
             imagedestroy($src);
             return file_exists($destThumbPath);

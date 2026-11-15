@@ -144,9 +144,53 @@
 
     // ================================================================
     // 🌐 BROWSER-SIDE PDF.JS EXTRACTOR (100% Zero-Server-Dependency)
-    // Extracts HD WebP calendar sheets directly in the admin's browser
+    // Extracts Ultra-HD WebP calendar sheets directly in the admin's browser
     // ================================================================
-    async function renderPdfPageToBlob(pdfDoc, pageNumber, scale = 2.0) {
+    async function ensurePdfJsLoaded() {
+        if (window.pdfjsLib) {
+            if (!pdfjsLib.GlobalWorkerOptions?.workerSrc) {
+                pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+            }
+            return window.pdfjsLib;
+        }
+
+        return new Promise((resolve, reject) => {
+            const s1 = document.createElement('script');
+            s1.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+            s1.onload = () => {
+                if (window.pdfjsLib) {
+                    try {
+                        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+                    } catch (e) {}
+                    resolve(window.pdfjsLib);
+                } else {
+                    loadFallback();
+                }
+            };
+            s1.onerror = loadFallback;
+
+            function loadFallback() {
+                const s2 = document.createElement('script');
+                s2.src = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js';
+                s2.onload = () => {
+                    if (window.pdfjsLib) {
+                        try {
+                            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+                        } catch (e) {}
+                        resolve(window.pdfjsLib);
+                    } else {
+                        reject(new Error('PDF.js लाइब्रेरी लोड नहीं हो सकी।'));
+                    }
+                };
+                s2.onerror = () => reject(new Error('PDF.js लाइब्रेरी लोड नहीं हो सकी। कृपया इंटरनेट कनेक्शन की जांच करें।'));
+                document.head.appendChild(s2);
+            }
+
+            document.head.appendChild(s1);
+        });
+    }
+
+    async function renderPdfPageToBlob(pdfDoc, pageNumber, scale = 3.2) {
         const page = await pdfDoc.getPage(pageNumber);
         const viewport = page.getViewport({ scale });
         const canvas = document.createElement('canvas');
@@ -172,12 +216,12 @@
                             } else {
                                 reject(new Error('Canvas blob generation failed'));
                             }
-                        }, 'image/jpeg', 0.90);
+                        }, 'image/jpeg', 0.92);
                     }
-                }, 'image/webp', 0.88);
+                }, 'image/webp', 0.93);
             } else {
                 try {
-                    const dataUrl = canvas.toDataURL('image/jpeg', 0.90);
+                    const dataUrl = canvas.toDataURL('image/jpeg', 0.92);
                     const byteString = atob(dataUrl.split(',')[1]);
                     const mimeString = dataUrl.split(',')[0].split(':')[1].split(';')[0];
                     const ab = new ArrayBuffer(byteString.length);
@@ -214,7 +258,13 @@
 
     async function runBrowserPdfExtraction(pdfSource) {
         if (!window.pdfjsLib) {
-            throw new Error('PDF.js लाइब्रेरी लोड नहीं हो सकी। कृपया इंटरनेट कनेक्शन की जांच करें।');
+            const progressText = document.getElementById('pdf-progress-text');
+            if (progressText) progressText.innerHTML = '<i class="fas fa-spinner fa-spin"></i> PDF.js लाइब्रेरी लोड हो रही है...';
+            try {
+                await ensurePdfJsLoaded();
+            } catch (err) {
+                throw new Error('PDF.js लाइब्रेरी लोड नहीं हो सकी। कृपया इंटरनेट कनेक्शन की जांच करें।');
+            }
         }
 
         const progressContainer = document.getElementById('pdf-extract-progress');
