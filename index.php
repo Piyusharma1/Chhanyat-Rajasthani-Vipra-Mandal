@@ -186,7 +186,7 @@ $cssVersion = file_exists($cssPath) ? filemtime($cssPath) : time();
                 <div class="home-cal-preview-card">
                     <div class="home-cal-img-wrap">
                         <a href="calendar.php?month=cover" title="सनातन दिनदर्शिका मुखपृष्ठ देखें" class="home-cal-img-link">
-                            <img id="home-cal-preview-img" src="uploads/calendar/thumbs/cover.webp" alt="सनातन दिनदर्शिका - मुखपृष्ठ" width="340" height="511" loading="lazy">
+                            <img id="home-cal-preview-img" src="uploads/calendar/thumbs/cover.webp?v=<?= @filemtime(__DIR__ . '/uploads/calendar/thumbs/cover.webp') ?: time() ?>" alt="सनातन दिनदर्शिका - मुखपृष्ठ" width="340" height="511" loading="lazy">
                             <span class="home-cal-img-zoom-hint">
                                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h6v6"></path><path d="M10 14L21 3"></path><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg>
                                 बड़ा देखें

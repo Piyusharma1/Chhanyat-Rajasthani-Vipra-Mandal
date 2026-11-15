@@ -616,23 +616,25 @@ function setupHomeCalendarWidget() {
         if (link && href) link.href = href;
     }
 
+    const calVersion = (window.CAL_VERSION || (document.querySelector('script[src*="home.js"]')?.src.split('v=')[1]) || Date.now());
+
     function previewFrom(e) {
         const pill = e.target.closest('.home-month-pill');
         if (!pill) return;
         const target = pill.dataset.month;
         if (target === 'cover') {
-            show('uploads/calendar/thumbs/cover.webp', 'सनातन दिनदर्शिका - मुखपृष्ठ', 'सनातन दिनदर्शिका (मुखपृष्ठ)', 'calendar.php?month=cover');
+            show(`uploads/calendar/thumbs/cover.webp?v=${calVersion}`, 'सनातन दिनदर्शिका - मुखपृष्ठ', 'सनातन दिनदर्शिका (मुखपृष्ठ)', 'calendar.php?month=cover');
             return;
         }
         if (target === 'samiti') {
-            show('uploads/calendar/thumbs/samiti.webp', 'कार्यकारिणी व सल्लागार मंडळ', 'कार्यकारिणी व सल्लागार मंडळ (समिति पृष्ठ)', 'calendar.php?month=samiti');
+            show(`uploads/calendar/thumbs/samiti.webp?v=${calVersion}`, 'कार्यकारिणी व सल्लागार मंडळ', 'कार्यकारिणी व सल्लागार मंडळ (समिति पृष्ठ)', 'calendar.php?month=samiti');
             return;
         }
         const m = Number(target);
         if (!(m >= 1 && m <= 12)) return;
         const monthTitle = hindiMonthTitles[m] || hindiMonths[m];
         const label = `सनातन दिनदर्शिका: ${monthTitle}`;
-        show(`uploads/calendar/pages/${m}.webp`, label, label, `calendar.php?month=${m}`);
+        show(`uploads/calendar/pages/${m}.webp?v=${calVersion}`, label, label, `calendar.php?month=${m}`);
     }
     const restore = () => show(cover.src, cover.alt, baseTitle, cover.href);
 

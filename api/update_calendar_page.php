@@ -128,6 +128,9 @@ if ($pageTarget === 'cover') {
         // Also keep PNG in sync
         @copy($file['tmp_name'], $targetPng);
         createCalendarThumbnail($targetWebp, $targetThumb, 600, 900);
+        @touch($targetWebp);
+        @touch($targetThumb);
+        @touch($baseDir . 'calendar.pdf');
 
         echo json_encode([
             'success' => true,
@@ -144,6 +147,9 @@ if ($pageTarget === 'cover') {
     if (convertToWebp($file['tmp_name'], $targetWebp, $mime)) {
         @copy($file['tmp_name'], $targetPng);
         createCalendarThumbnail($targetWebp, $targetThumb, 600, 900);
+        @touch($targetWebp);
+        @touch($targetThumb);
+        @touch($baseDir . 'calendar.pdf');
 
         echo json_encode([
             'success' => true,
@@ -170,6 +176,9 @@ if ($pageTarget === 'cover') {
         }
 
         createCalendarThumbnail($targetWebp, $targetThumb, 600, 750);
+        @touch($targetWebp);
+        @touch($targetThumb);
+        @touch($baseDir . 'calendar.pdf');
 
         echo json_encode([
             'success' => true,

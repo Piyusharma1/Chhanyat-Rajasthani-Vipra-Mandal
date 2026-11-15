@@ -108,6 +108,9 @@
                 if (target === 'cover') {
                     const img = document.getElementById('img-preview-cover');
                     if (img) img.src = `uploads/calendar/cover.webp?v=${timestamp}`;
+                } else if (target === 'samiti') {
+                    const img = document.getElementById('img-preview-samiti');
+                    if (img) img.src = `uploads/calendar/samiti.webp?v=${timestamp}`;
                 } else {
                     const img = document.getElementById(`img-preview-${target}`);
                     if (img) img.src = `uploads/calendar/pages/${target}.webp?v=${timestamp}`;
@@ -501,6 +504,9 @@
         const timestamp = Date.now();
         const coverImg = document.getElementById('img-preview-cover');
         if (coverImg) coverImg.src = `uploads/calendar/cover.webp?v=${timestamp}`;
+
+        const samitiImg = document.getElementById('img-preview-samiti');
+        if (samitiImg) samitiImg.src = `uploads/calendar/samiti.webp?v=${timestamp}`;
 
         for (let m = 1; m <= 12; m++) {
             const img = document.getElementById(`img-preview-${m}`);

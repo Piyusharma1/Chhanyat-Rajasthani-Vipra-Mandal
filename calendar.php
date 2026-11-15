@@ -20,6 +20,15 @@ $months = [
     10 => ['hi' => 'ऑक्टोबर',  'en' => 'October 2027',   'year' => '२०२७', 'hi_num' => '१०'],
 ];
 
+// Cache-busting helper to ensure newly updated calendar images load immediately
+if (!function_exists('calAssetUrl')) {
+    function calAssetUrl($relPath) {
+        $full = __DIR__ . '/' . ltrim($relPath, '/');
+        $mtime = @filemtime($full);
+        return $relPath . ($mtime ? '?v=' . $mtime : '');
+    }
+}
+
 // Pre-build all calendar pages in EXACT PDF order:
 // Page 1: Cover (मुखपृष्ठ)
 // Page 2: Samiti (कार्यकारिणी व सल्लागार मंडळ / चौघड़िया)
@@ -49,8 +58,8 @@ $calendarPages[] = [
     'title'    => 'सनातन दिनदर्शिका (मुखपृष्ठ)',
     'sub'      => 'छःन्यात राजस्थानी विप्र मंडल, लातूर',
     'short'    => 'मुखपृष्ठ',
-    'src'      => $coverSrc,
-    'thumb'    => $coverThumb,
+    'src'      => calAssetUrl($coverSrc),
+    'thumb'    => calAssetUrl($coverThumb),
     'download' => 'सनातन_दिनदर्शिका_मुखपृष्ठ.webp',
 ];
 $coverPage = $calendarPages[$coverIndex];
@@ -62,8 +71,8 @@ $calendarPages[] = [
     'title'    => 'कार्यकारिणी व सल्लागार मंडळ (समिति पृष्ठ)',
     'sub'      => 'छःन्यात राजस्थानी विप्र मंडल, लातूर',
     'short'    => 'समिति',
-    'src'      => $samitiSrc,
-    'thumb'    => $samitiThumb,
+    'src'      => calAssetUrl($samitiSrc),
+    'thumb'    => calAssetUrl($samitiThumb),
     'download' => 'सनातन_दिनदर्शिका_कार्यकारिणी_समिति.webp',
 ];
 $samitiPage = $calendarPages[$samitiIndex];
@@ -83,8 +92,8 @@ foreach ($months as $num => $m) {
         'title'    => "{$m['hi_num']}. {$m['hi']} {$m['year']}",
         'sub'      => '',
         'short'    => "{$m['hi_num']}. {$m['hi']}",
-        'src'      => $pSrc,
-        'thumb'    => $pThumb,
+        'src'      => calAssetUrl($pSrc),
+        'thumb'    => calAssetUrl($pThumb),
         'download' => "सनातन_दिनदर्शिका_{$m['hi']}_{$m['year']}.webp",
     ];
     $monthToPageIndex[$num] = $idx;
@@ -108,7 +117,7 @@ foreach ($months as $num => $m) {
     <link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Hindi&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css?v=<?= @filemtime(__DIR__.'/css/style.css') ?: time()?>">
-    <link rel="preload" as="image" href="<?= $coverThumb ?>" type="image/webp" fetchpriority="high">
+    <link rel="preload" as="image" href="<?= calAssetUrl($coverThumb) ?>" type="image/webp" fetchpriority="high">
 
     <style>
         :root {
