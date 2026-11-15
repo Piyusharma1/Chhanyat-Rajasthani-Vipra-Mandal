@@ -12,4 +12,3 @@ define('DB_USER',    'your_database_user');
 define('DB_PASS',    'your_database_password');
 define('DB_CHARSET', 'utf8mb4');
 ?>
-
