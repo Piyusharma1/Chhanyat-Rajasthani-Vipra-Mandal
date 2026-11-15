@@ -28,6 +28,10 @@ async function checkPageAuth() {
             return false;
         }
         currentAdminAuth = result;
+        if (result.csrf_token) {
+            if (window.setCSRFToken) window.setCSRFToken(result.csrf_token);
+            try { sessionStorage.setItem('csrf_token', result.csrf_token); } catch(e) {}
+        }
         return true;
     } catch (error) {
         console.error('🔒 Auth check failed:', error);
@@ -307,10 +311,15 @@ async function handleGalleryUpload(e) {
     const autoAnnounceEl = document.getElementById('auto-announcement');
     const createAnnouncement = autoAnnounceEl ? (autoAnnounceEl.checked ? '1' : '0') : '1';
 
+    const csrfToken = (window.getCSRFToken && window.getCSRFToken()) || sessionStorage.getItem('csrf_token') || '';
+
     const formData = new FormData();
     formData.append('album', albumName);
     formData.append('branch', branch);
     formData.append('create_announcement', createAnnouncement);
+    if (csrfToken) {
+        formData.append('csrf_token', csrfToken);
+    }
     selectedFiles.forEach(file => formData.append('images[]', file));
 
     if (uploadBtn) {
@@ -338,11 +347,21 @@ async function handleGalleryUpload(e) {
 
         xhr.addEventListener('load', () => {
             // 🔐 Handle auth errors during upload
-            if (xhr.status === 401 || xhr.status === 403) {
+            if (xhr.status === 401) {
                 showToast('❌ Session expired. Please login again.', 'error');
                 setTimeout(() => {
                     window.location.href = 'admin-login.php';
                 }, 1500);
+                return;
+            }
+
+            if (xhr.status === 403) {
+                try {
+                    const err = JSON.parse(xhr.responseText);
+                    showToast('❌ ' + (err.error || 'Access denied / Invalid CSRF token. Please refresh page.'), 'error');
+                } catch(e) {
+                    showToast('❌ Access denied (HTTP 403). Please refresh page.', 'error');
+                }
                 return;
             }
 
@@ -377,6 +396,9 @@ async function handleGalleryUpload(e) {
 
         xhr.open('POST', 'api/upload-gallery.php');
         xhr.withCredentials = true;
+        if (csrfToken) {
+            xhr.setRequestHeader('X-CSRF-Token', csrfToken);
+        }
         xhr.send(formData);
 
     } catch (error) {
@@ -720,21 +742,32 @@ window.deleteImage = async function (imageSrc, albumFolder) {
     if (!confirm('⚠️ क्या आप यह photo हटाना चाहते हैं?')) return;
 
     try {
+        const csrfToken = (window.getCSRFToken && window.getCSRFToken()) || sessionStorage.getItem('csrf_token') || '';
+        const headers = { 'Content-Type': 'application/json' };
+        if (csrfToken) headers['X-CSRF-Token'] = csrfToken;
+
         const response = await fetch('api/delete-gallery-image.php', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: headers,
             credentials: 'include',
             body: JSON.stringify({
                 folder: albumFolder,
-                image: imageSrc
+                image: imageSrc,
+                csrf_token: csrfToken
             })
         });
 
-        if (response.status === 401 || response.status === 403) {
+        if (response.status === 401) {
             showToast('❌ Session expired. Please login again.', 'error');
             setTimeout(() => {
                 window.location.href = 'admin-login.php';
             }, 1500);
+            return;
+        }
+
+        if (response.status === 403) {
+            const err = await response.json().catch(() => ({}));
+            showToast('❌ ' + (err.error || 'Access denied'), 'error');
             return;
         }
 
@@ -769,16 +802,31 @@ window.deleteAlbum = async function (albumFolder, albumTitle = '') {
     if (!confirm(`⚠️ क्या आप "${albumTitle}" Album और इसकी सभी Photos हटाना चाहते हैं?`)) return;
 
     try {
+        const csrfToken = (window.getCSRFToken && window.getCSRFToken()) || sessionStorage.getItem('csrf_token') || '';
+        const headers = { 'Content-Type': 'application/json' };
+        if (csrfToken) headers['X-CSRF-Token'] = csrfToken;
+
         const response = await fetch('api/delete-album.php', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: headers,
             credentials: 'include',
-            body: JSON.stringify({ folder: albumFolder })
+            body: JSON.stringify({
+                folder: albumFolder,
+                csrf_token: csrfToken
+            })
         });
 
-        if (response.status === 401 || response.status === 403) {
+        if (response.status === 401) {
+            showToast('❌ Session expired. Please login again.', 'error');
+            setTimeout(() => {
+                window.location.href = 'admin-login.php';
+            }, 1500);
+            return;
+        }
+
+        if (response.status === 403) {
             const err = await response.json().catch(() => ({}));
-            showToast('❌ ' + (err.error || 'Unauthorized action'), 'error');
+            showToast('❌ ' + (err.error || 'Access denied'), 'error');
             return;
         }
 
