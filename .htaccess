@@ -108,9 +108,10 @@ RewriteRule ^uploads/ - [L]
 
     # Content Security Policy
     # Allows: same-origin scripts/styles, Google Fonts, Google Analytics,
-    # counter.dev analytics, cdnjs (Font Awesome, PDF.js), jsDelivr, WhatsApp (links only),
+    # counter.dev analytics, Google Input Tools (Hindi transliteration),
+    # cdnjs (Font Awesome, PDF.js), jsDelivr, WhatsApp (links only),
     # workers for PDF rendering, and same-origin images + data/blob URIs.
-    Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://cdn.counter.dev https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https://www.google-analytics.com; connect-src 'self' blob: https://www.google-analytics.com https://analytics.google.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; worker-src 'self' blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; frame-src 'none'; object-src 'none'; base-uri 'self';"
+    Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://cdn.counter.dev https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https://www.google-analytics.com; connect-src 'self' blob: https://inputtools.google.com https://cdn.counter.dev https://counter.dev https://www.google-analytics.com https://analytics.google.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; worker-src 'self' blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; frame-src 'none'; object-src 'none'; base-uri 'self';"
 </IfModule>
 
 # ============================================
