@@ -20,7 +20,7 @@ except ImportError:
 
 base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 pdf_path = os.path.join(base_dir, 'uploads', 'calendar', 'calendar.pdf')
-out_dir  = os.path.join(base_dir, 'uploads', 'calendar', 'pages')
+out_dir = os.path.join(base_dir, 'uploads', 'calendar', 'pages')
 
 if not os.path.exists(pdf_path):
     print(f"Error: PDF not found at {pdf_path}")
@@ -28,70 +28,33 @@ if not os.path.exists(pdf_path):
 
 os.makedirs(out_dir, exist_ok=True)
 
-# ─────────────────────────────────────────────────────────────
-# Quality / resolution settings
-# ─────────────────────────────────────────────────────────────
-# Full-page images: rendered at 300 DPI (matrix scale = 300/72 ≈ 4.17)
-# This gives ~2480×3508 px for an A4 page — print-quality sharp.
-RENDER_SCALE   = 300 / 72        # ≈ 4.167  (72 pt = 1 inch in PDF)
-WEBP_QUALITY   = 93              # 93 = very high; lossless detail
-WEBP_METHOD    = 6               # slowest / best compression method
-
-# Thumbnails: rendered at 150 DPI — fast load in gallery/admin
-THUMB_SCALE    = 150 / 72       # ≈ 2.083
-THUMB_QUALITY  = 85
-THUMB_METHOD   = 4
-
-thumb_dir = os.path.join(base_dir, 'uploads', 'calendar', 'thumbs')
-os.makedirs(thumb_dir, exist_ok=True)
-
-
-def render_page(page, scale):
-    """Render a PDF page to a Pixmap at the given scale."""
-    mat = fitz.Matrix(scale, scale)
-    return page.get_pixmap(matrix=mat, alpha=False)
-
-
-def save_webp(pix, path, quality=WEBP_QUALITY, method=WEBP_METHOD):
-    """Save a Pixmap as WebP, using Pillow if available (better encoder)."""
-    if has_pil:
-        img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
-        img.save(path, "WEBP", quality=quality, method=method)
-    else:
-        # PyMuPDF's built-in saver (quality not tunable, but still good)
-        pix.save(path)
-
-
-def save_page(doc, idx, out_path, thumb_path):
-    """Render full-res + thumbnail for one PDF page index."""
-    page = doc[idx]
-
-    # Full-resolution image
-    pix_full = render_page(page, RENDER_SCALE)
-    save_webp(pix_full, out_path, WEBP_QUALITY, WEBP_METHOD)
-    print(f"  Saved full ({pix_full.width}×{pix_full.height}px) → {os.path.basename(out_path)}")
-
-    # Thumbnail
-    pix_thumb = render_page(page, THUMB_SCALE)
-    save_webp(pix_thumb, thumb_path, THUMB_QUALITY, THUMB_METHOD)
-    print(f"  Saved thumb ({pix_thumb.width}×{pix_thumb.height}px) → thumbs/{os.path.basename(thumb_path)}")
-
-
 try:
     doc = fitz.open(pdf_path)
     num_pages = len(doc)
     print(f"Total PDF pages: {num_pages}")
-    print(f"Render DPI: {round(RENDER_SCALE * 72)} | WebP quality: {WEBP_QUALITY}")
 
-    # ── Page-map detection ──────────────────────────────────────
-    cover_idx  = None
+    # Determine cover and month page indices (0-based)
+    cover_idx = None
     samiti_idx = None
     month_page_map = {}
 
     if num_pages == 14:
-        # 14-page Sanatan Panchang format:
-        # 0=Cover, 1=Samiti, 2=Nov, 3=Dec, 4=Jan … 13=Oct
-        cover_idx  = 0
+        # 🕉️ Sanatan Panchang 14-page format:
+        # Page 1 (idx 0): Cover (सनातन दिनदर्शिका)
+        # Page 2 (idx 1): Committee & Advisory (समिति)
+        # Page 3 (idx 2): November (11)
+        # Page 4 (idx 3): December (12)
+        # Page 5 (idx 4): January (1)
+        # Page 6 (idx 5): February (2)
+        # Page 7 (idx 6): March (3)
+        # Page 8 (idx 7): April (4)
+        # Page 9 (idx 8): May (5)
+        # Page 10 (idx 9): June (6)
+        # Page 11 (idx 10): July (7)
+        # Page 12 (idx 11): August (8)
+        # Page 13 (idx 12): September (9)
+        # Page 14 (idx 13): October (10)
+        cover_idx = 0
         samiti_idx = 1
         month_page_map = {
             1: 4, 2: 5, 3: 6, 4: 7, 5: 8, 6: 9,
@@ -100,7 +63,7 @@ try:
     elif num_pages == 28:
         cover_idx = 0
         month_page_map = {
-            1: 8,  2: 10, 3: 12, 4: 14, 5: 16, 6: 18,
+            1: 8, 2: 10, 3: 12, 4: 14, 5: 16, 6: 18,
             7: 20, 8: 22, 9: 24, 10: 26, 11: 4, 12: 6
         }
     elif num_pages >= 25:
@@ -118,48 +81,59 @@ try:
         for m in range(1, min(13, num_pages + 1)):
             month_page_map[m] = m - 1
 
-    # ── Cover ──────────────────────────────────────────────────
+    # Extract Cover if applicable
     if cover_idx is not None and cover_idx < num_pages:
-        print("Processing cover …")
-        save_page(
-            doc, cover_idx,
-            out_path   = os.path.join(base_dir, 'uploads', 'calendar', 'cover.webp'),
-            thumb_path = os.path.join(thumb_dir, 'cover.webp'),
-        )
+        c_page = doc[cover_idx]
+        c_pix = c_page.get_pixmap(matrix=fitz.Matrix(2.0, 2.0))
+        c_file = os.path.join(base_dir, 'uploads', 'calendar', 'cover.webp')
+        if has_pil:
+            c_img = Image.frombytes("RGB", [c_pix.width, c_pix.height], c_pix.samples)
+            c_img.save(c_file, "WEBP", quality=88, method=6)
+        else:
+            c_pix.save(c_file)
+        print(f"Saved cover -> {c_file}")
 
-    # ── Samiti / Committee ─────────────────────────────────────
+    # Extract Samiti/Committee page if applicable
     if samiti_idx is not None and samiti_idx < num_pages:
-        print("Processing samiti page …")
-        save_page(
-            doc, samiti_idx,
-            out_path   = os.path.join(base_dir, 'uploads', 'calendar', 'samiti.webp'),
-            thumb_path = os.path.join(thumb_dir, 'samiti.webp'),
-        )
+        s_page = doc[samiti_idx]
+        s_pix = s_page.get_pixmap(matrix=fitz.Matrix(2.0, 2.0))
+        s_file = os.path.join(base_dir, 'uploads', 'calendar', 'samiti.webp')
+        if has_pil:
+            s_img = Image.frombytes("RGB", [s_pix.width, s_pix.height], s_pix.samples)
+            s_img.save(s_file, "WEBP", quality=88, method=6)
+        else:
+            s_pix.save(s_file)
+        print(f"Saved samiti -> {s_file}")
 
-    # ── 12 month pages ─────────────────────────────────────────
+    # Extract each of the 12 month pages
     for m in range(1, 13):
-        if m not in month_page_map:
-            continue
-        idx = month_page_map[m]
-        if idx >= num_pages:
-            print(f"  Warning: month {m} mapped to page {idx+1} but PDF only has {num_pages} pages.")
-            continue
+        if m in month_page_map:
+            idx = month_page_map[m]
+            if idx < num_pages:
+                page = doc[idx]
+                pix = page.get_pixmap(matrix=fitz.Matrix(2.0, 2.0))
+                
+                webp_file = os.path.join(out_dir, f"{m}.webp")
+                if has_pil:
+                    img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
+                    img.save(webp_file, "WEBP", quality=88, method=6)
+                else:
+                    # Fallback to JPG if PIL is unavailable
+                    webp_file = os.path.join(out_dir, f"{m}.jpg")
+                    pix.save(webp_file)
 
-        print(f"Processing month {m} (PDF page {idx + 1}) …")
-        webp_file  = os.path.join(out_dir,   f"{m}.webp")
-        thumb_file = os.path.join(thumb_dir, f"{m}.webp")
-        save_page(doc, idx, webp_file, thumb_file)
+                # Remove old legacy formats if exists to prevent stale cache
+                for old_ext in ['.jpg', '.png']:
+                    old_file = os.path.join(out_dir, f"{m}{old_ext}")
+                    if os.path.exists(old_file) and old_file != webp_file:
+                        try:
+                            os.remove(old_file)
+                        except Exception:
+                            pass
 
-        # Remove stale legacy formats
-        for old_ext in ['.jpg', '.png']:
-            old_file = os.path.join(out_dir, f"{m}{old_ext}")
-            if os.path.exists(old_file):
-                try:
-                    os.remove(old_file)
-                except Exception:
-                    pass
+                print(f"Saved month {m} (page {idx+1}) -> {webp_file}")
 
-    print("SUCCESS: Extraction complete — 300 DPI WebP images generated.")
+    print("SUCCESS: Extraction complete in WEBP format.")
     sys.exit(0)
 
 except Exception as e:
