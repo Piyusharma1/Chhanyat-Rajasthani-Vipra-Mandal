@@ -59,7 +59,7 @@ function convertToWebp($sourcePath, $destWebpPath, $mime) {
         }
 
         if ($image) {
-            $result = imagewebp($image, $destWebpPath, 88);
+            $result = imagewebp($image, $destWebpPath, 93); // raised from 88 → 93
             imagedestroy($image);
             if ($result && file_exists($destWebpPath)) {
                 return true;
@@ -69,12 +69,12 @@ function convertToWebp($sourcePath, $destWebpPath, $mime) {
 
     // Fallback using Python Pillow if available and exec enabled
     if (function_exists('exec')) {
-        $pythonCmd = 'python3 -c "from PIL import Image; im = Image.open(r\'' . addslashes($sourcePath) . '\'); im.save(r\'' . addslashes($destWebpPath) . '\', \'WEBP\', quality=88)" 2>&1';
+        $pythonCmd = 'python3 -c "from PIL import Image; im = Image.open(r\'' . addslashes($sourcePath) . '\'); im.save(r\'' . addslashes($destWebpPath) . '\', \'WEBP\', quality=93)" 2>&1';
         @exec($pythonCmd);
         if (file_exists($destWebpPath)) {
             return true;
         }
-        $pythonCmd2 = 'python -c "from PIL import Image; im = Image.open(r\'' . addslashes($sourcePath) . '\'); im.save(r\'' . addslashes($destWebpPath) . '\', \'WEBP\', quality=88)" 2>&1';
+        $pythonCmd2 = 'python -c "from PIL import Image; im = Image.open(r\'' . addslashes($sourcePath) . '\'); im.save(r\'' . addslashes($destWebpPath) . '\', \'WEBP\', quality=93)" 2>&1';
         @exec($pythonCmd2);
         if (file_exists($destWebpPath)) {
             return true;
@@ -90,7 +90,7 @@ function convertToWebp($sourcePath, $destWebpPath, $mime) {
 }
 
 // Helper to create resized WebP thumbnail
-function createCalendarThumbnail($sourceWebpPath, $destThumbPath, $maxW = 600, $maxH = 800) {
+function createCalendarThumbnail($sourceWebpPath, $destThumbPath, $maxW = 1200, $maxH = 1600) {
     $dir = dirname($destThumbPath);
     if (!file_exists($dir)) {
         @mkdir($dir, 0755, true);
@@ -105,7 +105,7 @@ function createCalendarThumbnail($sourceWebpPath, $destThumbPath, $maxW = 600, $
             $newH = (int)round($h * $ratio);
             $thumb = imagecreatetruecolor($newW, $newH);
             imagecopyresampled($thumb, $src, 0, 0, 0, 0, $newW, $newH, $w, $h);
-            imagewebp($thumb, $destThumbPath, 82);
+            imagewebp($thumb, $destThumbPath, 88); // raised from 82 → 88
             imagedestroy($thumb);
             imagedestroy($src);
             return file_exists($destThumbPath);
@@ -127,7 +127,7 @@ if ($pageTarget === 'cover') {
     if (convertToWebp($file['tmp_name'], $targetWebp, $mime)) {
         // Also keep PNG in sync
         @copy($file['tmp_name'], $targetPng);
-        createCalendarThumbnail($targetWebp, $targetThumb, 600, 900);
+        createCalendarThumbnail($targetWebp, $targetThumb, 1200, 1600);
         @touch($targetWebp);
         @touch($targetThumb);
         @touch($baseDir . 'calendar.pdf');
@@ -146,7 +146,7 @@ if ($pageTarget === 'cover') {
 
     if (convertToWebp($file['tmp_name'], $targetWebp, $mime)) {
         @copy($file['tmp_name'], $targetPng);
-        createCalendarThumbnail($targetWebp, $targetThumb, 600, 900);
+        createCalendarThumbnail($targetWebp, $targetThumb, 1200, 1600);
         @touch($targetWebp);
         @touch($targetThumb);
         @touch($baseDir . 'calendar.pdf');
@@ -175,7 +175,7 @@ if ($pageTarget === 'cover') {
             @copy($file['tmp_name'], $pagesDir . $monthNum . '.png');
         }
 
-        createCalendarThumbnail($targetWebp, $targetThumb, 600, 750);
+        createCalendarThumbnail($targetWebp, $targetThumb, 1200, 1500);
         @touch($targetWebp);
         @touch($targetThumb);
         @touch($baseDir . 'calendar.pdf');
