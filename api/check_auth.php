@@ -3,6 +3,7 @@
 require_once __DIR__ . '/session_helper.php';
 require_once __DIR__ . '/csrf_helper.php';
 require_once __DIR__ . '/audit_helper.php';
+require_once __DIR__ . '/ip_helper.php';
 
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
@@ -49,11 +50,7 @@ try {
 } catch (Exception $e) {}
 
 // Get client IP safely
-$clientIp = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
-if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-    $parts = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
-    $clientIp = trim($parts[0]);
-}
+$clientIp = get_client_ip();
 
 // --- रास्ता 1: सिर्फ ऑथेंटिकेशन चेक करना (जब पेज नॉर्मल लोड होता है - GET Request) ---
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {

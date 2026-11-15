@@ -5,6 +5,7 @@
 
 require_once __DIR__ . '/session_helper.php';
 require_once __DIR__ . '/db.php';
+require_once __DIR__ . '/ip_helper.php';
 
 if (!function_exists('ensure_audit_logs_table')) {
     function ensure_audit_logs_table(PDO $pdo): void {
@@ -69,11 +70,7 @@ if (!function_exists('log_activity')) {
             $adminUsername = !empty($_SESSION['admin_username']) ? $_SESSION['admin_username'] : 'admin';
             $adminName     = !empty($_SESSION['admin_full_name']) ? $_SESSION['admin_full_name'] : $adminUsername;
 
-            $clientIp = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
-            if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-                $parts = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
-                $clientIp = trim($parts[0]);
-            }
+            $clientIp = get_client_ip();
 
             $userAgent = substr($_SERVER['HTTP_USER_AGENT'] ?? '', 0, 255);
 

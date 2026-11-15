@@ -1,8 +1,15 @@
 User-agent: *
 Disallow: /api/
 Disallow: /components/
-Disallow: /*-admin.php
-Disallow: /*-management.php
-Disallow: /index_Maintenance.php
+Disallow: /config/
+Disallow: /scripts/
+Disallow: /admin-login
+Disallow: /admin-dashboard
+Disallow: /add-admin
+Disallow: /audit-logs
+Disallow: /*-management
+Disallow: /manage-families
+Disallow: /Maintenance
+Disallow: /index_Maintenance
 
 Sitemap: https://chhanyatvipralatur.com/sitemap.xml

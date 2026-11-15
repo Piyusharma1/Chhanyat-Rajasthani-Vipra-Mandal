@@ -22,12 +22,12 @@
     </a>
     
     <nav class="desktop-nav" aria-label="मुख्य नेविगेशन">
-         <a href="index.php">Home</a>
-         <a href="calendar.php">Calendar</a>
-         <a href="gallery.php">Gallery</a>
-         <a href="families.php">Family Directory</a>
-         <a href="about.php">About Us</a>
-         <a href="admin-login.php">Admin Dashboard</a>
+         <a href="/">Home</a>
+         <a href="/calendar">Calendar</a>
+         <a href="/gallery">Gallery</a>
+         <a href="/families">Family Directory</a>
+         <a href="/about">About Us</a>
+         <a href="/admin-login">Admin Dashboard</a>
     </nav>
     
     <button class="menu-toggle" id="menuToggle" aria-label="मेनू खोलें" aria-expanded="false">
@@ -44,12 +44,12 @@
   </div>
   
   <div class="mobile-nav" id="mobileNav" role="navigation" aria-label="मोबाइल नेविगेशन">
-         <a href="index.php">Home</a>
-         <a href="calendar.php">Calendar</a>
-         <a href="gallery.php">Gallery</a>
-         <a href="families.php">Family Directory</a>
-         <a href="about.php">About Us</a>
-         <a href="admin-login.php">Admin Dashboard</a>
+         <a href="/">Home</a>
+         <a href="/calendar">Calendar</a>
+         <a href="/gallery">Gallery</a>
+         <a href="/families">Family Directory</a>
+         <a href="/about">About Us</a>
+         <a href="/admin-login">Admin Dashboard</a>
   </div>
 </header>
 
