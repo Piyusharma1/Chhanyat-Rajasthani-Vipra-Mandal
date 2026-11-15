@@ -44,6 +44,36 @@ try {
 
     $stmt = $pdo->prepare("DELETE FROM families WHERE id = :id");
     $stmt->execute([':id' => $data['id']]);
+
+    // 🔥 Auto-clean from Central Committee if linked to this family_id
+    try {
+        $cleanComm = $pdo->prepare("DELETE FROM committee WHERE family_id = :id");
+        $cleanComm->execute([':id' => $data['id']]);
+    } catch (Exception $ex) {}
+
+    // 🔥 Auto-clean from Branch Committees if linked to this family_id
+    try {
+        $bStmt = $pdo->query("SELECT id, committee FROM branches");
+        $branches = $bStmt ? $bStmt->fetchAll(PDO::FETCH_ASSOC) : [];
+        foreach ($branches as $b) {
+            if (!empty($b['committee'])) {
+                $commList = is_string($b['committee']) ? json_decode($b['committee'], true) : $b['committee'];
+                if (is_array($commList)) {
+                    $originalCount = count($commList);
+                    $commList = array_values(array_filter($commList, function($m) use ($data) {
+                        return !isset($m['family_id']) || $m['family_id'] !== $data['id'];
+                    }));
+                    if (count($commList) !== $originalCount) {
+                        $updB = $pdo->prepare("UPDATE branches SET committee = :comm WHERE id = :bid");
+                        $updB->execute([
+                            ':comm' => json_encode($commList, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+                            ':bid' => $b['id']
+                        ]);
+                    }
+                }
+            }
+        }
+    } catch (Exception $ex) {}
     
     log_activity('DELETE', 'family', $data['id'], $existing['head'] ?? '', [
         'branch' => $existing['branch'] ?? ''
