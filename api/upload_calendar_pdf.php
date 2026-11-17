@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/require_auth.php';
 header('Content-Type: application/json; charset=utf-8');
-@set_time_limit(180); // Allow ample time for PDF page rendering
+@set_time_limit(600); // Allow ample time for large PDF uploads and page rendering
 
 if (!isset($_FILES['calendar_pdf']) || $_FILES['calendar_pdf']['error'] !== UPLOAD_ERR_OK) {
     $errorCodes = [
@@ -16,12 +16,6 @@ if (!isset($_FILES['calendar_pdf']) || $_FILES['calendar_pdf']['error'] !== UPLO
 }
 
 $file = $_FILES['calendar_pdf'];
-$maxSize = 50 * 1024 * 1024; // 50MB
-
-if ($file['size'] > $maxSize) {
-    echo json_encode(['success' => false, 'error' => 'PDF size cannot exceed 50MB.']);
-    exit;
-}
 
 $finfo = finfo_open(FILEINFO_MIME_TYPE);
 $mime = finfo_file($finfo, $file['tmp_name']);
