@@ -1,15 +1,9 @@
 <?php
-// Only set JSON header if requested directly as an API endpoint
-if (!headers_sent() && isset($_SERVER['REQUEST_URI']) && strpos($_SERVER['REQUEST_URI'], '/api/') !== false) {
-    header('Content-Type: application/json; charset=utf-8');
-}
+header('Content-Type: application/json; charset=utf-8');
 
 // Load credentials from config file (never hardcoded here)
 $configFile = __DIR__ . '/../config/config.php';
 if (!file_exists($configFile)) {
-    if (!empty($suppress_db_die)) {
-        return;
-    }
     http_response_code(500);
     die(json_encode([
         'error' => 'Database configuration file not found.',
@@ -50,9 +44,6 @@ try {
 }
 
 if (!$pdo) {
-    if (!empty($suppress_db_die)) {
-        return;
-    }
     http_response_code(500);
     die(json_encode([
         'error' => 'Database connection failed',
