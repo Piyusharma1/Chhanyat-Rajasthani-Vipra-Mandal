@@ -119,14 +119,15 @@ function renderBranchesMarquee(branches) {
     if (!marqueeTrack || !marqueeContainer || branches.length === 0) return;
 
     const itemsHtml = branches.map(branch => {
-        const encodedName = encodeURIComponent(branch.branchName);
+        const bName = branch.branchName || '';
+        const encodedName = encodeURIComponent(bName);
         return `
                 <a href="branch.php?branch=${encodedName}" 
                 class="marquee-item" 
-                title="${branch.branchName} परिवार देखें"
-                data-branch="${branch.branchName}">
+                title="${bName} परिवार देखें"
+                data-branch="${bName}">
 
-                    <span class="branch-name">${branch.branchName}</span>
+                    <span class="branch-name">${bName}</span>
                 </a>
                 <span class="marquee-separator" aria-hidden="true">✦</span>
             `;
@@ -145,7 +146,8 @@ function setupMarqueeScrolling(container, track) {
     let startX;
     let scrollLeft;
     let animationId = null;
-    let isPaused = false;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let isPaused = prefersReducedMotion;
     let lastManualScroll = 0;
     const SCROLL_SPEED = 1;
     const PAUSE_DURATION = 3000;
@@ -537,7 +539,7 @@ function renderAdsHtml(ads) {
 
         return `
                 <div class="sponsor-banner ad-banner" role="listitem">
-                    <a href="${targetUrl}" ${isExternal ? 'target="_blank" rel="noopener"' : ''} class="sponsor-banner-media ad-banner-media" aria-label="${title}">
+                    <a href="${targetUrl}" ${isExternal ? 'target="_blank" rel="sponsored noopener"' : ''} class="sponsor-banner-media ad-banner-media" aria-label="${title}">
                         <img src="${img}" alt="${title}" loading="lazy" decoding="async" onerror="this.parentElement.style.display='none'">
                     </a>
                     <div class="sponsor-banner-footer ad-banner-footer">
@@ -546,7 +548,7 @@ function renderAdsHtml(ads) {
                             ${biz ? `<small style="display:block;font-size:0.8rem;color:#777;font-weight:normal;">${biz}</small>` : ''}
                         </div>
                         ${waLink ? `
-                            <a href="${waLink}" target="_blank" rel="noopener" class="sponsor-banner-contact-btn ad-banner-contact-btn" title="WhatsApp पर संपर्क करें">
+                            <a href="${waLink}" target="_blank" rel="sponsored noopener" class="sponsor-banner-contact-btn ad-banner-contact-btn" title="WhatsApp पर संपर्क करें">
                                 <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/></svg>
                                 <span>संपर्क</span>
                             </a>
@@ -825,7 +827,7 @@ function buildSlider(images) {
             </picture>
             <div class="slide-gradient"></div>
             <div class="slide-caption">
-                <h3>${img.title}</h3>
+                <div class="hero-caption-title">${img.title}</div>
                 ${img.description ? `<p>${img.description}</p>` : ''}
             </div>
             </div>`;
@@ -858,6 +860,21 @@ function buildSlider(images) {
 function initSlider() {
     currentSlide = NUM_CLONES;
     updateSlider(false);
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) {
+        isAutoPlaying = false;
+        const pauseBtn = document.getElementById('slider-pause-btn');
+        const pauseIcon = document.getElementById('slider-pause-icon');
+        const playIcon = document.getElementById('slider-play-icon');
+        if (pauseBtn) {
+            pauseBtn.setAttribute('aria-label', 'स्लाइडर चलाएं');
+            pauseBtn.setAttribute('title', 'स्लाइडर चलाएं');
+        }
+        if (pauseIcon) pauseIcon.style.display = 'none';
+        if (playIcon) playIcon.style.display = 'inline-block';
+    }
+
     if (isAutoPlaying) autoPlay();
 
     // Ensure slider stays centered on window resize
@@ -975,12 +992,47 @@ function resetAutoPlay() {
     if (isAutoPlaying) autoPlay();
 }
 
+function toggleSliderPause() {
+    const pauseBtn = document.getElementById('slider-pause-btn');
+    const pauseIcon = document.getElementById('slider-pause-icon');
+    const playIcon = document.getElementById('slider-play-icon');
+    if (isAutoPlaying) {
+        isAutoPlaying = false;
+        clearInterval(autoPlayInterval);
+        if (pauseBtn) {
+            pauseBtn.setAttribute('aria-label', 'स्लाइडर चलाएं');
+            pauseBtn.setAttribute('title', 'स्लाइडर चलाएं');
+        }
+        if (pauseIcon) pauseIcon.style.display = 'none';
+        if (playIcon) playIcon.style.display = 'inline-block';
+    } else {
+        isAutoPlaying = true;
+        autoPlay();
+        if (pauseBtn) {
+            pauseBtn.setAttribute('aria-label', 'स्लाइडर रोकें');
+            pauseBtn.setAttribute('title', 'स्लाइडर रोकें');
+        }
+        if (pauseIcon) pauseIcon.style.display = 'inline-block';
+        if (playIcon) playIcon.style.display = 'none';
+    }
+}
+
 function initSliderEvents() {
     const sliderSection = document.querySelector('.hero-slider');
     if (!sliderSection) {
         console.warn('⚠️ .hero-slider not found');
         return;
     }
+
+    const prevBtn = document.getElementById('slider-prev-btn');
+    const nextBtn = document.getElementById('slider-next-btn');
+    const pauseBtn = document.getElementById('slider-pause-btn');
+    const retryBtn = document.getElementById('slider-retry-btn');
+
+    if (prevBtn) prevBtn.addEventListener('click', () => moveSlide(-1));
+    if (nextBtn) nextBtn.addEventListener('click', () => moveSlide(1));
+    if (pauseBtn) pauseBtn.addEventListener('click', toggleSliderPause);
+    if (retryBtn) retryBtn.addEventListener('click', loadGalleryImages);
 
     sliderSection.addEventListener('mouseenter', () => {
         if (isAutoPlaying) {
@@ -1011,8 +1063,11 @@ function initSliderEvents() {
 // ============================================
 // ✅ IMAGE MODAL / LIGHTBOX
 // ============================================
+let lastFocusedElement = null;
+
 function openModal(index = 0) {
     if (galleryImages.length === 0) return;
+    lastFocusedElement = document.activeElement;
     currentImageIndex = index;
     const modal = document.getElementById('image-modal');
     if (!modal) return;
@@ -1025,6 +1080,9 @@ function openModal(index = 0) {
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
     createThumbnails(index);
+
+    const closeBtn = document.getElementById('modal-close-btn');
+    if (closeBtn) closeBtn.focus();
 }
 
 function closeModal() {
@@ -1034,6 +1092,10 @@ function closeModal() {
     modal.setAttribute('aria-hidden', 'true');
     modal.classList.remove('active');
     document.body.style.overflow = '';
+
+    if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') {
+        lastFocusedElement.focus();
+    }
 }
 
 function loadImage(index) {
@@ -1087,6 +1149,40 @@ function updateThumbnails(activeIndex) {
 }
 
 function initModalEvents() {
+    const backdrop = document.getElementById('modal-backdrop');
+    const closeBtn = document.getElementById('modal-close-btn');
+    const prevBtn = document.getElementById('modal-prev-btn');
+    const nextBtn = document.getElementById('modal-next-btn');
+
+    if (backdrop) backdrop.addEventListener('click', closeModal);
+    if (closeBtn) closeBtn.addEventListener('click', closeModal);
+    if (prevBtn) prevBtn.addEventListener('click', () => changeImage(-1));
+    if (nextBtn) nextBtn.addEventListener('click', () => changeImage(1));
+
+    // Focus trap inside modal
+    const modal = document.getElementById('image-modal');
+    if (modal) {
+        modal.addEventListener('keydown', (e) => {
+            if (e.key !== 'Tab') return;
+            const focusable = modal.querySelectorAll('button:not([disabled]), [tabindex="0"], a[href]');
+            if (focusable.length === 0) return;
+            const first = focusable[0];
+            const last = focusable[focusable.length - 1];
+
+            if (e.shiftKey) {
+                if (document.activeElement === first) {
+                    e.preventDefault();
+                    last.focus();
+                }
+            } else {
+                if (document.activeElement === last) {
+                    e.preventDefault();
+                    first.focus();
+                }
+            }
+        });
+    }
+
     let modalTouchX = 0;
 
     document.addEventListener('touchstart', (e) => {
@@ -1168,6 +1264,15 @@ export function initHomePage() {
     initSliderEvents();
     initModalEvents();
     initKeyboardEvents();
+
+    // If SSR branches are already rendered in HTML, initialize marquee immediately
+    const marqueeTrack = document.getElementById('branches-marquee-track');
+    const marqueeContainer = document.querySelector('.branches-marquee');
+    if (marqueeTrack && marqueeContainer && marqueeTrack.children.length > 0) {
+        setupMarqueeScrolling(marqueeContainer, marqueeTrack);
+        setupMarqueeClickHandlers(marqueeContainer);
+    }
+
     loadGalleryImages();
     loadCriticalData();
     setTimeout(reportPerformance, 3000);
@@ -1181,6 +1286,7 @@ window.closeModal = closeModal;
 window.changeImage = changeImage;
 window.moveSlide = moveSlide;
 window.goToSlide = goToSlide;
+window.toggleSliderPause = toggleSliderPause;
 window.loadGalleryImages = loadGalleryImages;
 
 // ============================================
